@@ -4,13 +4,15 @@ from scipy.special import binom
 
 from RBS_Circuit import *
 from Conv_Layer import *
+#from PennyLane_toolbox import *
 from toolbox import RBS_generalized, map_RBS
+from Pooling import *
 
 # Hardware accelerator:
 device = torch.device("cpu")  # Only using CPU
 
 n, k = 8, 2
-i, j = 1, 2
+i, j = 0, 1
 
 initial_state = torch.zeros(int(binom(n,k)))
 initial_state[3] = 1
@@ -45,4 +47,9 @@ c_1 = CONV_state(batch_ini)
 d_0 = CONV_density(rho)
 d_1 = CONV_density(batch_rho)
 
+ini = torch.tensor([1.0 for i in range(4**2)])
+ini = ini/torch.linalg.norm(ini)
 
+POOL_state = Pooling_2D_state_vector(4, 2, device)
+
+e_0 = POOL_state(ini)
