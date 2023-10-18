@@ -1,12 +1,12 @@
 import numpy as np
+import torch 
 from scipy.special import binom
 from itertools import combinations
 
 ################################################################################
-# RBS based Hamming Weight preserving quantum circuit:                         #
+# Basis change:                                                                #
 ################################################################################
 def recursive_next_list_RBS(n, k, list_index, index):
-    #print(n, k, list_index, index)
     new_list_index = list_index.copy()
     new_list_index[index] += 1
     if (new_list_index[index]//n > 0):
@@ -50,6 +50,28 @@ def RBS_generalized(a, b, n, k, mapping_RBS):
         RBS.append((mapping_RBS[tuple(active_qubits_a)], mapping_RBS[tuple(active_qubits_b)]))
     return RBS
 
+def map_Computational_Basis_to_HW_Subspace(n, k, map, input_state):
+    """ This function transforms an input_state from the 
+    computational basis to its equivalent in the basis of
+    fixed Hamming Weight. 
+    Args:
+        - n: number of qubits
+        - k: Hamming weight
+        - map: a dictionnary that links the active qubits and the 
+        state index in the basis of fixed Hamming Weight. Can be 
+        produced by using the function map_RBS.
+        - input_state: a state in the computational basis.
+    Output:
+        - a state in the basis of fixed Hamming Weight.
+    """
+    output_state = torch.zeros(int(binom(n,k)))
+    for key in map.keys():
+        index = sum([2**(n-i-1) for i in key]) # index in the computational basis:
+        output_state[map[key]] = torch.real(input_state[index]) # we consider only real floats
+    return(output_state)
+
+
+
 ################################################################################
 ### RBS application in the 2D Image Basis:                                     #
 ################################################################################
@@ -79,8 +101,6 @@ def map_RBS_Image_HW2(I, dict_I2, map_RBS_HW2, sample):
         index_HW2_basis = map_RBS_HW2[(i,j)]
         output[index_HW2_basis] = sample[key]
     return(output)
-    
-
 
 def RBS_generalized_I2_2D(a, b, I):
     """ Given the two qubits a,b the RBS gate is applied on, it outputs a list of
@@ -100,6 +120,26 @@ def RBS_generalized_I2_2D(a, b, I):
         # We are in the cross register
         print("Error in RBS_generalized_I2: the two qubits are not in the same register")
     return(RBS)
+
+
+def map_Computational_Basis_to_Image_Square_Subspace(n, map, input_state):
+    """ This function transforms an input_state from the
+    computational basis to its equivalent in the basis of
+    the image. We suppose the image to be square.
+    Args:
+        - n: number of qubits
+        - k: Hamming weight
+        - map: a dictionnary that links the active qubits and the
+        state index in the basis of the Image. Can be produce by
+        using the function map_RBS_I2_2D.
+    Output:
+        - a state in the basis of the image.
+    """
+    output_state = torch.zeros((n//2)**2)
+    for key in map.keys():
+        index = sum([2**(n-i-1) for i in key]) # index in the computational basis:
+        output_state[map[key]] = torch.real(input_state[index]) # we consider only real floats
+    return(output_state)
 
 ################################################################################
 ### RBS application in the 3D Image Basis:                                     #

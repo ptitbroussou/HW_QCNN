@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from scipy.special import binom
 
-from toolbox import map_RBS, RBS_generalized
+from toolbox import map_RBS, RBS_generalized, RBS_generalized_I2_2D
 
 
 #################################################################################
@@ -61,7 +61,7 @@ def RBS_Unitaries(n, k, list_gates, device):
         - k: chosen Hamming Weight
         - list_gates: list of tuples representing the qubits affected by each RBS
         - device: torch device (cpu, cuda, etc...)
-    Ouptuts:
+    Output:
         - RBS_Unitaries_dict: a dictionnary with key tuples of qubits affected by RBS and
         with values tuples of tensors that decompose the equivalen unitary such as in 
         RBS_Unitary (cos_matrix, sin_matrix, id_matrix)
@@ -72,6 +72,25 @@ def RBS_Unitaries(n, k, list_gates, device):
         RBS_Unitaries_dict[(i,j)] = RBS_Unitary(int(binom(n,k)), RBS_generalized(i,j,n,k,mapping_RBS), device)
     return(RBS_Unitaries_dict)
 
+
+def RBS_Unitaries_I2(I, list_gates, device):
+    """ We store the RBS unitaries corresponding to each edge in the qubit connectivity to
+    save memory. This allows to different RBS applied on the same pair of qubit to use the
+    same unitary (but different parameters). This function differs from RBS_Unitaries as 
+    we consider the basis of the Image.
+    Args:
+        - I: size of the image
+        - list_gates: list of tuples representing the qubits affected by each RBS
+        - device: torch device (cpu, cuda, etc...)
+    Output:
+        - RBS_Unitaries_dict: a dictionnary with key tuples of qubits affected by RBS and
+        with values tuples of tensors that decompose the equivalen unitary such as in
+        RBS_Unitary (cos_matrix, sin_matrix, id_matrix)
+    """
+    RBS_Unitaries_dict, qubit_edges = {}, list(set(list_gates))
+    for (i,j) in qubit_edges:
+        RBS_Unitaries_dict[(i,j)] = RBS_Unitary(int(I**2), RBS_generalized_I2_2D(i,j,I), device)
+    return(RBS_Unitaries_dict)
 
 #################################################################################
 ### RBS gate class:                                                             #
