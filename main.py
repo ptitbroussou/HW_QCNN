@@ -14,42 +14,26 @@ device = torch.device("cpu")  # Only using CPU
 n, k = 8, 2
 i, j = 0, 1
 
-initial_state = torch.zeros(int(binom(n,k)))
-initial_state[3] = 1
-rho = torch.outer(initial_state, initial_state.t())
-
-nbr_batch = 5
-rho_list = [[0 for i in range(int(binom(n,k)))] for j in range(int(binom(n,k)))]
-rho_list[3][3] = 1
-ini_state_list = [0 for i in range(int(binom(n,k)))]
-ini_state_list[3] = 1
-batch_ini = torch.tensor([ini_state_list for i in range(nbr_batch)],dtype=torch.float)
-batch_rho = torch.tensor([rho_list for i in range(nbr_batch)],dtype=torch.float)
-
-
-angle = torch.nn.Parameter(torch.randn(1)) 
-VQC_state = RBS_VQC_state_vector(n, k, [(i,j)], device)
-VQC_density = RBS_VQC_density(n, k, [(i,j)], device)
-VQC_state.RBS_gates[0].angle = angle
-VQC_density.RBS_gates[0].angle = angle
+### Initial state in the Image basis:
+initial_state_1 = torch.tensor([1.0 for i in range((n//2)**2)])
+initial_state_1 = initial_state_1/torch.norm(initial_state_1)
+initial_state_2 = torch.zeros(((n//2)**2))
+initial_state_2[0] = 1.0
+# Reshaping the initial states
+ini_1 = initial_state_1.unsqueeze(0)
+ini_2 = initial_state_2.unsqueeze(0)
+# We now consider a batch of Image:
+batch = torch.stack((initial_state_1, initial_state_2))
 
 
-a_0 = VQC_state(initial_state)
-a_1 = VQC_state(batch_ini)
-b_0 = VQC_density(rho)
-b_1 = VQC_density(batch_rho)
 
-CONV_state = Conv_RBS_state_vector(4, 2, device)
-CONV_density = Conv_RBS_density(4,2, device)
+# Define the Pytorch model of the QCNN architecture:
+CONV = Conv_RBS_state_vector_I2(n//2,4,device)
+model = nn.Sequential(Conv_RBS_state_vector_I2(n//2,4,device), Pooling_2D_state_vector(n//2, n//4,device))
 
-c_0 = CONV_state(initial_state)
-c_1 = CONV_state(batch_ini)
-d_0 = CONV_density(rho)
-d_1 = CONV_density(batch_rho)
+out_1 = model(ini_1)
+out_2 = model(ini_2)
 
-ini = torch.tensor([1.0 for i in range(4**2)])
-ini = ini/torch.linalg.norm(ini)
+out_batch = model(batch)
 
-POOL_state = Pooling_2D_state_vector(4, 2, device)
-
-e_0 = POOL_state(ini)
+print(out_1.size(), out_2.size(), out_batch.size())
