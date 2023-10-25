@@ -14,7 +14,8 @@ def Pooling_2D_Projector(I, O, device):
         - O: size of the output image (we suppose O = I//2 for now)
         - device: torch device (cpu, cuda, etc...)
     Output:
-        - Projector: projector corresponding to all cases of measurement
+        - Projector: projector corresponding to all cases of measurement. Its 
+        dimension is (k, O**2, I**2) with k the number of cases of measurement.
     """
     # Number of matrices:
     Number_of_matrices, index = 1 + 2*O + O**2, 0
@@ -55,10 +56,12 @@ class Pooling_2D_state_vector(nn.Module):
         """ This module forward a tensor made of each pure sate weighted by their
         probabilities that describe the output mixted state form the pooling layer. 
         Arg:
-            - input_sate: a torch vector representing the initial input state
+            - input_sate: a torch vector representing the initial input state. Its
+            dimension is (nbr_batch, I**2).
         Output:
-            - a torch vector made of several vectors that represents 
-            the output mixted state.
+            - a torch vector made of several vectors that represents the output 
+            mixted state with dimension (nbr_batch, k, O**2) with k the number of
+            pure states representing the mixed state.
         """
         input_state = torch.einsum('bi, koi->bko', input_state, self.Projectors.to(torch.float32))        
         return(input_state)
