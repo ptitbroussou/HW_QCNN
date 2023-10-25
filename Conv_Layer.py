@@ -152,6 +152,7 @@ class Conv_RBS_state_vector_I2(nn.Module):
         """ Feedforward of the RBS based Convolutional layer.
         Arg:
             - input_state = a state vector on which is applied the RBS from the VQC
+            of dimension (nbr_batch, I**2)
         Output:
             - final state from the application of the RBS from the VQC on the input 
             state

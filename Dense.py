@@ -41,13 +41,12 @@ class Basis_Change_I_to_HW(nn.Module):
         probabilities that describe the output mixted state form the pooling layer. 
         Arg:
             - input_sate: a torch vector representing the initial input state of 
-            dimension (nbr_batch, k, I**2) with k the number of pure states representing
-            the mixed state, and I the size of the input image.
+            dimension (nbr_batch, I**2).
         Output:
             - a torch vector made of several vectors that represents the output mixted
-            state in the basis of HW 2. Its dimension is (nbr_batch, k, binom(2*I,2)).
+            state in the basis of HW 2. Its dimension is (nbr_batch, binom(2*I,2)).
         """
-        input_state = torch.einsum('bki, oi->bko', input_state, self.Passage_matrix.to(torch.float32))
+        input_state = torch.einsum('bi, oi->bo', input_state, self.Passage_matrix.to(torch.float32))
         return(input_state)
 
 
@@ -69,15 +68,14 @@ class RBS_Dense_state_vector(nn.Module):
         """ Application of the RBS corresponding unitary on the input state.
         Args:
             - input: a torch vector representing the initial input state. Its
-            dimension is (nbr_batch, k, binom(I,2)) with k the number of pure states
-            representing the mixed state, and I the size of the input image
+            dimension is (nbr_batch, binom(I,2)).
             - RBS_unitaries: a dictionnary that gives the RBS unitary corresponding 
             to the qubit tuple such defined in RBS_Unitaries function. The unitary are
             of dimension (binom(I,2),binom(I,2))
         Output:
             - output state from the application of the RBS on the input state 
         """
-        return(torch.einsum('bki, ii->bki', input, (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2])))
+        return(torch.einsum('bi, ii->bi', input, (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2])))
 
 
 class Dense_RBS_state_vector(nn.Module):
@@ -97,14 +95,11 @@ class Dense_RBS_state_vector(nn.Module):
         """ Feedforward of the RBS based VQC.
         Arg:
             - input_state = a state vector on which is applied the RBS from the 
-            VQC. Its dimension is (nbr_batch, k, binom(I,2)) with k the number of 
-            pure states representing the mixed state, and I the size of the input image
+            VQC. Its dimension is (nbr_batch, binom(2*I,2))
         Output:
             - final state from the application of the RBS from the VQC on the input 
-            state in the basis of HW 2. Its dimension is (nbr_batch, k, binom(2*I,2))
+            state in the basis of HW 2. Its dimension is (nbr_batch, binom(2*I,2))
         """
-        #input_state = input_state.unsqueeze(-1)
         for RBS in self.RBS_gates:
             input_state = RBS(input_state, self.RBS_Unitaries_dict)
-        #input_state = input_state.squeeze(-1)
         return(input_state)

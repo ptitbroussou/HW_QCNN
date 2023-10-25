@@ -51,6 +51,7 @@ class Pooling_2D_state_vector(nn.Module):
         super().__init__()
         self.Projectors = Pooling_2D_Projector(I, O, device)
         self.Number_of_states = 1 + 2*O + O**2 # Number of projectors in Projectors_matrix
+        self.O = O
     
     def forward(self, input_state):
         """ This module forward a tensor made of each pure sate weighted by their
@@ -60,8 +61,10 @@ class Pooling_2D_state_vector(nn.Module):
             dimension is (nbr_batch, I**2).
         Output:
             - a torch vector made of several vectors that represents the output 
-            mixted state with dimension (nbr_batch, k, O**2) with k the number of
+            mixted state with dimension (nbr_batch*k, O**2) with k the number of
             pure states representing the mixed state.
         """
-        input_state = torch.einsum('bi, koi->bko', input_state, self.Projectors.to(torch.float32))        
+        input_state = torch.einsum('bi, koi->bko', input_state, self.Projectors.to(torch.float32))
+        # Resize the new state from dimension (nbr_batch, k, O**2) to dimension (nbr_batch*k, O**2):
+        input_state = input_state.view(-1, self.O**2)
         return(input_state)

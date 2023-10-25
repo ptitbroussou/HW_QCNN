@@ -12,7 +12,7 @@ from Pooling import *
 # Hardware accelerator:
 device = torch.device("cpu")  # Only using CPU
 
-n, k = 8, 2
+n, k = 16, 2
 
 ### Initial state in the Image basis:
 initial_state_1 = torch.tensor([1.0 for i in range((n//2)**2)])
@@ -30,8 +30,7 @@ batch = torch.stack((initial_state_1, initial_state_2))
 # Define the Pytorch model of the QCNN architecture:
 gate_dense = [(0,1),(1,2),(2,3),(0,1),(1,2),(2,3)]
 
-CONV = Conv_RBS_state_vector_I2(n//2,4,device)
-model = nn.Sequential(Conv_RBS_state_vector_I2(n//2,4,device), Pooling_2D_state_vector(n//2, n//4,device), Basis_Change_I_to_HW(n//4, device), Dense_RBS_state_vector(n//4,gate_dense,device))
+model = nn.Sequential(Conv_RBS_state_vector_I2(8,4,device), Pooling_2D_state_vector(8, 4,device), Conv_RBS_state_vector_I2(4,2,device), Pooling_2D_state_vector(4, 2,device), Basis_Change_I_to_HW(2, device), Dense_RBS_state_vector(2,gate_dense,device))
 
 
 print(ini_1.size(), ini_2.size(), batch.size())
