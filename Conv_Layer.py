@@ -163,3 +163,35 @@ class Conv_RBS_state_vector_I2(nn.Module):
         input_state = input_state.squeeze(-1)
         return(input_state)
     
+
+class Conv_RBS_density_I2(nn.Module):
+    """ This module describes the action of a RBS based convolutional layer in the basis
+    of the Image. """
+    def __init__(self, I, K, device):
+        """ Args:
+            - I: dimension of the initial image (for a square image I=n/2 the number of qubits)
+            - K: size of the convolutional filter
+            - device: torch device (cpu, cuda, etc...)
+        """
+        super().__init__()
+        list_gates = []
+        _, Param_dictionnary, RBS_dictionnary = QCNN_RBS_based_VQC(I, K)
+        for key in RBS_dictionnary:
+            list_gates.append((RBS_dictionnary[key], RBS_dictionnary[key]+1))
+        # We only store the RBS unitary corresponding to an edge in the qubit connectivity: 
+        self.RBS_Unitaries_dict = RBS_Unitaries_I2(I, list_gates, device)
+        self.Parameters = nn.ParameterList([nn.Parameter(torch.rand((), device=device), requires_grad = True) for i in range(int(K*(K-1)))])
+        self.RBS_gates = nn.ModuleList([RBS_Conv_density(list_gates[i], self.Parameters[Param_dictionnary[i]], device) for i in range(len(list_gates))])
+    
+    def forward(self, input_state):
+        """ Feedforward of the RBS based Convolutional layer.
+        Arg:
+            - input_state = a initial density matrix on which is applied the RBS from
+            the VQC
+        Output:
+            - final density matrix from the application of the RBS from the VQC on the
+            input state
+        """
+        for RBS in self.RBS_gates:
+            input_state = RBS(input_state, self.RBS_Unitaries_dict)
+        return(input_state)

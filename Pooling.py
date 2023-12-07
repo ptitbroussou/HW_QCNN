@@ -57,7 +57,7 @@ class Pooling_2D_state_vector(nn.Module):
         """ This module forward a tensor made of each pure sate weighted by their
         probabilities that describe the output mixted state form the pooling layer. 
         Arg:
-            - input_sate: a torch vector representing the initial input state. Its
+            - input_state: a torch vector representing the initial input state. Its
             dimension is (nbr_batch, I**2).
         Output:
             - a torch vector made of several vectors that represents the output 
@@ -68,3 +68,31 @@ class Pooling_2D_state_vector(nn.Module):
         # Resize the new state from dimension (nbr_batch, k, O**2) to dimension (nbr_batch*k, O**2):
         input_state = input_state.view(-1, self.O**2)
         return(input_state)
+
+
+class Pooling_2D_density(nn.Module):
+    """ This module describe the effect of the Pooling on the QCNN architecture while
+    simulating states as density operators. """
+    def __init__(self, I, O, device):
+        """ We suppose that the input image is square. """
+        super().__init__()
+        self.Projectors = Pooling_2D_Projector(I, O, device)
+        self.O = O
+    
+    def forward(self, input):
+        """ This module forward a tensor made of each pure sate weighted by their
+        probabilities that describe the output mixted state form the pooling layer. 
+        Arg:
+            - input: a torch vector representing the initial input state. Its
+            dimension is (nbr_batch, I**2, I**2).
+        Output:
+            - a torch vector density operator that represents the output mixted 
+            state with dimension (nbr_batch, O**2, O**2).
+        """
+        mixed_state_density_matrix = torch.zeros((input.size()[0], self.O**2, self.O**2))
+        for k in range(self.Projectors.size()[0]):
+            pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
+            pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
+            mixed_state_density_matrix += pure_state
+        input = mixed_state_density_matrix
+        return(input)
