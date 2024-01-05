@@ -141,6 +141,21 @@ def map_Computational_Basis_to_Image_Square_Subspace(n, map, input_state):
         output_state[map[key]] = torch.real(input_state[index]) # we consider only real floats
     return(output_state)
 
+def Image_Basis_B2(I, image):
+    """ This function maps a input vector image to a vector
+    representing its amplitude encoding in the basis of the image. 
+    Args:
+        - I: size of the input image
+        - image: input tensor of dimension (I,I)
+    Output:
+        - a tensor state in the basis of the image 
+    """
+    output_state = torch.zeros(I**2)
+    for i in range(I):
+        for j in range(I):
+            output_state[i*I+j] = image[i][j]
+    return(output_state)
+
 ################################################################################
 ### RBS application in the 3D Image Basis:                                     #
 ################################################################################
