@@ -68,7 +68,7 @@ class Basis_Change_I_to_HW_density(nn.Module):
             the basis of HW 2. Its dimension is (nbr_batch, binom(2*I,2), binom(2*I,2)).
         """
         input_state = torch.einsum('bii, oi->boi', input_state, self.Passage_matrix.to(torch.float32))
-        input_state = torch.einsum('boi, oi->boo', input_state, self.Passage_matrix.to(torch.float32))
+        input_state = torch.einsum('boi, ai->boa', input_state, self.Passage_matrix.to(torch.float32))
 
         return(input_state)
 
@@ -121,8 +121,8 @@ class RBS_Dense_density(nn.Module):
         Output:
             - output state from the application of the RBS on the input state 
         """
-        input = torch.einsum('ii, bii->bii', (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]), input)
-        input = torch.einsum('bii, ii->bii', input, (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).t)
+        input = torch.einsum('ij, bij->bij', (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]), input)
+        input = torch.einsum('bij, ji->bij', input, (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]))
         return(input)
 
 class Dense_RBS_state_vector(nn.Module):

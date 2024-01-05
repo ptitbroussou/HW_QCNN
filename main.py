@@ -36,8 +36,12 @@ gate_dense = [(0,1),(1,2),(2,3),(0,1),(1,2),(2,3)]
 model_state = nn.Sequential(Conv_RBS_density_I2(4,2,device), Pooling_2D_density(4,2,device), Basis_Change_I_to_HW_density(2, device), Dense_RBS_density(2, gate_dense, device))
 
 # Data Loading
-I, batch_size, nbr_class, nbr_train, nbr_test = 28, 1, 1, 500, 100
+I, batch_size, nbr_class, nbr_train, nbr_test = 28, 2, 10, 500, 100
 mnistTrainLoader, mnistTestLoader = MNIST_DataLoading(I, batch_size, nbr_class, nbr_train, nbr_test)
+
+model = nn.Sequential(Conv_RBS_density_I2(28,7,device), Pooling_2D_density(28, 14, device), Conv_RBS_density_I2(14,2,device), Pooling_2D_density(14, 7, device), Basis_Change_I_to_HW_density(7, device), Dense_RBS_density(7, gate_dense, device))
+training(model=model, nbr_epochs=2, nbr_class=nbr_class, TrainLoader=mnistTrainLoader, TestLoader=mnistTestLoader, device=device)
+
 
 #model = QCNN_model(model_state, nbr_epochs=5, loss_fn=nn.MSELoss, device=device)
 #X_train, y_train, X_test, y_test, _ =  Fashion_MNIST_pca([i for i in range(2)], 500, 100, Npca=8**2, I=8, O=int(binom(4,2)))

@@ -8,17 +8,23 @@ import torchvision.transforms as transforms
 from sklearn.decomposition import PCA
 from keras.datasets import mnist, fashion_mnist
 
-from toolbox import map_RBS, RBS_generalized
+from toolbox import map_RBS, RBS_generalized, Image_Basis_B2
 
 ### MNIST dataset ########################################################
 class custom_transform(object):
+    """ This transformation converts the input data from a torchvision dataset
+    into a density by first normalizing the input vector (as input state) and
+    by representing the pure states as density operator. """
     def __init__(self, I, map):
         self.I = I
         self.map = map    
     def __call__(self,img):
-        img = Image_Basis_B2(self.I, img.resize(self.I, self.I), self.map)
+        # Express the input data as amplitude encoded state in the image basis:
+        img = Image_Basis_B2(self.I, img.resize(self.I, self.I))
         img = img/torch.linalg.norm(img)
-        return(img)    
+        # Express the input state as a density operator:
+        img = torch.einsum('i, j->ij', img, img)
+        return(img)
     def __repr__(self):
         return self.__class__.__name__+'()'
 
