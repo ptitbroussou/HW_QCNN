@@ -97,7 +97,7 @@ class RBS_Dense_state_vector(nn.Module):
         Output:
             - output state from the application of the RBS on the input state 
         """
-        return(torch.einsum('bi, ii->bi', input, (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2])))
+        return(torch.matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).unsqueeze(0),input.unsqueeze(-1)).squeeze(-1))
 
 class RBS_Dense_density(nn.Module):
     """ This module describe the action of one RBS gate."""
@@ -121,9 +121,10 @@ class RBS_Dense_density(nn.Module):
         Output:
             - output state from the application of the RBS on the input state 
         """
-        input = torch.einsum('ij, bij->bij', (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]), input)
-        input = torch.einsum('bij, ji->bij', input, (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]))
+        b, I, I = input.size()
+        input = torch.matmul(torch.matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).unsqueeze(0).expand(b, I, I), input), (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).conj().T.unsqueeze(0).expand(b, I, I))
         return(input)
+        #return((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input).matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).t()))
 
 class Dense_RBS_state_vector(nn.Module):
     """ This module describes the action of one RBS based VQC. """

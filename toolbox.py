@@ -70,8 +70,27 @@ def map_Computational_Basis_to_HW_Subspace(n, k, map, input_state):
         output_state[map[key]] = torch.real(input_state[index]) # we consider only real floats
     return(output_state)
 
-
-
+def map_Computational_Basis_to_HW_Subspace_density(n, k, map, input_density):
+    """ This function transforms an input_state from the 
+    computational basis to its equivalent in the basis of
+    fixed Hamming Weight. 
+    Args:
+        - n: number of qubits
+        - k: Hamming weight
+        - map: a dictionnary that links the active qubits and the 
+        state index in the basis of fixed Hamming Weight. Can be 
+        produced by using the function map_RBS.
+        - input_density: a density matrix in the computational basis.
+    Output:
+        - a density matrix in the basis of fixed Hamming Weight.
+    """
+    output_density = torch.zeros(int(binom(n,k)),int(binom(n,k)))
+    for key_1 in map.keys():
+        index_1 = sum([2**(n-i-1) for i in key_1]) # index in the computational basis
+        for key_2 in map.keys():
+            index_2 = sum([2**(n-i-1) for i in key_2]) # index in the computational basis
+            output_density[map[key_1], map[key_2]] = torch.real(input_density[index_1, index_2]) # we consider only real floats
+    return(output_density)
 ################################################################################
 ### RBS application in the 2D Image Basis:                                     #
 ################################################################################
@@ -140,6 +159,28 @@ def map_Computational_Basis_to_Image_Square_Subspace(n, map, input_state):
         index = sum([2**(n-i-1) for i in key]) # index in the computational basis:
         output_state[map[key]] = torch.real(input_state[index]) # we consider only real floats
     return(output_state)
+
+def map_Computational_Basis_to_Image_Square_Subspace_density(n, map, input_density):
+    """ This function transforms an input_state from the
+    computational basis to its equivalent in the basis of
+    the image. We suppose the image to be square.
+    Args:
+        - n: number of qubits
+        - k: Hamming weight
+        - map: a dictionnary that links the active qubits and the
+        state index in the basis of the Image. Can be produce by
+        using the function map_RBS_I2_2D.
+    Output:
+        - a state in the basis of the image.
+    """
+    output_density = torch.zeros((n//2)**2,(n//2)**2)
+    for key_1 in map.keys():
+        index_1 = sum([2**(n-i-1) for i in key_1]) # index in the computational basis
+        for key_2 in map.keys():
+            index_2 = sum([2**(n-i-1) for i in key_2]) # index in the computational basis
+            output_density[map[key_1],map[key_2]] = torch.real(input_density[index_1,index_2]) # we consider only real floats
+    return(output_density)
+
 
 def Image_Basis_B2(I, image):
     """ This function maps a input vector image to a vector

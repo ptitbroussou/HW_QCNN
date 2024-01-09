@@ -92,9 +92,9 @@ def denseRBS_gates(affected_qubits):
         list_gates.append((affected_qubits[index], affected_qubits[index+1]))
     return(list_gates)
 
-def dense_RBS(angles, affected_qubits):
+def dense_RBS(angles, list_gates):
     """ This function apply a RBS dense layer in the remaining qubits """
-    list_gates = denseRBS_gates(affected_qubits)
+    #list_gates = denseRBS_gates(affected_qubits)
     for index, RBS in enumerate(list_gates):
         i,j = RBS
         angle = angles[index]
