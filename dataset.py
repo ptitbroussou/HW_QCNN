@@ -84,9 +84,9 @@ def Fashion_MNIST_pca(list_class, nbr_training_samples, nbr_test_samples, Npca=2
     X_train, X_test = X_train.reshape(60000, 28**2), X_test.reshape(10000, 28**2)
     X_pca_train, X_pca_test = pca.fit_transform(X_train), pca.fit_transform(X_test)
     var_exp = pca.explained_variance_ratio_
-    dictionnary_label = {}
+    dictionary_label = {}
     for i,label in enumerate(list_class):
-        dictionnary_label[label] = i
+        dictionary_label[label] = i
     nbr_train, nbr_test = 0, 0
     for y in y_train:
         if (y in list_class):
@@ -100,12 +100,12 @@ def Fashion_MNIST_pca(list_class, nbr_training_samples, nbr_test_samples, Npca=2
     for i, y in enumerate(y_train):
         if (y in list_class):
             X_train[new_index] = X_pca_train[i]/np.linalg.norm(X_pca_train[i])
-            y_vector_train[new_index][dictionnary_label[y]] = 1
+            y_vector_train[new_index][dictionary_label[y]] = 1
             new_index += 1
     new_index = 0
     for i,y in enumerate(y_test):
         if (y in list_class):
             X_test[new_index] = X_pca_test[i]/np.linalg.norm(X_pca_test[i])
-            y_vector_test[new_index][dictionnary_label[y]] = 1
+            y_vector_test[new_index][dictionary_label[y]] = 1
             new_index += 1
     return(X_train[:nbr_training_samples], y_vector_train[:nbr_training_samples], X_test[:nbr_test_samples], y_vector_test[:nbr_test_samples], var_exp)

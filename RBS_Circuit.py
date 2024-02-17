@@ -39,17 +39,17 @@ def Chosen_RBS_VQC(n, k, list_gates):
         - k: chosen Hamming Weight
         - list_gates: list of tuples that describe the qubits on which are applied the RBS
     Outputs:
-        - QNN_dictionnary: dictionnary that link each gate with a list of tuples that 
+        - QNN_dictionary: dictionary that link each gate with a list of tuples that 
         represents the planar rotations form this RBS
         - QNN_layer: list of list of gates. Each sub-list represents a layer filled with 
         RBS gates represented by indexes.
     """
-    QNN_layer, QNN_dictionnary = [[i] for i in range(len(list_gates))], {}
+    QNN_layer, QNN_dictionary = [[i] for i in range(len(list_gates))], {}
     mapping_RBS = map_RBS(n, k)
     for RBS in range(len(QNN_layer)):
         i,j = list_gates[RBS]
-        QNN_dictionnary[RBS] = RBS_generalized(i,j, n, k, mapping_RBS)
-    return(QNN_dictionnary, QNN_layer)
+        QNN_dictionary[RBS] = RBS_generalized(i,j, n, k, mapping_RBS)
+    return(QNN_dictionary, QNN_layer)
 
 
 def RBS_Unitaries(n, k, list_gates, device):
@@ -62,7 +62,7 @@ def RBS_Unitaries(n, k, list_gates, device):
         - list_gates: list of tuples representing the qubits affected by each RBS
         - device: torch device (cpu, cuda, etc...)
     Output:
-        - RBS_Unitaries_dict: a dictionnary with key tuples of qubits affected by RBS and
+        - RBS_Unitaries_dict: a dictionary with key tuples of qubits affected by RBS and
         with values tuples of tensors that decompose the equivalen unitary such as in 
         RBS_Unitary (cos_matrix, sin_matrix, id_matrix)
     """
@@ -83,7 +83,7 @@ def RBS_Unitaries_I2(I, list_gates, device):
         - list_gates: list of tuples representing the qubits affected by each RBS
         - device: torch device (cpu, cuda, etc...)
     Output:
-        - RBS_Unitaries_dict: a dictionnary with key tuples of qubits affected by RBS and
+        - RBS_Unitaries_dict: a dictionary with key tuples of qubits affected by RBS and
         with values tuples of tensors that decompose the equivalen unitary such as in
         RBS_Unitary (cos_matrix, sin_matrix, id_matrix)
     """
@@ -110,7 +110,7 @@ class RBS_Gate_state_vector(nn.Module):
         """ Application of the RBS corresponding unitary on the input state.
         Args:
             - input: a torch vector representing the initial input state
-            - RBS_unitaries: a dictionnary that gives the RBS unitary corresponding 
+            - RBS_unitaries: a dictionary that gives the RBS unitary corresponding 
             to the qubit tuple such defined in RBS_Unitaries function
         Output:
             - output state from the application of the RBS on the input state 
@@ -133,7 +133,7 @@ class RBS_Gate_density(nn.Module):
         """ Application of the RBS corresponding unitary on the input state.
         Args:
             - input: a torch matrix representing the initial input as a density matrix
-            - RBS_unitaries: a dictionnary that gives the RBS unitary corresponding 
+            - RBS_unitaries: a dictionary that gives the RBS unitary corresponding 
             to the qubit tuple such defined in RBS_Unitaries function
         Output:
             - output density matrix from the application of the RBS on the input state

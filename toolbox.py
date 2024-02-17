@@ -14,22 +14,22 @@ def recursive_next_list_RBS(n, k, list_index, index):
         new_list_index[index] = new_list_index[index - 1] + 1
     return(new_list_index)
 
-def dictionnary_RBS(n,k):
-    """ gives a dictionnary that links the state and the list of active bits
+def dictionary_RBS(n,k):
+    """ gives a dictionary that links the state and the list of active bits
     for a k arrangment basis """
     nbr_of_states = int(binom(n,k))
-    RBS_dictionnary = {}
+    RBS_dictionary = {}
     for state in range(nbr_of_states):
         if (state == 0):
-            RBS_dictionnary[state] = [i for i in range(k)]
+            RBS_dictionary[state] = [i for i in range(k)]
         else:
-            RBS_dictionnary[state] = recursive_next_list_RBS(n, k, RBS_dictionnary[state-1], k-1)
-    return(RBS_dictionnary)
+            RBS_dictionary[state] = recursive_next_list_RBS(n, k, RBS_dictionary[state-1], k-1)
+    return(RBS_dictionary)
 
 def map_RBS(n, k):
     """ Given the number of qubits n and the chosen Hamming weight k, outputs
     the corresponding state for a tuple of k active qubits. """
-    Dict_RBS = dictionnary_RBS(n,k)
+    Dict_RBS = dictionary_RBS(n,k)
     mapping_RBS = {tuple(val): key for (key,val) in Dict_RBS.items()}
     return(mapping_RBS)
 
@@ -57,7 +57,7 @@ def map_Computational_Basis_to_HW_Subspace(n, k, map, input_state):
     Args:
         - n: number of qubits
         - k: Hamming weight
-        - map: a dictionnary that links the active qubits and the 
+        - map: a dictionary that links the active qubits and the 
         state index in the basis of fixed Hamming Weight. Can be 
         produced by using the function map_RBS.
         - input_state: a state in the computational basis.
@@ -77,7 +77,7 @@ def map_Computational_Basis_to_HW_Subspace_density(n, k, map, input_density):
     Args:
         - n: number of qubits
         - k: Hamming weight
-        - map: a dictionnary that links the active qubits and the 
+        - map: a dictionary that links the active qubits and the 
         state index in the basis of fixed Hamming Weight. Can be 
         produced by using the function map_RBS.
         - input_density: a density matrix in the computational basis.
@@ -94,26 +94,26 @@ def map_Computational_Basis_to_HW_Subspace_density(n, k, map, input_density):
 ################################################################################
 ### RBS application in the 2D Image Basis:                                     #
 ################################################################################
-def dictionnary_RBS_I2_2D(I):
-    """ gives a dictionnary that links the state and the list of active bits
+def dictionary_RBS_I2_2D(I):
+    """ gives a dictionary that links the state and the list of active bits
     for a basis of IxI images. """
-    RBS_dictionnary = {}
+    RBS_dictionary = {}
     for line in range(I):
         for column in range(I):
-            RBS_dictionnary[line*I + column] = [line, column+I]
-    return(RBS_dictionnary)
+            RBS_dictionary[line*I + column] = [line, column+I]
+    return(RBS_dictionary)
 
 def map_RBS_I2_2D(I):
     """ Given the number of qubits n and the chosen Hamming weight k, outputs
     the corresponding state for a tuple of k active qubits. """
-    Dict_RBS = dictionnary_RBS_I2_2D(I)
+    Dict_RBS = dictionary_RBS_I2_2D(I)
     mapping_RBS = {tuple(val): key for (key,val) in Dict_RBS.items()}
     return(mapping_RBS)
 
 def map_RBS_Image_HW2(I, dict_I2, map_RBS_HW2, sample):
-    """ gives a dictionnary that links the state in the basis of image of size 
+    """ gives a dictionary that links the state in the basis of image of size 
     IxI to the equivalent state in the basis of Hamming Weight 2. """
-    #dict_I2 = dictionnary_RBS_I2_2D(I)
+    #dict_I2 = dictionary_RBS_I2_2D(I)
     output = np.zeros(int(binom(2*I,2)))
     for key in dict_I2.keys():
         (i,j) = dict_I2[key]
@@ -148,7 +148,7 @@ def map_Computational_Basis_to_Image_Square_Subspace(n, map, input_state):
     Args:
         - n: number of qubits
         - k: Hamming weight
-        - map: a dictionnary that links the active qubits and the
+        - map: a dictionary that links the active qubits and the
         state index in the basis of the Image. Can be produce by
         using the function map_RBS_I2_2D.
     Output:
@@ -167,7 +167,7 @@ def map_Computational_Basis_to_Image_Square_Subspace_density(n, map, input_densi
     Args:
         - n: number of qubits
         - k: Hamming weight
-        - map: a dictionnary that links the active qubits and the
+        - map: a dictionary that links the active qubits and the
         state index in the basis of the Image. Can be produce by
         using the function map_RBS_I2_2D.
     Output:
@@ -200,20 +200,20 @@ def Image_Basis_B2(I, image):
 ################################################################################
 ### RBS application in the 3D Image Basis:                                     #
 ################################################################################
-def dictionnary_RBS_I2_3D(I,C):
-    """ gives a dictionnary that links the state and the list of active bits
+def dictionary_RBS_I2_3D(I,C):
+    """ gives a dictionary that links the state and the list of active bits
     for a basis of CxIxI images. """
-    RBS_dictionnary = {}
+    RBS_dictionary = {}
     for line in range(I):
         for column in range(I):
             for channel in range(C):
-              RBS_dictionnary[channel*I**2 + line*I + column] = [line, column+I, 2*I+channel]
-    return(RBS_dictionnary)
+              RBS_dictionary[channel*I**2 + line*I + column] = [line, column+I, 2*I+channel]
+    return(RBS_dictionary)
 
 def map_RBS_I2_3D(I,C):
     """ Given the number of qubits 2*I+C and the chosen Hamming weight 3, outputs
     the corresponding state for a tuple of k active qubits. """
-    Dict_RBS = dictionnary_RBS_I2_3D(I,C)
+    Dict_RBS = dictionary_RBS_I2_3D(I,C)
     mapping_RBS = {tuple(val): key for (key,val) in Dict_RBS.items()}
     return(mapping_RBS)
 
@@ -244,44 +244,44 @@ def RBS_generalized_I2_3D(a, b, I, C):
 def QCNN_RBS_based_VQC(I, K):
     """ I represents the size of the input image. K represents the size of the
     filter we consider. The stride is always equal to K. Each elements of 
-    QNN_layer is a list of gates applied in parallel. Param_dictionnary is a 
-    dictionnary that links each gate with the corresponding parameter. 
-    RBS_dictionnary is a dictionnary that links each RBS with its corresponding
+    QNN_layer is a list of gates applied in parallel. Param_dictionary is a 
+    dictionary that links each gate with the corresponding parameter. 
+    RBS_dictionary is a dictionary that links each RBS with its corresponding
     first qubit of application. """ 
     #Connectivity_Graph = QCNN_Connectivity_graph(I)
     nbr_parameters = int(K*(K-1))
-    Param_dictionnary, RBS_dictionnary = {}, {}
+    Param_dictionary, RBS_dictionary = {}, {}
     QNN_layer = [[] for i in range(2*K - 3)]
     # QCNN circuit definition:
     for index_filter in range((I-K)//K+1):
         # For the first half of qubits:
-        PQNN_param_dictionnary1, PQNN_dictionnary1, PQNN_layer1 = PQNN_building_brick(K*index_filter, K, index_filter*(nbr_parameters//2), 0)
+        PQNN_param_dictionary1, PQNN_dictionary1, PQNN_layer1 = PQNN_building_brick(K*index_filter, K, index_filter*(nbr_parameters//2), 0)
         # For the second half of qubits:
-        PQNN_param_dictionnary2, PQNN_dictionnary2, PQNN_layer2 = PQNN_building_brick(I+ K*index_filter, K, (I//K + index_filter)*(nbr_parameters//2), (nbr_parameters//2))
+        PQNN_param_dictionary2, PQNN_dictionary2, PQNN_layer2 = PQNN_building_brick(I+ K*index_filter, K, (I//K + index_filter)*(nbr_parameters//2), (nbr_parameters//2))
         # Updating the dictionnaries and the QNN_layers:
-        RBS_dictionnary.update(PQNN_dictionnary1)
-        RBS_dictionnary.update(PQNN_dictionnary2)
-        Param_dictionnary.update(PQNN_param_dictionnary1)
-        Param_dictionnary.update(PQNN_param_dictionnary2)
+        RBS_dictionary.update(PQNN_dictionary1)
+        RBS_dictionary.update(PQNN_dictionary2)
+        Param_dictionary.update(PQNN_param_dictionary1)
+        Param_dictionary.update(PQNN_param_dictionary2)
         for inner_layer_index in range(2*K - 3):
             for element_index in range(len(PQNN_layer1[inner_layer_index])):
                 QNN_layer[inner_layer_index].append(PQNN_layer1[inner_layer_index][element_index])
                 QNN_layer[inner_layer_index].append(PQNN_layer2[inner_layer_index][element_index])
-    return(QNN_layer, Param_dictionnary, RBS_dictionnary)
+    return(QNN_layer, Param_dictionary, RBS_dictionary)
 
 def PQNN_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=0):
     """ This function gives back the QNN corresponding to a PQNN with nearest
     neighbours connectivity that start on qubit start_qubit. The size of the
     PQNN is given (nbr of qubits) by the input variable size.
-    The PQNN_param_dictionnary gives the corresponding parameters to each RBS. The
+    The PQNN_param_dictionary gives the corresponding parameters to each RBS. The
     index_first_RBS is used to named properly the RBS. The
-    PQNN_dictionnary is a dictionnary that gives the correspondance between the
+    PQNN_dictionary is a dictionary that gives the correspondance between the
     RBS and the corresponding edge in the connectivity graph."""
-    PQNN_param_dictionnary, PQNN_dictionnary, PQNN_layer = {}, {}, []
+    PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = {}, {}, []
     List_order, List_layer_index = Pyramidal_Order_RBS_gates(size, start_qubit)
     for index, RBS in enumerate(List_order):
-        PQNN_param_dictionnary[index_first_RBS + index] = index_first_param + index
-        PQNN_dictionnary[index_first_RBS + index] = start_qubit + RBS
+        PQNN_param_dictionary[index_first_RBS + index] = index_first_param + index
+        PQNN_dictionary[index_first_RBS + index] = start_qubit + RBS
     # Definition of the QNN_layers thanks to List_layer_index structure
     index_RBS = index_first_RBS
     for layer in List_layer_index:
@@ -290,7 +290,7 @@ def PQNN_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=
             layer_CQNN.append(index_RBS)
             index_RBS += 1
         PQNN_layer.append(layer_CQNN)
-    return(PQNN_param_dictionnary, PQNN_dictionnary, PQNN_layer)
+    return(PQNN_param_dictionary, PQNN_dictionary, PQNN_layer)
 
 def Pyramidal_Order_RBS_gates(nbr_qubits, first_RBS = 0):
     """ This function gives the structure of each inner layer in the pyramidal

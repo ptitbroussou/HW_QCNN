@@ -91,7 +91,7 @@ class RBS_Dense_state_vector(nn.Module):
         Args:
             - input: a torch vector representing the initial input state. Its
             dimension is (nbr_batch, binom(I,2)).
-            - RBS_unitaries: a dictionnary that gives the RBS unitary corresponding 
+            - RBS_unitaries: a dictionary that gives the RBS unitary corresponding 
             to the qubit tuple such defined in RBS_Unitaries function. The unitary are
             of dimension (binom(I,2),binom(I,2))
         Output:
@@ -115,7 +115,7 @@ class RBS_Dense_density(nn.Module):
         Args:
             - input: a torch vector representing the initial density operator.
             Its dimension is (nbr_batch, binom(I,2), binom(I,2)).
-            - RBS_unitaries: a dictionnary that gives the RBS unitary corresponding 
+            - RBS_unitaries: a dictionary that gives the RBS unitary corresponding 
             to the qubit tuple such defined in RBS_Unitaries function. The unitary are
             of dimension (binom(I,2),binom(I,2))
         Output:

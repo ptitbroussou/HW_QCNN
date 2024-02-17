@@ -34,13 +34,13 @@ def Conv_2D_gates(affected_qubits, K):
      angles is a list of parameters
     of size K*(K-1). """
     list_gates = []
-    _, Param_dictionnary, RBS_dictionnary = QCNN_RBS_based_VQC(len(affected_qubits)//2, K)
-    for key in RBS_dictionnary:
-            list_gates.append((affected_qubits[RBS_dictionnary[key]], affected_qubits[RBS_dictionnary[key]+1]))
-    return(Param_dictionnary, list_gates)
+    _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC(len(affected_qubits)//2, K)
+    for key in RBS_dictionary:
+            list_gates.append((affected_qubits[RBS_dictionary[key]], affected_qubits[RBS_dictionary[key]+1]))
+    return(Param_dictionary, list_gates)
 
 # Convolutional layer using pennylane:
-def Conv_RBS_2D(angles, Param_dictionnary, list_gates):
+def Conv_RBS_2D(angles, Param_dictionary, list_gates):
     """ This function creates a Convolutional layer with RBS gates.
     The list affected_qubits contains the qubits on which we apply 
     the RBS gates, and K represents the size of the filter window.
@@ -48,7 +48,7 @@ def Conv_RBS_2D(angles, Param_dictionnary, list_gates):
     of size K*(K-1). """
     for index, RBS in enumerate(list_gates):
         i,j = RBS
-        angle = angles[Param_dictionnary[index]]
+        angle = angles[Param_dictionary[index]]
         # decomposing the RBS gate:
         qml.Hadamard(wires=i)
         qml.Hadamard(wires=j)
@@ -75,8 +75,8 @@ def Pool_2D(affected_qubits):
 #############################################################################################################
 def conv_and_pooling(angles, K, affected_qubits):
     """ Apply both the convolution and the pooling layer."""
-    conv2D_dictionnary, conv2D_gates = Conv_2D_gates(affected_qubits, K)
-    Conv_RBS_2D(angles, conv2D_dictionnary, conv2D_gates)
+    conv2D_dictionary, conv2D_gates = Conv_2D_gates(affected_qubits, K)
+    Conv_RBS_2D(angles, conv2D_dictionary, conv2D_gates)
     Pool_2D(affected_qubits)
 
 #############################################################################################################
