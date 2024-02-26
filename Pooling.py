@@ -5,7 +5,6 @@ from scipy.special import binom
 from toolbox import map_RBS_I2_2D, map_RBS_I2_3D, map_RBS
 
 
-
 def Pooling_2D_Projector(I, O, device):
     """ This function mimics the effect of a HW preserving pooling layer on half
     the remaining qubits. We suppose that the input image is square.
@@ -37,8 +36,8 @@ def Pooling_2D_Projector(I, O, device):
             Projectors[index, i*O+j, (2*i)*I + 2*j+1] = 1
         index +=1
     # If we measure a qubit in |1> in the column register
-    for i in range(O): # we measure this qubit in state |1> 
-        for j in range(O):
+    for j in range(O): # we measure this qubit in state |1>
+        for i in range(O):
             Projectors[index, i*O+j, (2*i+1)*I + 2*j] = 1
         index +=1
     return(Projectors)
@@ -54,8 +53,8 @@ class Pooling_2D_state_vector(nn.Module):
         self.O = O
     
     def forward(self, input_state):
-        """ This module forward a tensor made of each pure sate weighted by their
-        probabilities that describe the output mixted state form the pooling layer. 
+        """ This module forward a tensor made of each pure state weighted by their
+        probabilities that describe the output mixed state form the pooling layer.
         Arg:
             - input_state: a torch vector representing the initial input state. Its
             dimension is (nbr_batch, I**2).
@@ -76,23 +75,27 @@ class Pooling_2D_density(nn.Module):
     def __init__(self, I, O, device):
         """ We suppose that the input image is square. """
         super().__init__()
-        self.Projectors = Pooling_2D_Projector(I, O, device)
+        self.Projectors = Pooling_2D_Projector(I, O, device).float()
         self.O = O
     
     def forward(self, input):
-        """ This module forward a tensor made of each pure sate weighted by their
+        """ This module forward a tensor made of each pure state weighted by their
         probabilities that describe the output mixted state form the pooling layer. 
         Arg:
-            - input: a torch vector representing the initial input state. Its
-            dimension is (nbr_batch, I**2, I**2).
+            - input: a torch vector representing the initial input state (density matrix).
+            Its dimension is (nbr_batch, I**2, I**2).
         Output:
             - a torch vector density operator that represents the output mixted 
             state with dimension (nbr_batch, O**2, O**2).
         """
-        mixed_state_density_matrix = torch.zeros((input.size()[0], self.O**2, self.O**2))
-        for k in range(self.Projectors.size()[0]):
-            pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
-            pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
-            mixed_state_density_matrix += pure_state
+        # mixed_state_density_matrix = torch.zeros((input.size()[0], self.O**2, self.O**2))
+        # for k in range(self.Projectors.size()[0]):
+        #     pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
+        #     pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
+        #     mixed_state_density_matrix += pure_state
+        mixed_state_density_matrix = torch.zeros(input.size()[0], self.O**2, self.O**2)
+        for i in range(input.size()[0]):
+            for p in self.Projectors:
+                mixed_state_density_matrix[i] += p @ input[i] @ p.T
         input = mixed_state_density_matrix
         return(input)
