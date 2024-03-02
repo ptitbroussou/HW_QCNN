@@ -33,8 +33,7 @@ class RBS_Conv_state_vector(nn.Module):
         Output:
             - output state from the application of the RBS on the input state 
         """
-        return ((RBS_unitaries[self.qubit_tuple][0] * torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][
-            1] * torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input))
+        return (RBS_unitaries[self.qubit_tuple][0] * torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1] * torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input)
 
 
 class RBS_Conv_density(nn.Module):
@@ -73,7 +72,7 @@ class RBS_Conv_density(nn.Module):
 ### Convolutional layer class in the basis of fixed HW:                         #
 #################################################################################
 class Conv_RBS_state_vector(nn.Module):
-    """ This module describes the action of a RBS based convolutional layer. """
+    """ This module describes the action of an RBS based convolutional layer. """
 
     def __init__(self, I, K, device):
         """ Args:
@@ -179,6 +178,7 @@ class Conv_RBS_state_vector_I2(nn.Module):
             - final state from the application of the RBS from the VQC on the input 
             state
         """
+        input_state = input_state.float()
         input_state = input_state.unsqueeze(-1)
         for RBS in self.RBS_gates:
             input_state = RBS(input_state, self.RBS_Unitaries_dict)

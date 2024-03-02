@@ -9,8 +9,8 @@ from toolbox import map_RBS, RBS_generalized, RBS_generalized_I2_2D
 ### RBS decomposition toolbox:                                                  #
 #################################################################################
 def RBS_Unitary(nbr_state, gate_impact, device):
-    """ Return a RBS corresponding unitary decomposed as coeffs that should be multiply by
-    cos(theta), coeffs that should be multiply by sin(theta) and the ones that are constant
+    """ Return an RBS corresponding unitary decomposed as coeffs that should be multiplied by
+    cos(theta), coeffs that should be multiplied by sin(theta) and the ones that are constant
     equal to one. This decomposition allows to avoid inplace operations. 
     Args:
         - nbr_state: size of the considered basis

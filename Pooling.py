@@ -77,6 +77,7 @@ class Pooling_2D_density(nn.Module):
         super().__init__()
         self.Projectors = Pooling_2D_Projector(I, O, device).float()
         self.O = O
+        self.device = device
     
     def forward(self, input):
         """ This module forward a tensor made of each pure state weighted by their
@@ -93,7 +94,7 @@ class Pooling_2D_density(nn.Module):
         #     pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
         #     pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
         #     mixed_state_density_matrix += pure_state
-        mixed_state_density_matrix = torch.zeros(input.size()[0], self.O**2, self.O**2)
+        mixed_state_density_matrix = torch.zeros(input.size()[0], self.O**2, self.O**2).to(self.device)
         for i in range(input.size()[0]):
             for p in self.Projectors:
                 mixed_state_density_matrix[i] += p @ input[i] @ p.T

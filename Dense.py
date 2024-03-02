@@ -122,9 +122,8 @@ class RBS_Dense_density(nn.Module):
             - output state from the application of the RBS on the input state 
         """
         b, I, I = input.size()
-        input = torch.matmul(torch.matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).unsqueeze(0).expand(b, I, I), input), (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).conj().T.unsqueeze(0).expand(b, I, I))
-        return(input)
-        #return((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input).matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).t()))
+        return torch.matmul(torch.matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).unsqueeze(0).expand(b, I, I), input), (RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).conj().T.unsqueeze(0).expand(b, I, I))
+        # return((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input).matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).t()))
 
 class Dense_RBS_state_vector(nn.Module):
     """ This module describes the action of one RBS based VQC. """
@@ -170,11 +169,12 @@ class Dense_RBS_density(nn.Module):
         """ Feedforward of the RBS based VQC.
         Arg:
             - input_state = a density operator on which is applied the RBS from the 
-            VQC. Its dimension is (nbr_batch, I**2, I**2)
+            VQC. Its dimension is (nbr_batch, binom(2*I,2), binom(2*I,2))
         Output:
             - final density operator from the application of the RBS from the VQC on
-            the input density operator. Its dimension is (nbr_batch, I**2, I**2).
+            the input density operator. Its dimension is (nbr_batch, binom(2*I,2), binom(2*I,2)).
         """
+        input_state = input_state.float()
         for RBS in self.RBS_gates:
             input_state = RBS(input_state, self.RBS_Unitaries_dict)
         return(input_state)
