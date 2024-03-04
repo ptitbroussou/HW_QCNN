@@ -377,17 +377,17 @@ def to_density_matrix(batch_vectors, device):
     return out
 
 
-def get_predict_number_vector(MI, device):
+def get_predict_number_vector(output_network, device):
     """
     input: 5*91*91， 10*1540*1540
     output:5*10
     """
-    batch_number = MI.size()[0]
-    matrix_size = MI.size()[1]
-    step = MI.size()[1] // 10
+    batch_number = output_network.size()[0]
+    matrix_size = output_network.size()[1]
+    step = output_network.size()[1] // 10
     batch_output = []
     for i in range(batch_number):
-        diagonal = torch.diag(MI[i]).to(device)
+        diagonal = torch.diag(output_network[i]).to(device)
         output_list = []
         for j in range(0, matrix_size, step):
             chunk_sum = torch.sum(diagonal[j:j + step]).to(device)
@@ -431,5 +431,19 @@ def get_batch_projectors(numbers, batch_size, CN2, device):
     projector_size = CN2//10
     for i in range(batch_size):
         for j in range(numbers[i]*projector_size,(numbers[i]+1)*projector_size):
-            output[i][j][j] += 1
+            output[i][j][j] += 1.0/projector_size
+    return output
+
+
+def get_batch_dot_projectors(numbers, batch_size, CN2, device):
+    """
+    get the dot target matrix to calculate the loss function
+    numbers: target in the MNIST dataloader, size: batch * 1
+    CN2: binom(n,2)
+    output size: batch * CN2 * CN2
+    """
+    output = torch.zeros(batch_size,CN2,CN2).to(device)
+    projector_size = CN2//10
+    for i in range(batch_size):
+        output[i][((2*numbers[i]+1)//2)*projector_size][((2*numbers[i]+1)//2)*projector_size] += 1.0
     return output
