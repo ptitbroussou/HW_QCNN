@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from scipy.special import binom
 from itertools import combinations
+from torch.utils.data import DataLoader, TensorDataset
 
 
 ################################################################################
@@ -377,14 +378,14 @@ def to_density_matrix(batch_vectors, device):
     return out
 
 
-def get_predict_number_vector(output_network, device):
+def get_predict_number_vector(output_network, predict_size, device):
     """
     input: 5*91*91， 10*1540*1540
     output:5*10
     """
     batch_number = output_network.size()[0]
     matrix_size = output_network.size()[1]
-    step = output_network.size()[1] // 10
+    step = matrix_size // predict_size
     batch_output = []
     for i in range(batch_number):
         diagonal = torch.diag(output_network[i]).to(device)
@@ -420,7 +421,7 @@ def batch_softargmax(predict_number_vectors, device):
     return out.float()
 
 
-def get_batch_projectors(numbers, batch_size, CN2, device):
+def get_batch_projectors(numbers, batch_size, CN2, class_number, device):
     """
     get the target matrix to calculate the loss function
     numbers: target in the MNIST dataloader, size: batch * 1
@@ -428,7 +429,7 @@ def get_batch_projectors(numbers, batch_size, CN2, device):
     output size: batch * CN2 * CN2
     """
     output = torch.zeros(batch_size,CN2,CN2).to(device)
-    projector_size = CN2//10
+    projector_size = CN2//class_number
     for i in range(batch_size):
         for j in range(numbers[i]*projector_size,(numbers[i]+1)*projector_size):
             output[i][j][j] += 1.0/projector_size
@@ -447,3 +448,25 @@ def get_batch_dot_projectors(numbers, batch_size, CN2, device):
     for i in range(batch_size):
         output[i][((2*numbers[i]+1)//2)*projector_size][((2*numbers[i]+1)//2)*projector_size] += 1.0
     return output
+
+def filter_dataloader(dataloader, classes=[0, 1]):
+    filtered_data = []
+    filtered_targets = []
+
+    for data, target in dataloader:
+        mask = target == classes[0]
+        for c in classes[1:]:
+            mask = mask | (target == c)
+
+        filtered_data.append(data[mask])
+        filtered_targets.append(target[mask])
+
+    # Concatenate all collected data and targets
+    filtered_data = torch.cat(filtered_data, dim=0)
+    filtered_targets = torch.cat(filtered_targets, dim=0)
+
+    # Create a new TensorDataset and DataLoader from the filtered data and targets
+    filtered_dataset = TensorDataset(filtered_data, filtered_targets)
+    filtered_dataloader = DataLoader(filtered_dataset, batch_size=dataloader.batch_size, shuffle=True)
+
+    return filtered_dataloader
