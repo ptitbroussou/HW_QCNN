@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from scipy.special import binom
 
-from toolbox import map_RBS_I2_2D, map_RBS
+from toolbox import map_RBS_I2_2D, map_RBS, get_predict_number_vector
 from RBS_Circuit import RBS_Unitaries 
 
 
@@ -154,7 +154,7 @@ class Dense_RBS_state_vector(nn.Module):
 
 class Dense_RBS_density(nn.Module):
     """ This module describes the action of one RBS based VQC. """
-    def __init__(self, I, list_gates, device):
+    def __init__(self, I, list_gates, number_class, device):
         """ Args:
             - I: size of the square input image
             - list_gates: list of tuples representing the qubits affected by each RBS
@@ -164,6 +164,8 @@ class Dense_RBS_density(nn.Module):
         # We only store the RBS unitary corresponding to an edge in the qubit connectivity: 
         self.RBS_Unitaries_dict = RBS_Unitaries(I*2, 2, list_gates, device)
         self.RBS_gates = nn.ModuleList([RBS_Dense_density(list_gates[i], device) for i in range(len(list_gates))])
+        self.number_class = number_class
+        self.device = device
 
     def forward(self, input_state):
         """ Feedforward of the RBS based VQC.
@@ -174,7 +176,7 @@ class Dense_RBS_density(nn.Module):
             - final density operator from the application of the RBS from the VQC on
             the input density operator. Its dimension is (nbr_batch, binom(2*I,2), binom(2*I,2)).
         """
-        input_state = input_state.float()
         for RBS in self.RBS_gates:
             input_state = RBS(input_state, self.RBS_Unitaries_dict)
-        return(input_state)
+        # out = get_predict_number_vector(input_state, self.number_class, self.device)
+        return input_state

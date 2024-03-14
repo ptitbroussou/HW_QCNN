@@ -2,7 +2,7 @@ import torch
 from torchvision import datasets, transforms
 from sklearn import datasets as skdatasets
 
-transform_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+transform_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
 
 def load_FashionMNIST(batch_size):
     train_loader = torch.utils.data.DataLoader(
@@ -17,10 +17,10 @@ def load_FashionMNIST(batch_size):
 def load_MNIST(batch_size):
     train_loader = torch.utils.data.DataLoader(
             datasets.MNIST('data', train=True, download=True, transform=transform_mnist),
-            batch_size=batch_size, shuffle=True)
+            batch_size=batch_size, shuffle=False)
     test_loader = torch.utils.data.DataLoader(
             datasets.MNIST('data', train=False, download=True, transform=transform_mnist),
-            batch_size=batch_size, shuffle=True)
+            batch_size=batch_size, shuffle=False)
     return train_loader, test_loader, 784, 10
 
 
