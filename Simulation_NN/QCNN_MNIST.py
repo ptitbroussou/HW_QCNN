@@ -1,3 +1,6 @@
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import torch.nn.functional as F  # functions of the neural network library
 import load_dataset as load  # module with function to load data
 from Conv_Layer import *
@@ -13,8 +16,8 @@ n = 2*I
 k = 2
 K = 2
 
-device = torch.device("cuda")
-batch_size = 1000  # the number of examples per batch
+device = torch.device("cpu")
+batch_size = 100  # the number of examples per batch
 train_loader, test_loader, dim_in, dim_out = load.load_MNIST(batch_size=batch_size)
 scala = 100
 reduced_loader = reduce_MNIST_dataset(train_loader, scala)
