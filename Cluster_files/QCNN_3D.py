@@ -52,7 +52,7 @@ K = 2 # size of kernel
 batch_size = 10 # batch number
 scala = 6000 # time we reduce dataset
 learning_rate = 1e-1
-device = torch.device("mps")
+device = torch.device("cuda")
 
 train_loader, test_loader, dim_in, dim_out = load.load_MNIST(batch_size=batch_size)
 reduced_loader = reduce_MNIST_dataset(train_loader, scala)
