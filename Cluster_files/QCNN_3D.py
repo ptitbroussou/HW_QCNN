@@ -9,7 +9,7 @@ from Conv_Layer import Conv_RBS_density_I2_3D
 import torch
 import torch.nn as nn  # the neural network library of pytorch
 import load_dataset_letao as load  # module with function to load MNIST
-from toolbox import reduce_MNIST_dataset
+from toolbox import reduce_MNIST_dataset, get_full_pyramid_gates
 from training import test_net, train_net
 from Dense import Dense_RBS_density_3D
 from toolbox import Basis_Change_I_to_HW_density_3D, Trace_out_dim, get_reduced_layers_structure, PQNN_building_brick, \
@@ -36,10 +36,7 @@ class QCNN(nn.Module):
         list_gates_pyramid = get_reduced_layers_structure(O + J, 5)
         # Here we only keep the last 5 qubits, because 5 qubits represents 10 dimension with k=3, 10 dimension corresponds to 10 labels
         # Arrangement of pyramid dense gates with only 5 qubits
-        list_gates_pyramid_small = []
-        _,PQNN_dictionary,_ = PQNN_building_brick(0, 5, index_first_RBS=0, index_first_param=0)
-        for x, y in PQNN_dictionary.items():
-            list_gates_pyramid_small.append((y, y + 1))
+        list_gates_pyramid_small = get_full_pyramid_gates(5)
 
         # QCNN layers
         self.conv1 = Conv_RBS_density_I2_3D(I, K, J, device)

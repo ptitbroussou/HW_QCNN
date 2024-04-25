@@ -684,3 +684,11 @@ def filter_dataloader(dataloader, classes=[0, 1]):
     filtered_dataloader = DataLoader(filtered_dataset, batch_size=dataloader.batch_size, shuffle=True)
 
     return filtered_dataloader
+
+
+def get_full_pyramid_gates(n):
+    list_gates = []
+    _, PQNN_dictionary, _ = PQNN_building_brick(0, 5, index_first_RBS=0, index_first_param=0)
+    for x, y in PQNN_dictionary.items():
+        list_gates.append((y,y+1))
+    return list_gates
