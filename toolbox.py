@@ -156,6 +156,51 @@ def RBS_generalized_I2_2D(a, b, I):
     return (RBS)
 
 
+def map_Computational_Basis_to_Image_3D_Subspace(I, J, map, input_state):
+    """ This function transforms an input_state from the
+    computational basis to its equivalent in the basis of
+    the image. We suppose the image to be square.
+    Args:
+        - n: number of qubits
+        - k: Hamming weight
+        - map: a dictionary that links the active qubits and the
+        state index in the basis of the Image. Can be produce by
+        using the function map_RBS_I2_2D.
+    Output:
+        - a state in the basis of the image.
+    """
+    output_state = torch.zeros(I*I*J)
+    n = I+I+J
+    for key in map.keys():
+        index = sum([2 ** (n - i - 1) for i in key])  # index in the computational basis:
+        output_state[map[key]] = torch.real(input_state[index])  # we consider only real floats
+    return (output_state)
+
+
+def map_Computational_Basis_to_Image_3D_Subspace_density(I, J, map, input_density):
+    """ This function transforms an input_state from the
+    computational basis to its equivalent in the basis of
+    the image. We suppose the image to be square.
+    Args:
+        - n: number of qubits
+        - k: Hamming weight
+        - map: a dictionary that links the active qubits and the
+        state index in the basis of the Image. Can be produce by
+        using the function map_RBS_I2_2D.
+    Output:
+        - a state in the basis of the image.
+    """
+    output_density = torch.zeros(I*I*J, I*I*J)
+    n = I+I+J
+    for key_1 in map.keys():
+        index_1 = sum([2 ** (n - i - 1) for i in key_1])  # index in the computational basis
+        for key_2 in map.keys():
+            index_2 = sum([2 ** (n - i - 1) for i in key_2])  # index in the computational basis
+            output_density[map[key_1], map[key_2]] = torch.real(
+                input_density[index_1, index_2])  # we consider only real floats
+    return (output_density)
+
+
 def map_Computational_Basis_to_Image_Square_Subspace(n, map, input_state):
     """ This function transforms an input_state from the
     computational basis to its equivalent in the basis of
