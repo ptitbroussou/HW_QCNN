@@ -508,6 +508,33 @@ def copy_images_bottom_channel(images, J):
     return upscaled_x
 
 
+def copy_images_bottom_channel_stride(images, scale_factor):
+    # Assume 'images' is a 3D torch tensor representing a batch of grayscale images
+    # Dimension 0 is the batch size, 1 and 2 are both N (rows and columns respectively)
+    # 'scale_factor' is the scaling factor
+
+    # Batch and original dimensions
+    batch_size, N, _ = images.shape  # Assuming square images N x N
+
+    # New dimensions
+    new_N = N * scale_factor
+
+    # Precompute the original indices to be accessed for all images
+    orig_i = torch.arange(new_N).floor_divide(scale_factor) % N
+    orig_j = torch.arange(new_N).floor_divide(scale_factor) % N
+
+    # Adjust indices to simulate the stride effect by adding a varying offset
+    offset = torch.arange(new_N * new_N).view(new_N, new_N) % scale_factor
+    orig_i = (orig_i.view(-1, 1) + offset) % N
+    orig_j = (orig_j.view(1, -1) + offset) % N
+
+    # Use advanced indexing to create the scaled images
+    # Apply indexing directly, correctly handling the batch dimension
+    scaled_images = images[:, orig_i, orig_j]
+
+    return scaled_images
+
+
 class Trace_out_dim(nn.Module):
     def __init__(self, out, device):
         super().__init__()
