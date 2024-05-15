@@ -17,10 +17,10 @@ def load_FashionMNIST(batch_size):
 def load_MNIST(batch_size):
     train_loader = torch.utils.data.DataLoader(
             datasets.MNIST('data', train=True, download=True, transform=transform_mnist),
-            batch_size=batch_size, shuffle=False)
+            batch_size=batch_size, shuffle=True)
     test_loader = torch.utils.data.DataLoader(
             datasets.MNIST('data', train=False, download=True, transform=transform_mnist),
-            batch_size=batch_size, shuffle=False)
+            batch_size=batch_size, shuffle=True)
     return train_loader, test_loader, 784, 10
 
 
