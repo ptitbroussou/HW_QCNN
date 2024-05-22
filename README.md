@@ -3,7 +3,7 @@ Simulation for Hamming Weight Preserving QCNN
 
 ## Guide - How to test QCNN models
 
-### Test in the LIP6 Cluster
+### Test in the LIP6 Cluster interactively
 
 The cluster server we use is called **Convergence**, you can check the website https://front.convergence.lip6.fr/convergence_en.html or my guide.
 
@@ -55,6 +55,38 @@ Epoch 8: Loss = 1.997192, accuracy = 30.0000 %
 Epoch 9: Loss = 2.031348, accuracy = 30.0000 %
 Evaluation on test set: Loss = 2.278623, accuracy = 14.0000 %
 ```
+
+### Test in the LIP6 Cluster non-interactively
+You can create a "batch.sh" file with content
+```
+#!/bin/bash
+
+#SBATCH --job-name=run
+#SBATCH --nodes=1
+#SBATCH --constraint=amd
+#SBATCH --cpus-per-gpu=16
+#SBATCH --mem=80G
+#SBATCH --gpus=a100_7g.80gb:1
+#SBATCH --time=1500
+#SBATCH --mail-type=ALL
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+python QCNN_3D.py
+```
+Then execute this file
+```bash
+(base) letao@front:~$ cd new/HW_QCNN/Cluster_files
+(base) letao@front:~/new/HW_QCNN/Cluster_files$ sbatch batch.sh
+Submitted batch job 13588
+(base) letao@front:~/new/HW_QCNN/Cluster_files$ 
+```
+You can use the command "squeue" to check if your task is running (sometimes you need to wait). After the task finished (or time out), you can check a output file (or error file) in the current fold.
+If you use "a100_7g.80gb", maybe it takes a lot of time to wait, you can change it to "a100_3g.40gb" or use the interactive way.
+
+
+### Others
+
 
 There are two folders here, the files in the **Jupyter_test** you can use for your own testing in the IDE.
 And the files in the **Cluster_files** you can run directly in (Cluster) terminal, these files in two folds has the same content.

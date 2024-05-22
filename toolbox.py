@@ -524,7 +524,7 @@ def copy_images_bottom_channel_stride(images, scale_factor):
     orig_j = torch.arange(new_N).floor_divide(scale_factor) % N
 
     # Adjust indices to simulate the stride effect by adding a varying offset
-    offset = torch.arange(new_N * new_N).view(new_N, new_N) % scale_factor
+    offset = (torch.arange(new_N * new_N).view(new_N, new_N) % scale_factor)*1
     orig_i = (orig_i.view(-1, 1) + offset) % N
     orig_j = (orig_j.view(1, -1) + offset) % N
 

@@ -34,41 +34,29 @@ class QCNN(nn.Module):
         """
         super(QCNN, self).__init__()
 
-        #  Arrangement of rectangular pyramid dense gates
-        list_gates_full_pyramid = get_reduced_layers_structure((O//1) + (J//1), 5)
+        # Arrangement of rectangular pyramid dense gates
+        list_gates_full_pyramid = get_reduced_layers_structure((O//1) + (J//4), 5)
         # Here we only keep the last 5 qubits, because 5 qubits represents 10 dimension with k=3, 10 dimension corresponds to 10 labels
         # Arrangement of pyramid dense gates with only 5 qubits
         list_gates_reduced_pyramid = get_full_pyramid_gates(5)
-        list_gates_full = [(i, j) for i in range((O//1)+(J//1)) for j in range((O//1)+(J//1)) if i != j]
-        list_gates_full_reverse = [(i, j) for i in range((O//1)+(J//1)) for j in range((O//1)+(J//1)) if i != j]
+        list_gates_full = [(i, j) for i in range((O//1)+(J//4)) for j in range((O//1)+(J//4)) if i != j]
         list_gates_reduced = [(i, j) for i in range(5) for j in range(5) if i != j]
-        list_gates_reduced_reverse = [(j, i) for i in range(5) for j in range(5) if i != j]
-        list_gates_full_plane = [(i, i+1) for i in range((O//1) + (J//1)-1)]
+        list_gates_full_plane = [(i, i+1) for i in range((O//1) + (J//4)-1)]
 
         # 3 conv QCNN layers
         self.conv1 = Conv_RBS_density_I2_3D(I,K,J,device)
-        self.pool1 = Pooling_2D_density_3D(I, O, J, device)
-        self.conv2 = Conv_RBS_density_I2_3D(O,K,J//1,device)
-        self.pool2 = Pooling_2D_density_3D(O, O//2, J//1, device)
+        self.pool1 = Pooling_channel_density_3D(I, O, J, device)
+        self.conv2 = Conv_RBS_density_I2_3D(O,K//2,J//2,device)
+        self.pool2 = Pooling_channel_density_3D(O, O//2, J//2, device)
         # self.conv3 = Conv_RBS_density_I2_3D(O//2,K//4,J//2,device)
         # self.pool3 = Pooling_2D_density_3D(O//2, O//4, J//2, device)
-        self.basis_map = Basis_Change_I_to_HW_density_3D(O//2, J//1, k, device)
-        self.dense_full1 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full, device)
-        # self.dense_full2 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full_pyramid, device)
-        self.dense_full3 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full_reverse, device)
-        # self.dense_full4 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full_pyramid, device)
-        self.dense_full5 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full, device)
-        self.dense_full7 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full_reverse, device)
-        # self.dense_full6 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full_pyramid, device)
-        self.dense_full8 = Dense_RBS_density_3D(O//2, J//1, k, list_gates_full_plane, device)
+        self.basis_map = Basis_Change_I_to_HW_density_3D(O//2, J//4, k, device)
+        self.dense_full1 = Dense_RBS_density_3D(O//2, J//4, k, list_gates_full, device)
+        self.dense_full2 = Dense_RBS_density_3D(O//2, J//4, k, list_gates_full_pyramid, device)
+        self.dense_full3 = Dense_RBS_density_3D(O//2, J//4, k, list_gates_full_plane, device)
         self.reduce_dim = Trace_out_dim(10, device)
         self.dense_reduced1 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced, device)
-        # self.dense_reduced2 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced_pyramid, device)
-        self.dense_reduced3 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced_reverse, device)
-        # self.dense_reduced4 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced_pyramid, device)
-        self.dense_reduced5 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced, device)
-        # self.dense_reduced2 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced_pyramid, device)
-        self.dense_reduced7 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced_reverse, device)
+        self.dense_reduced2 = Dense_RBS_density_3D(0, 5, k, list_gates_reduced_pyramid, device)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -78,11 +66,9 @@ class QCNN(nn.Module):
         # c3 = self.conv3(p2)
         # p3 = self.pool3(c3)
         x = self.basis_map(x)
-        # d1 = self.dense_full7(self.dense_full6(self.dense_full5(self.dense_full4(self.dense_full3(self.dense_full2(self.dense_full1(d0)))))))
-        d1 = self.dense_full8(self.dense_full7((self.dense_full5(self.dense_full3(self.dense_full1(x))))))
+        d1 = self.dense_full3(self.dense_full2(self.dense_full1(x)))
         to = self.reduce_dim(d1)
-        d= self.dense_reduced7(self.dense_reduced5(self.dense_reduced3(self.dense_reduced1(to))))
-        # d= (self.dense_reduced3(self.dense_reduced1(to)))
+        d = self.dense_reduced2(self.dense_reduced1(to))
         output = map_HW_to_measure(d, device) # only keep the diagonal elements
         return output
 
@@ -94,7 +80,7 @@ J = 4  # number of channel
 k = 3 # preserving subspace parameter
 K = 4  # size of kernel
 batch_size = 10  # batch number
-scala_train = 60  # multiple that we reduce train dataset
+scala_train = 600  # multiple that we reduce train dataset
 scala_test = 10 # multiple that we reduce test dataset
 learning_rate = 1e-2
 device = torch.device("cuda") # if you are testing in your PC, you can use torch.device("cpu")
