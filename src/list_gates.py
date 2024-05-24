@@ -1,6 +1,18 @@
 from toolbox import PQNN_building_brick
 
 
+def full_connection_gates(n):
+    return [(i, j) for i in range(n) for j in range(n) if i != j]
+
+
+def full_reverse_connection_gates(n):
+    return [(j, i) for i in range(n) for j in range(n) if i != j]
+
+
+def slide_gates(n):
+    return [(i, i + 1) for i in range(n - 1)]
+
+
 def full_pyramid_gates(n):
     list_gates = []
     _, PQNN_dictionary, _ = PQNN_building_brick(0, 5, index_first_RBS=0, index_first_param=0)

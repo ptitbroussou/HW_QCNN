@@ -4,7 +4,7 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 import torch
 import torch.nn as nn  # the neural network library of pytorch
-import load_dataset as load  # module with function to load MNIST
+from src import load_dataset as load
 
 
 class CNN(nn.Module):
@@ -56,11 +56,11 @@ train_loader, test_loader = load.load_MNIST(batch_size=batch_size)
 scala = 1000
 reduced_loader = load.reduce_MNIST_dataset(train_loader, scala)
 
-conv_network = CNN()
+network = CNN()
 learning_rate = 1e-2  # the scale of the changes applied to the weights
-optimizer = torch.optim.Adam(conv_network.parameters(), lr=learning_rate)
+optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
-# test_loss, test_accuracy = eval_net(conv_network, test_loader, criterion)
+# test_loss, test_accuracy = eval_net(network, test_loader, criterion)
 # print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy*100:.4f} %')
 
 loss_list = []
@@ -98,7 +98,7 @@ def train_net(network, train_loader, criterion, optimizer):
 
 
 for epoch in range(10):
-    train_loss, train_accuracy = train_net(conv_network, train_loader, criterion, optimizer)
+    train_loss, train_accuracy = train_net(network, train_loader, criterion, optimizer)
     loss_list.append(train_loss)
     accuracy_list.append(train_accuracy * 100)
 
@@ -129,5 +129,5 @@ def eval_net(network, test_loader, criterion):
     return test_loss, test_accuracy
 
 
-test_loss, test_accuracy = eval_net(conv_network, test_loader, criterion)
+test_loss, test_accuracy = eval_net(network, test_loader, criterion)
 print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')

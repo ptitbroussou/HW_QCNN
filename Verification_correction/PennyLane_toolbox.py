@@ -1,5 +1,5 @@
 import pennylane as qml
-from toolbox import QCNN_RBS_based_VQC, Pyramidal_Order_RBS_gates, QCNN_RBS_based_VQC_bottom_channel
+from src.toolbox import QCNN_RBS_based_VQC, Pyramidal_Order_RBS_gates, QCNN_RBS_based_VQC_bottom_channel
 
 
 # RBS simulation via PennyLane toolbox:

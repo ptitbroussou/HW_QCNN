@@ -1,9 +1,9 @@
 import torch
 from torch import nn
 from scipy.special import binom
-from toolbox import map_RBS_I2_2D, map_RBS, map_RBS_I2_3D_bottom_channel, map_RBS_I2_3D_top_channel
+from src.toolbox import map_RBS_I2_2D, map_RBS, map_RBS_I2_3D_bottom_channel, map_RBS_I2_3D_top_channel
 import torch.nn.functional as F
-from RBS_Circuit import RBS_Unitaries
+from src.RBS_Circuit import RBS_Unitaries
 
 
 #################################################################################

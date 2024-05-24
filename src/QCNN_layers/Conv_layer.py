@@ -1,7 +1,10 @@
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import torch
 from torch import nn
-from toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_bottom_channel
-from RBS_Circuit import RBS_Unitaries, RBS_Unitaries_I2, RBS_Unitaries_I2_3D
+from src.toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_bottom_channel
+from src.RBS_Circuit import RBS_Unitaries, RBS_Unitaries_I2, RBS_Unitaries_I2_3D
 
 
 #################################################################################

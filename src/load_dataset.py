@@ -16,13 +16,13 @@ def load_FashionMNIST(batch_size):
     return train_loader, test_loader
 
 
-def load_MNIST(batch_size):
+def load_MNIST(batch_size, shuffle):
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST('data', train=True, download=True, transform=transform_mnist),
-        batch_size=batch_size, shuffle=True)
+        batch_size=batch_size, shuffle=shuffle)
     test_loader = torch.utils.data.DataLoader(
         datasets.MNIST('data', train=False, download=True, transform=transform_mnist),
-        batch_size=batch_size, shuffle=True)
+        batch_size=batch_size, shuffle=shuffle)
     return train_loader, test_loader
 
 
@@ -49,8 +49,12 @@ def filter_dataloader(dataloader, classes=[0, 1]):
     return filtered_dataloader
 
 
-def reduce_MNIST_dataset(data_loader, scala):
+def reduce_MNIST_dataset(data_loader, dataset, is_train):
     # original data: torch.Size([60000, 28, 28])
+    if is_train:
+        scala = 60000//dataset
+    else:
+        scala = 10000//dataset
     old_data = data_loader.dataset.data
     data_loader.dataset.data = old_data.resize_(int(data_loader.dataset.data.size(0) / scala), 28, 28)
     return data_loader
@@ -72,7 +76,7 @@ def copy_images_bottom_channel(images, J):
     return upscaled_x
 
 
-def copy_images_bottom_channel_stride(images, scale_factor):
+def copy_images_bottom_channel_stride(images, scale_factor, stride):
     # Assume 'images' is a 3D torch tensor representing a batch of grayscale images
     # Dimension 0 is the batch size, 1 and 2 are both N (rows and columns respectively)
     # 'scale_factor' is the scaling factor
@@ -88,7 +92,7 @@ def copy_images_bottom_channel_stride(images, scale_factor):
     orig_j = torch.arange(new_N).floor_divide(scale_factor) % N
 
     # Adjust indices to simulate the stride effect by adding a varying offset
-    offset = (torch.arange(new_N * new_N).view(new_N, new_N) % scale_factor) * 1
+    offset = (torch.arange(new_N * new_N).view(new_N, new_N) % scale_factor) * stride
     orig_i = (orig_i.view(-1, 1) + offset) % N
     orig_j = (orig_j.view(1, -1) + offset) % N
 
