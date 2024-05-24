@@ -33,7 +33,7 @@ learning_rate = 2e-3
 train_epochs = 2  # number of epoch we train
 test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want
 dense_full_gates = (full_connection_gates(O + J//4) + butterfly_bi_gates(O + J//4) + butterfly_gates(O + J//4) +

@@ -45,7 +45,7 @@ learning_rate = 2e-3
 train_epochs = 2  # number of epoch we train
 test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=True)
 reduced_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, True)
