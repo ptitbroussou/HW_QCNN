@@ -1,8 +1,6 @@
 import torch
 from torch import nn
-from scipy.special import binom
-
-from toolbox import *
+from toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_bottom_channel
 from RBS_Circuit import RBS_Unitaries, RBS_Unitaries_I2, RBS_Unitaries_I2_3D
 
 

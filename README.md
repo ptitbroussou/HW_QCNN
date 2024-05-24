@@ -57,7 +57,7 @@ Evaluation on test set: Loss = 2.278623, accuracy = 14.0000 %
 ```
 
 ### Test in the LIP6 Cluster non-interactively
-You can create a "batch.sh" file with content
+You can create a "batch.sh" file in the fold "Cluster_files" with content
 ```
 #!/bin/bash
 
@@ -74,6 +74,12 @@ You can create a "batch.sh" file with content
 
 python QCNN_3D.py
 ```
+Here we can change:
+* job-name=run: name shown in the squeue
+* mem=80G: depends on GPU we use
+* gpus=a100_7g.80gb:1: you can also use a100_3g.40gb, less waiting time
+* time=1500: 1500min, means this program will stop in 25h
+
 Then execute this file
 ```bash
 (base) letao@front:~$ cd new/HW_QCNN/Cluster_files

@@ -1,8 +1,5 @@
 import torch
 from torch import nn
-from scipy.special import binom
-
-from toolbox import map_RBS_I2_2D, map_RBS_I2_3D, map_RBS
 
 
 def Pooling_2D_Projector(I, O, device):
@@ -43,7 +40,7 @@ def Pooling_2D_Projector(I, O, device):
     return (Projectors)
 
 
-def Pooling_2D_Projector_3D(I, O, J, device):
+def Pooling_3D_Projector(I, O, J, device):
     """ This function mimics the effect of a HW preserving pooling layer on half
     the remaining qubits. We suppose that the input image is square.
     Args:
@@ -133,11 +130,6 @@ class Pooling_2D_density(nn.Module):
             - a torch vector density operator that represents the output mixted 
             state with dimension (nbr_batch, O**2, O**2).
         """
-        # mixed_state_density_matrix = torch.zeros((input.size()[0], self.O**2, self.O**2))
-        # for k in range(self.Projectors.size()[0]):
-        #     pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
-        #     pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
-        #     mixed_state_density_matrix += pure_state
         mixed_state_density_matrix = torch.zeros(input.size()[0], self.O ** 2, self.O ** 2).to(self.device)
         for i in range(input.size()[0]):
             for p in self.Projectors:
@@ -146,14 +138,14 @@ class Pooling_2D_density(nn.Module):
         return (input)
 
 
-class Pooling_2D_density_3D(nn.Module):
+class Pooling_3D_density(nn.Module):
     """ This module describe the effect of the Pooling on the QCNN architecture while
     simulating states as density operators. """
 
     def __init__(self, I, O, J, device):
         """ We suppose that the input image is square. """
         super().__init__()
-        self.Projectors = Pooling_2D_Projector_3D(I, O, J, device).float()
+        self.Projectors = Pooling_3D_Projector(I, O, J, device).float()
         self.O = O
         self.J = J
         self.device = device
@@ -168,11 +160,6 @@ class Pooling_2D_density_3D(nn.Module):
             - a torch vector density operator that represents the output mixted
             state with dimension (nbr_batch, O**2, O**2).
         """
-        # mixed_state_density_matrix = torch.zeros((input.size()[0], self.O**2, self.O**2))
-        # for k in range(self.Projectors.size()[0]):
-        #     pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
-        #     pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
-        #     mixed_state_density_matrix += pure_state
         mixed_state_density_matrix = torch.zeros(input.size()[0], (self.O ** 2) * self.J, (self.O ** 2) * self.J).to(
             self.device)
         for i in range(input.size()[0]):
@@ -182,7 +169,7 @@ class Pooling_2D_density_3D(nn.Module):
         return (input)
 
 
-def Pooling_channel_Projector_3D(I, O, J, L, device):
+def Pooling_3D_Projector_channel(I, O, J, L, device):
     """ This function mimics the effect of a HW preserving 3D channel pooling layer on half
     the remaining qubits. We suppose that the input image is square.
     Args:
@@ -225,14 +212,14 @@ def Pooling_channel_Projector_3D(I, O, J, L, device):
     return (Projectors)
 
 
-class Pooling_channel_density_3D(nn.Module):
+class Pooling_3D_density_channel(nn.Module):
     """ This module describe the effect of the Pooling on the QCNN architecture while
     simulating states as density operators. """
 
     def __init__(self, I, O, J, device):
         """ We suppose that the input image is square. """
         super().__init__()
-        self.Projectors = Pooling_channel_Projector_3D(I, O, J, J//2, device).float()
+        self.Projectors = Pooling_3D_Projector_channel(I, O, J, J//2, device).float()
         self.O = O
         self.J = J//2
         self.device = device
@@ -247,11 +234,6 @@ class Pooling_channel_density_3D(nn.Module):
             - a torch vector density operator that represents the output mixted
             state with dimension (nbr_batch, O**2, O**2).
         """
-        # mixed_state_density_matrix = torch.zeros((input.size()[0], self.O**2, self.O**2))
-        # for k in range(self.Projectors.size()[0]):
-        #     pure_state = torch.einsum('bii, oi->boi', input, self.Projectors[k].to(torch.float32))
-        #     pure_state = torch.einsum('boi, ki-> bok', pure_state, self.Projectors[k].to(torch.float32))
-        #     mixed_state_density_matrix += pure_state
         mixed_state_density_matrix = torch.zeros(input.size()[0], (self.O ** 2) * self.J, (self.O ** 2) * self.J).to(
             self.device)
         for i in range(input.size()[0]):

@@ -4,8 +4,7 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 import torch
 import torch.nn as nn  # the neural network library of pytorch
-import load_dataset_letao as load  # module with function to load MNIST
-from toolbox import reduce_MNIST_dataset
+import load_dataset as load  # module with function to load MNIST
 
 
 class CNN(nn.Module):
@@ -53,9 +52,9 @@ class CNN(nn.Module):
 
 
 batch_size = 10  # the number of examples per batch
-train_loader, test_loader, dim_in, dim_out = load.load_MNIST(batch_size=batch_size)
+train_loader, test_loader = load.load_MNIST(batch_size=batch_size)
 scala = 1000
-reduced_loader = reduce_MNIST_dataset(train_loader, scala)
+reduced_loader = load.reduce_MNIST_dataset(train_loader, scala)
 
 conv_network = CNN()
 learning_rate = 1e-2  # the scale of the changes applied to the weights

@@ -2,9 +2,6 @@ import numpy as np
 import torch
 from scipy.special import binom
 from itertools import combinations
-from torch import nn
-from torch.utils.data import DataLoader, TensorDataset
-import torch.nn.functional as F
 
 
 ################################################################################
@@ -274,7 +271,7 @@ def dictionary_RBS_I2_3D(I, C):
     return (RBS_dictionary)
 
 
-def dictionary_RBS_I2_3D_bottom(I, J):
+def dictionary_RBS_I2_3D_bottom_channel(I, J):
     """ gives a dictionary that links the state and the list of active bits
     for a basis of CxIxI images. """
     RBS_dictionary = {}
@@ -285,18 +282,20 @@ def dictionary_RBS_I2_3D_bottom(I, J):
     return (RBS_dictionary)
 
 
-def map_RBS_I2_3D(I, C):
+def map_RBS_I2_3D_top_channel(I, C):
     """ Given the number of qubits 2*I+C and the chosen Hamming weight 3, outputs
-    the corresponding state for a tuple of k active qubits. """
+    the corresponding state for a tuple of k active qubits.
+    The channel qubits are in the top"""
     Dict_RBS = dictionary_RBS_I2_3D(I, C)
     mapping_RBS = {tuple(val): key for (key, val) in Dict_RBS.items()}
     return (mapping_RBS)
 
 
-def map_RBS_I2_3D_bottom(I, C):
+def map_RBS_I2_3D_bottom_channel(I, C):
     """ Given the number of qubits 2*I+C and the chosen Hamming weight 3, outputs
-    the corresponding state for a tuple of k active qubits. """
-    Dict_RBS = dictionary_RBS_I2_3D_bottom(I, C)
+    the corresponding state for a tuple of k active qubits.
+     The channel qubits are in the bottom"""
+    Dict_RBS = dictionary_RBS_I2_3D_bottom_channel(I, C)
     mapping_RBS = {tuple(val): key for (key, val) in Dict_RBS.items()}
     return (mapping_RBS)
 
@@ -479,243 +478,3 @@ def Pyramidal_Order_RBS_gates(nbr_qubits, first_RBS=0):
     for i, layer in enumerate(List_layers):
         List_order += layer
     return (List_order, List_layer_index)
-
-
-################################################################################
-### Letao Testing Neural Network (unfinished):                                      #
-################################################################################
-
-def reduce_MNIST_dataset(data_loader, scala):
-    # original data: torch.Size([60000, 28, 28])
-    old_data = data_loader.dataset.data
-    data_loader.dataset.data = old_data.resize_(int(data_loader.dataset.data.size(0) / scala), 28, 28)
-    return data_loader
-
-
-def to_density_matrix(batch_vectors, device):
-    out = torch.zeros([batch_vectors.size(0), batch_vectors.size(1), batch_vectors.size(1)]).to(device)
-    index = 0
-    for vector in batch_vectors:
-        out[index] += torch.einsum('i,j->ij', vector, vector)
-        index += 1
-    return out
-
-
-def copy_images_bottom_channel(images, J):
-    images = images.unsqueeze(1)
-    upscaled_x = F.interpolate(images, size=(images.size()[-1] * J, images.size()[-1] * J), mode='nearest')
-    upscaled_x = upscaled_x.squeeze(1)
-    return upscaled_x
-
-
-def copy_images_bottom_channel_stride(images, scale_factor):
-    # Assume 'images' is a 3D torch tensor representing a batch of grayscale images
-    # Dimension 0 is the batch size, 1 and 2 are both N (rows and columns respectively)
-    # 'scale_factor' is the scaling factor
-
-    # Batch and original dimensions
-    batch_size, N, _ = images.shape  # Assuming square images N x N
-
-    # New dimensions
-    new_N = N * scale_factor
-
-    # Precompute the original indices to be accessed for all images
-    orig_i = torch.arange(new_N).floor_divide(scale_factor) % N
-    orig_j = torch.arange(new_N).floor_divide(scale_factor) % N
-
-    # Adjust indices to simulate the stride effect by adding a varying offset
-    offset = (torch.arange(new_N * new_N).view(new_N, new_N) % scale_factor)*1
-    orig_i = (orig_i.view(-1, 1) + offset) % N
-    orig_j = (orig_j.view(1, -1) + offset) % N
-
-    # Use advanced indexing to create the scaled images
-    # Apply indexing directly, correctly handling the batch dimension
-    scaled_images = images[:, orig_i, orig_j]
-
-    return scaled_images
-
-
-class Trace_out_dim(nn.Module):
-    def __init__(self, out, device):
-        super().__init__()
-        self.out = out
-        self.device = device
-
-    def forward(self, input):
-        # input = F.relu(input[:,-self.out:,-self.out:])
-        input = input[:, -self.out:, -self.out:]
-        return F.normalize(input, p=2, dim=1).to(self.device)
-
-
-def map_HW_to_measure(batch_x, device):
-    return torch.stack([torch.diag(x) for x in batch_x]).to(device)
-
-
-def get_reduced_layers_structure(n, out):
-    list_gates = []
-    PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = PQNN_building_brick(0, n, index_first_RBS=0,
-                                                                             index_first_param=0)
-    for x, y in PQNN_dictionary.items():
-        list_gates.append((y, y + 1))
-    list_gates.reverse()
-    # print(list_gates)
-
-    list_gates_delete = []
-    PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = PQNN_building_brick(0, n - out, index_first_RBS=0,
-                                                                             index_first_param=0)
-    for x, y in PQNN_dictionary.items():
-        list_gates_delete.append((y, y + 1))
-    # print(list_gates_delete)
-
-    for e in list_gates_delete:
-        list_gates.remove(e)
-    list_gates.reverse()
-    return list_gates
-
-
-def Passage_matrix_I_to_HW_3D(I, J, k, device):
-    """ This function outputs a tensor matrix that allows to pass from the
-    Image basis to the HW basis. We assume to consider square images with no
-    channels.
-    Args:
-        - I: size of the input image
-        - device: torch device (cpu, cuda, etc...)
-    Output:
-        - Passage_matrix: tensor matrix of size (int(binom(2*I,2)), I**2) that allows
-        to pass from the Image basis to the HW basis.
-    """
-    Passage_matrix = torch.zeros((int(binom(I + I + J, k)), I * I * J), dtype=torch.uint8, device=device)
-    mapping_input = map_RBS_I2_3D_bottom(I, J)
-    mapping_output = map_RBS(I + I + J, k)
-    for line in range(I):
-        for column in range(I):
-            for channel in range(J):
-                # print("line: " + str(line) + ", " + str(I+column) + ", " + str(2*I+channel) )
-                output_index = mapping_output[(line, I + column, 2 * I + channel)]
-                intput_index = mapping_input[(line, I + column, 2 * I + channel)]
-                Passage_matrix[output_index, intput_index] = 1
-    return (Passage_matrix)
-
-
-class Basis_Change_I_to_HW_density_3D(nn.Module):
-    """ This module allows to change the basis from the Image basis to the HW basis."""
-
-    def __init__(self, I, J, k, device):
-        """ We suppose that the input image is square and we consider no channels. """
-        super().__init__()
-        self.Passage_matrix = Passage_matrix_I_to_HW_3D(I, J, k, device).to(torch.float)
-
-    def forward(self, input_state):
-        """ This module forward a tensor made of each pure sate weighted by their
-        probabilities that describe the output mixted state form the pooling layer.
-        Arg:
-            - input: a torch vector representing the initial input state. Its
-            dimension is (nbr_batch, I**2, I**2).
-        Output:
-            - a torch density operator that represents the output mixted state in
-            the basis of HW 2. Its dimension is (nbr_batch, binom(2*I,2), binom(2*I,2)).
-        """
-        return self.Passage_matrix @ input_state @ self.Passage_matrix.T
-
-
-def get_predict_number_vector(output_network, device):
-    """
-    input: 5*91*91， 10*1540*1540
-    output:5*10
-    """
-    batch_number = output_network.size()[0]
-    matrix_size = output_network.size()[1]
-    step = output_network.size()[1] // 10
-    batch_output = []
-    for i in range(batch_number):
-        diagonal = torch.diag(output_network[i]).to(device)
-        output_list = []
-        for j in range(0, matrix_size, step):
-            chunk_sum = torch.sum(diagonal[j:j + step]).to(device)
-            output_list.append(chunk_sum)
-        batch_output.append(torch.tensor(output_list).to(device))
-    MO = torch.stack(batch_output).to(device)
-    return MO
-
-
-def softargmax(x, device):
-    beta = 1.0
-    xx = beta * x
-    sm = torch.nn.functional.softmax(xx, dim=-1)
-    indices = torch.arange(len(x)).to(device)
-    y = torch.mul(indices, sm)
-    result = torch.sum(y).to(device)
-    return result
-
-
-def batch_softargmax(predict_number_vectors, device):
-    """
-    input: batch * 10 tensor, e.g. 5*10
-    output: batch * 1 tensor
-    """
-    out = torch.zeros(predict_number_vectors.size()[0], requires_grad=True).to(device)
-    index = 0
-    for vector in predict_number_vectors:
-        out[index] += softargmax(vector, device)
-        index += 1
-    return out.float()
-
-
-def get_batch_projectors(numbers, batch_size, CN2, device):
-    """
-    get the target matrix to calculate the loss function
-    numbers: target in the MNIST dataloader, size: batch * 1
-    CN2: binom(n,2)
-    output size: batch * CN2 * CN2
-    """
-    output = torch.zeros(batch_size, CN2, CN2).to(device)
-    projector_size = CN2 // 10
-    for i in range(batch_size):
-        for j in range(numbers[i] * projector_size, (numbers[i] + 1) * projector_size):
-            output[i][j][j] += 1.0 / projector_size
-    return output
-
-
-def get_batch_dot_projectors(numbers, batch_size, CN2, device):
-    """
-    get the dot target matrix to calculate the loss function
-    numbers: target in the MNIST dataloader, size: batch * 1
-    CN2: binom(n,2)
-    output size: batch * CN2 * CN2
-    """
-    output = torch.zeros(batch_size, CN2, CN2).to(device)
-    projector_size = CN2 // 10
-    for i in range(batch_size):
-        output[i][((2 * numbers[i] + 1) // 2) * projector_size][((2 * numbers[i] + 1) // 2) * projector_size] += 1.0
-    return output
-
-
-def filter_dataloader(dataloader, classes=[0, 1]):
-    filtered_data = []
-    filtered_targets = []
-
-    for data, target in dataloader:
-        mask = target == classes[0]
-        for c in classes[1:]:
-            mask = mask | (target == c)
-
-        filtered_data.append(data[mask])
-        filtered_targets.append(target[mask])
-
-    # Concatenate all collected data and targets
-    filtered_data = torch.cat(filtered_data, dim=0)
-    filtered_targets = torch.cat(filtered_targets, dim=0)
-
-    # Create a new TensorDataset and DataLoader from the filtered data and targets
-    filtered_dataset = TensorDataset(filtered_data, filtered_targets)
-    filtered_dataloader = DataLoader(filtered_dataset, batch_size=dataloader.batch_size, shuffle=True)
-
-    return filtered_dataloader
-
-
-def get_full_pyramid_gates(n):
-    list_gates = []
-    _, PQNN_dictionary, _ = PQNN_building_brick(0, 5, index_first_RBS=0, index_first_param=0)
-    for x, y in PQNN_dictionary.items():
-        list_gates.append((y,y+1))
-    return list_gates
