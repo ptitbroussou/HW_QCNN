@@ -1,6 +1,7 @@
 # HW_QCNN
 Simulation for Hamming Weight Preserving QCNN
 
+![QCNN_structure](QCNN_structure.png)
 ## Guide - How to test QCNN models
 
 ### Test in the LIP6 Cluster interactively
