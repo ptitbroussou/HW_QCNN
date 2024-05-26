@@ -6,7 +6,7 @@
 * [Hello world](#hello-world)
 * [Tensor dataflow](#tensor-dataflow)
 * [Guide to test with LIP6 Cluster servers](#guide-to-test-with-LIP6-Cluster-servers)
-
+* [Project structure](#project-structure)
 
 ## Hello world
 Let's start with a simple HW-QCNN network like the figure shown above: 
@@ -15,6 +15,7 @@ you can open and run "Playground/hello_work.ipynb".
 It's ture that the result is bad, but it's a good way to understand this project step by step.
 After understanding the meaning of these hyperparameters, 
 you can design and test your own HW-QCNN structure with LIP6 cluster servers.
+(e.g., add more RBS gates in dense layers and use higher I, J)
 
 ## Tensor dataflow
 ![Dataflow](images/Dataflow.png)
@@ -109,12 +110,10 @@ Submitted batch job 13588
 You can use the command "squeue" to check if your task is running (sometimes you need to wait). After the task finished (or time out), you can check a output file (or error file) in the current fold.
 If you use "a100_7g.80gb", maybe it takes a lot of time to wait, you can change it to "a100_3g.40gb" or use the interactive way.
 
-
-### Others
-
-
-There are two folders here, the files in the **Jupyter_test** you can use for your own testing in the IDE.
-And the files in the **Cluster_files** you can run directly in (Cluster) terminal, these files in two folds has the same content.
-
-
 Little tips: you can use VS Code to ssh connect the server, it's a easy way to edit server files.
+
+## Project fold structure
+* Cluster_files: executable QCNN python files
+* Playground: jupyter files to help you test and understand this project
+* src: backend python methods for QCNN
+* Verification_correction: files to verify the correctness of our methods
