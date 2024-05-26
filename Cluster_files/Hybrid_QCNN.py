@@ -7,7 +7,7 @@ from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 import torch
 import torch.nn as nn  # the neural network library of pytorch
 from src import load_dataset as load
-from src.training import test_net, train_net
+from src.training import train_network, test_network
 
 
 class QCNN(nn.Module):
@@ -56,11 +56,10 @@ optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 loss_list = []
 accuracy_list = []
 for epoch in range(10):
-    train_loss, train_accuracy = train_net(batch_size, I, J, k, network, train_loader, criterion, optimizer,
-                                           device)
+    train_loss, train_accuracy = train_network(batch_size, I, J, network, train_loader, criterion, optimizer, 1, device)
     loss_list.append(train_loss)
     accuracy_list.append(train_accuracy * 100)
     print(f'Epoch {epoch}: Loss = {train_loss:.6f}, accuracy = {train_accuracy * 100:.4f} %')
 
-test_loss, test_accuracy = test_net(batch_size, I, J, k, network, reduced_test_loader, criterion, device)
+test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, 1, device)
 print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')

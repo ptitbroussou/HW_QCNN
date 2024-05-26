@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from src import load_dataset as load
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
-from src.QCNN_layers.Measurement_layer import map_HW_to_measure
+from src.QCNN_layers.Measurement_layer import measurement
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
@@ -17,39 +17,49 @@ warnings.simplefilter('ignore')
 
 
 ##################### Hyperparameters begin #######################
-
-# Below you can change to test
-I = 16  # dimension of image we use
+# Below are the hyperparameters of this network, you can change them to test
+I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
 J = 2  # number of channel
 k = 3  # preserving subspace parameter, usually you don't need to change this
-K = 2  # size of kernel
-stride = 2
+K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
+stride = 2 # the difference in step sizes for different channels
 batch_size = 10  # batch number
-training_dataset = 10  # multiple that we reduce train dataset
-testing_dataset = 10  # multiple that we reduce test dataset
-is_shuffle = True
-learning_rate = 2e-3
+training_dataset = 10  # training dataset sample number
+testing_dataset = 10  # testing dataset sample number
+is_shuffle = True # shuffle for this dataset
+learning_rate = 2e-3 # step size for each learning steps
 train_epochs = 2  # number of epoch we train
 test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
-criterion = torch.nn.CrossEntropyLoss()
+criterion = torch.nn.CrossEntropyLoss() # loss function
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
-# Here you can modify the RBS gate list that you want
+# Here you can modify the RBS gate list that you want for the dense layer:
+# dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
+# Why we need two dense gate lists? Because for the 10 labels classification we only need 10 dimension in the end,
+# so after the full dense we reduce the dimension from binom(O+J,3) to binom(5,3)=10, i.e., only keep the last 5 qubits.
+# Finally, we do the reduce dense for 5 qubits and measurement.
+# Also, you can check visualization of different gate lists in the file "src/list_gates.py"
 dense_full_gates = (full_connection_gates(O + J) + butterfly_bi_gates(O + J) + butterfly_gates(O + J) +
                     full_connection_gates(O + J) + X_gates(O + J) + full_reverse_connection_gates(O + J)
                     + slide_gates(O + J))
 dense_reduce_gates = (full_connection_gates(5) + butterfly_gates(5) + full_reverse_connection_gates(5) +
                       X_gates(5) + full_connection_gates(5) + full_reverse_connection_gates(5))
-
 ##################### Hyperparameters end #######################
 
 
 class QCNN(nn.Module):
     """
-    Pyramid Quantum convolution neural network by using Jonas's method to predict labels.
-    """
+    Hamming weight preserving quantum convolution neural network (k=3)
 
+    Tensor dataflow of this network:
+    input density matrix: (batch,J*I^2,J*I^2)--> conv1: (batch,J*I^2,J*I^2)--> pool1: (batch,J*O^2,J*O^2)
+    --> conv2: (batch,J*O^2,J*O^2)--> pool2: (batch,J*(O/2)^2,J*(O/2)^2)--> basis_map: (batch,binom(O+J,3),binom(O+J,3))
+    --> full_dense: (batch,binom(O+J,3),binom(O+J,3)) --> reduce_dim: (batch,binom(O+J,3),binom(5,3)=10)
+    --> reduce_dense: (batch,10,10) --> output measurement: (batch,10)
+
+    Then we can use it to calculate the Loss(output, targets)
+    """
     def __init__(self, I, O, J, K, k, dense_full_gates, dense_reduce_gates, device):
         """ Args:
             - I: dimension of image we use, default I is 28
@@ -57,7 +67,7 @@ class QCNN(nn.Module):
             - J: number of convolution channels
             - K: size of kernel
             - k: preserving subspace parameter, it should be 3
-            - dense_full_gates: dense gate list, dimension from binom(O+J,3) to 10
+            - dense_full_gates: dense gate list, dimension from binom(O+J,3) to binom(5,3)=10
             - dense_reduce_gates: reduced dense gate list, dimension from 10 to 10
             - device: torch device (cpu, cuda, etc...)
         """
@@ -76,16 +86,17 @@ class QCNN(nn.Module):
         x = self.pool2(self.conv2(x))  # second convolution and pooling
         x = self.basis_map(x)  # basis change from 3D Image to HW=3
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
-        return map_HW_to_measure(x, device)  # measure, only keep the diagonal elements
+        return measurement(x, device)  # measure, only keep the diagonal elements
 
 
 network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
+
 # Loading data
 train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=is_shuffle)
-reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True)
+reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True) # reduce dataset samples
 reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
 
-# training part
-network_state = train_globally(batch_size, I, J, k, network, reduced_train_loader, reduced_test_loader, optimizer, criterion, train_epochs, test_interval, stride, device)
-torch.save(network_state, "model_state")
+# training this network
+network_state = train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, criterion, train_epochs, test_interval, stride, device)
+torch.save(network_state, "model_state") # save network parameters

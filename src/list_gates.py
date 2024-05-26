@@ -1,8 +1,8 @@
-from src.toolbox import PQNN_building_brick
+from src.toolbox import PQNN_building_brick, QCNN_RBS_based_VQC_bottom_channel
 
 
 def full_connection_gates(n):
-    """
+    """ n=5
     0: ─╭B─╭B─╭B─╭B─╭S──────────╭S──────────╭S──────────╭S──────────┤
     1: ─╰S─│──│──│──╰B─╭B─╭B─╭B─│──╭S───────│──╭S───────│──╭S───────┤
     2: ────╰S─│──│─────╰S─│──│──╰B─╰B─╭B─╭B─│──│──╭S────│──│──╭S────┤
@@ -13,7 +13,7 @@ def full_connection_gates(n):
 
 
 def full_reverse_connection_gates(n):
-    """
+    """ n=5
     0: ──────────╭S──────────╭S──────────╭S──────────╭S─╭B─╭B─╭B─╭B─┤
     1: ───────╭S─│────────╭S─│────────╭S─│──╭B─╭B─╭B─╰B─│──│──│──╰S─┤
     2: ────╭S─│──│─────╭S─│──│──╭B─╭B─╰B─╰B─│──│──╰S────│──│──╰S────┤
@@ -24,7 +24,7 @@ def full_reverse_connection_gates(n):
 
 
 def slide_gates(n):
-    """
+    """ n=8
     0: ─╭B───────────────────┤
     1: ─╰S─╭B────────────────┤
     2: ────╰S─╭B─────────────┤
@@ -38,7 +38,7 @@ def slide_gates(n):
 
 
 def full_pyramid_gates(n):
-    """
+    """ n=8
     0: ─╭B────╭B────╭B────╭B────╭B────╭B────╭B─┤
     1: ─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─┤
     2: ────╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S────┤
@@ -56,7 +56,7 @@ def full_pyramid_gates(n):
 
 
 def get_reduced_layers_structure(n, out):
-    """
+    """ n=8
     0: ─╭B────╭B────╭B────╭B──────────┤
     1: ─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B───────┤
     2: ────╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B────┤
@@ -72,14 +72,12 @@ def get_reduced_layers_structure(n, out):
     for x, y in PQNN_dictionary.items():
         list_gates.append((y, y + 1))
     list_gates.reverse()
-    # print(list_gates)
 
     list_gates_delete = []
     PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = PQNN_building_brick(0, n - out, index_first_RBS=0,
                                                                              index_first_param=0)
     for x, y in PQNN_dictionary.items():
         list_gates_delete.append((y, y + 1))
-    # print(list_gates_delete)
 
     for e in list_gates_delete:
         list_gates.remove(e)
@@ -88,7 +86,7 @@ def get_reduced_layers_structure(n, out):
 
 
 def butterfly_bi_gates(n):
-    """
+    """ n=8
     0: ─╭B──────────╭B───────╭B────╭B───────────────────┤
     1: ─│──╭B───────│──╭B────│──╭B─╰S─╭B────────────────┤
     2: ─│──│──╭B────│──│──╭B─╰S─│──╭B─╰S─╭B─────────────┤
@@ -108,7 +106,7 @@ def butterfly_bi_gates(n):
 
 
 def butterfly_gates(n):
-    """
+    """ n=8
     0: ─╭B───────╭B────╭B────┤
     1: ─│──╭B────│──╭B─╰S────┤
     2: ─│──│──╭B─╰S─│──╭B────┤
@@ -130,7 +128,7 @@ def butterfly_gates(n):
 
 
 def X_gates(n):
-    """
+    """ n=8
     0: ─╭B────────────────╭B─┤
     1: ─╰S─╭B──────────╭B─╰S─┤
     2: ────╰S─╭B────╭B─╰S────┤
@@ -150,3 +148,26 @@ def X_gates(n):
         list2.append((i, i + 1))
         list2.append((n - i - 2, n - i - 1))
     return list + list2[::-1]
+
+
+def conv_3D_gates(I, K, J):
+    """
+    I=4, K=4, J=4
+     0: ─╭B────╭B────╭B─┤
+     1: ─╰S─╭B─╰S─╭B─╰S─┤
+     2: ────╰S─╭B─╰S────┤
+     3: ───────╰S───────┤
+     4: ─╭B────╭B────╭B─┤
+     5: ─╰S─╭B─╰S─╭B─╰S─┤
+     6: ────╰S─╭B─╰S────┤
+     7: ───────╰S───────┤
+     8: ─╭B────╭B────╭B─┤
+     9: ─╰S─╭B─╰S─╭B─╰S─┤
+    10: ────╰S─╭B─╰S────┤
+    11: ───────╰S───────┤
+    """
+    list_gates = []
+    _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC_bottom_channel(I, K, J)
+    for key in RBS_dictionary:
+        list_gates.append((RBS_dictionary[key], RBS_dictionary[key] + 1))
+    return list_gates

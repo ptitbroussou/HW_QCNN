@@ -6,8 +6,8 @@ import torch
 import torch.nn as nn
 from src import load_dataset as load
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
-from src.QCNN_layers.Measurement_layer import map_HW_to_measure
-from src.QCNN_layers.Pooling_layer import Pooling_3D_density, Pooling_3D_density_channel
+from src.QCNN_layers.Measurement_layer import measurement
+from src.QCNN_layers.Pooling_layer import Pooling_3D_density_channel
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
 from src.list_gates import butterfly_bi_gates, butterfly_gates, X_gates, full_connection_gates, \
@@ -76,7 +76,7 @@ class QCNN(nn.Module):
         x = self.pool2(self.conv2(x))  # second convolution and pooling
         x = self.basis_map(x)  # basis change from 3D Image to HW=3
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
-        return map_HW_to_measure(x, device)  # measure, only keep the diagonal elements
+        return measurement(x, device)  # measure, only keep the diagonal elements
 
 
 network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
@@ -87,5 +87,5 @@ reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset,
 reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
 
 # training part
-network_state = train_globally(batch_size, I, J, k, network, reduced_train_loader, reduced_test_loader, optimizer, criterion, train_epochs, test_interval, stride, device)
+network_state = train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, criterion, train_epochs, test_interval, stride, device)
 torch.save(network_state, "model_state")
