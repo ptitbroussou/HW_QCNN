@@ -3,9 +3,9 @@
 ![QCNN_structure](images/QCNN_structure.png)
 
 ## Table of Contents
-* [Hello world](#Hello world)
-* [Tensor dataflow](#Tensor dataflow)
-* [Guide to test with LIP6 Cluster servers](#Guide to test with LIP6 Cluster servers)
+* [Hello world](#hello world)
+* [Tensor dataflow](#tensor dataflow)
+* [Guide to test with LIP6 Cluster servers](#guide to test with LIP6 Cluster servers)
 
 
 ## Hello world
