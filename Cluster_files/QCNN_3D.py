@@ -55,7 +55,7 @@ class QCNN(nn.Module):
     Tensor dataflow of this network:
     input density matrix: (batch,J*I^2,J*I^2)--> conv1: (batch,J*I^2,J*I^2)--> pool1: (batch,J*O^2,J*O^2)
     --> conv2: (batch,J*O^2,J*O^2)--> pool2: (batch,J*(O/2)^2,J*(O/2)^2)--> basis_map: (batch,binom(O+J,3),binom(O+J,3))
-    --> full_dense: (batch,binom(O+J,3),binom(O+J,3)) --> reduce_dim: (batch,binom(O+J,3),binom(5,3)=10)
+    --> full_dense: (batch,binom(O+J,3),binom(O+J,3)) --> reduce_dim: (batch,binom(5,3)=10,10)
     --> reduce_dense: (batch,10,10) --> output measurement: (batch,10)
 
     Then we can use it to calculate the Loss(output, targets)

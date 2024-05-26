@@ -1,10 +1,25 @@
-# HW_QCNN
-Simulation for Hamming Weight Preserving QCNN
+# Hamming-Weight preserving Quantum Convolutional Neural Network
 
-![QCNN_structure](QCNN_structure.png)
-## Guide - How to test QCNN models
+![QCNN_structure](images/QCNN_structure.png)
 
-### Test in the LIP6 Cluster interactively
+## Table of Contents
+* [Hello world](#Hello world)
+* [Tensor dataflow](#Tensor dataflow)
+* [Guide to test with LIP6 Cluster servers](#Guide to test with LIP6 Cluster servers)
+
+
+## Hello world
+Let's start with a simple HW-QCNN network like the figure shown above: 
+you can open and run "Playground/hello_work.ipynb".
+
+It's ture that the result is bad, but it's a good way to understand this project step by step.
+After understanding the meaning of these hyperparameters, 
+you can design and test your own HW-QCNN structure with LIP6 cluster servers.
+
+## Tensor dataflow
+![Dataflow](images/Dataflow.png)
+
+## Guide to test with LIP6 Cluster servers
 
 The cluster server we use is called **Convergence**, you can check the website https://front.convergence.lip6.fr/convergence_en.html or my guide.
 
@@ -16,13 +31,15 @@ Last login: Wed Apr 24 16:31:05 2024 from 132.227.92.49
 ```
 Here "letao" is my account name, you should replace it by yours.
 
-After connected, please install the packages we need, at least pytorch, scipy, numpy, etc (e.g. you can use pip install),
-and clone this git
+After connected, please install the packages we need, at least pytorch, scipy, numpy, etc (e.g. you can use pip install) 
+and clone this git, you only need to do this one time and the server will save all.
 
 ```bash
 git clone git@github.com:ptitbroussou/HW_QCNN.git
 ```
-Then alloc the server resource by:
+Here you have two choices, interactive or non-interactive:
+### Test in the LIP6 Cluster interactively
+Alloc the server resource by:
 ```bash
 (base) letao@front:~$ salloc --nodes=1 --gpus-per-node=a100_3g.40gb:1 --time=60
 salloc: Granted job allocation 11162
@@ -36,8 +53,6 @@ Now you can open a new terminal and execute:
 Last login: Wed Apr 24 13:02:04 2024 from 2001:660:3302:28c7:6efe:54ff:fe4e:8a18
 (base) letao@node04:~$
 ```
-
-
 
 and execute the file you want 
 
@@ -58,6 +73,9 @@ Evaluation on test set: Loss = 2.278623, accuracy = 14.0000 %
 ```
 
 ### Test in the LIP6 Cluster non-interactively
+The advantage of this method over the last interactive one is that: 
+you don't need to keep the SSH connection during training, it's more safe.
+
 You can create a "batch.sh" file in the fold "Cluster_files" with content
 ```
 #!/bin/bash
@@ -100,6 +118,3 @@ And the files in the **Cluster_files** you can run directly in (Cluster) termina
 
 
 Little tips: you can use VS Code to ssh connect the server, it's a easy way to edit server files.
-
-## Detailed guide in the LIP6 website
-https://front.convergence.lip6.fr/convergence_en.html
