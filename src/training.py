@@ -62,6 +62,13 @@ def test_network(batch_size, I, J, network, test_loader, criterion,  stride, dev
 
 
 def train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, criterion, train_epochs, test_interval, stride, device):
+    # first testing part
+    total_params = sum(p.numel() for p in network.parameters())
+    print(f"Start training! Number of network total parameters: {total_params}")
+
+    test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, stride, device)
+    print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
+
     loss_list = []
     accuracy_list = []
     for epoch in range(train_epochs):
@@ -71,7 +78,7 @@ def train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test
         accuracy_list.append(train_accuracy * 100)
         end = time.time()
         print(f'Epoch {epoch}: Loss = {train_loss:.6f}, accuracy = {train_accuracy * 100:.4f} %, time={(end - start):.4f}s')
-        if epoch % test_interval == 0:
+        if epoch % test_interval == 0 and epoch != 0:
             test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, stride, device)
             print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
     # final testing part

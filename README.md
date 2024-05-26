@@ -6,7 +6,8 @@
 * [Hello world](#hello-world)
 * [Tensor dataflow](#tensor-dataflow)
 * [Guide to test with LIP6 Cluster servers](#guide-to-test-with-LIP6-Cluster-servers)
-* [Project structure](#project-structure)
+* [Project directory structure](#project-directory-structure)
+* [Record](#record)
 
 ## Hello world
 Let's start with a simple HW-QCNN network like the figure shown above: 
@@ -15,7 +16,7 @@ you can open and run "Playground/hello_work.ipynb".
 It's ture that the result is bad, but it's a good way to understand this project step by step.
 After understanding the meaning of these hyperparameters, 
 you can design and test your own HW-QCNN structure with LIP6 cluster servers.
-(e.g., add more RBS gates in dense layers and use higher I, J)
+(e.g., add more RBS gates for dense layers and use larger I, J, etc.)
 
 ## Tensor dataflow
 ![Dataflow](images/Dataflow.png)
@@ -77,7 +78,7 @@ Evaluation on test set: Loss = 2.278623, accuracy = 14.0000 %
 The advantage of this method over the last interactive one is that: 
 you don't need to keep the SSH connection during training, it's more safe.
 
-You can create a "batch.sh" file in the fold "Cluster_files" with content
+You can create a "batch.sh" file in the folder "Cluster_files" with content
 ```
 #!/bin/bash
 
@@ -107,13 +108,39 @@ Then execute this file
 Submitted batch job 13588
 (base) letao@front:~/new/HW_QCNN/Cluster_files$ 
 ```
-You can use the command "squeue" to check if your task is running (sometimes you need to wait). After the task finished (or time out), you can check a output file (or error file) in the current fold.
+You can use the command "squeue" to check if your task is running (sometimes you need to wait). After the task finished (or time out), you can check a output file (or error file) in the current folder.
 If you use "a100_7g.80gb", maybe it takes a lot of time to wait, you can change it to "a100_3g.40gb" or use the interactive way.
 
 Little tips: you can use VS Code to ssh connect the server, it's a easy way to edit server files.
 
-## Project fold structure
+## Project directory structure
 * Cluster_files: executable QCNN python files
 * Playground: jupyter files to help you test and understand this project
 * src: backend python methods for QCNN
 * Verification_correction: files to verify the correctness of our methods
+
+
+## Record
+10 labels MNIST QCNN: testing accuracy = 75.4% (1000 testing samples)
+![QCNN_plot](images/plot.png)
+### Hyperparameters:
+I = 16,
+O = I//2 ,
+J = 7,
+k = 3,
+K = 4,
+stride = 2,
+batch_size = 10,
+training_dataset = 1000,
+testing_dataset = 1000,
+is_shuffle = True,
+learning_rate = 3e-3,
+train_epochs = 100,
+test_interval = 10,
+criterion = torch.nn.CrossEntropyLoss(),
+
+dense_full_gates = (full_connection_gates(O + J) + butterfly_bi_gates(O + J) + full_pyramid_gates(O + J) + butterfly_gates(O + J) + full_reverse_connection_gates(O + J) + X_gates(O + J) +
+full_connection_gates(O + J) + slide_gates(O + J))
+
+dense_reduce_gates = (full_connection_gates(5) + butterfly_gates(5) + full_reverse_connection_gates(5) +
+X_gates(5) + full_connection_gates(5) + full_reverse_connection_gates(5) + full_pyramid_gates(5))
