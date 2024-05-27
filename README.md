@@ -121,7 +121,7 @@ Little tips: you can use VS Code to ssh connect the server, it's a easy way to e
 
 
 ## Record
-10 labels MNIST QCNN: testing accuracy = 75.4% (1000 testing samples)
+10 labels MNIST QCNN: testing accuracy = 79.3% (1000 testing samples)
 ![QCNN_plot](images/plot.png)
 ### Hyperparameters:
 I = 16,
@@ -131,10 +131,10 @@ k = 3,
 K = 4,
 stride = 2,
 batch_size = 10,
-training_dataset = 1000,
+training_dataset = 1001
 testing_dataset = 1000,
 is_shuffle = True,
-learning_rate = 3e-3,
+learning_rate = 3e-3 (1e-3 for the last epoch),
 train_epochs = 100,
 test_interval = 10,
 criterion = torch.nn.CrossEntropyLoss(),
