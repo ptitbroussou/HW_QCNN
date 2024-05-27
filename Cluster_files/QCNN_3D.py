@@ -10,8 +10,8 @@ from src.QCNN_layers.Measurement_layer import measurement
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
-from src.list_gates import butterfly_bi_gates, butterfly_gates, X_gates, full_connection_gates, \
-    full_reverse_connection_gates, slide_gates
+from src.list_gates import drip_circuit, butterfly_circuit, X_circuit, full_connection_circuit, \
+    full_reverse_connection_circuit, slide_circuit
 
 warnings.simplefilter('ignore')
 
@@ -40,11 +40,11 @@ device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps"
 # so after the full dense we reduce the dimension from binom(O+J,3) to binom(5,3)=10, i.e., only keep the last 5 qubits.
 # Finally, we do the reduce dense for 5 qubits and measurement.
 # Also, you can check visualization of different gate lists in the file "src/list_gates.py"
-dense_full_gates = (full_connection_gates(O + J) + butterfly_bi_gates(O + J) + butterfly_gates(O + J) +
-                    full_connection_gates(O + J) + X_gates(O + J) + full_reverse_connection_gates(O + J)
-                    + slide_gates(O + J))
-dense_reduce_gates = (full_connection_gates(5) + butterfly_gates(5) + full_reverse_connection_gates(5) +
-                      X_gates(5) + full_connection_gates(5) + full_reverse_connection_gates(5))
+dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + butterfly_circuit(O + J) +
+                    full_connection_circuit(O + J) + X_circuit(O + J) + full_reverse_connection_circuit(O + J)
+                    + slide_circuit(O + J))
+dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) +
+                      X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5))
 ##################### Hyperparameters end #######################
 
 

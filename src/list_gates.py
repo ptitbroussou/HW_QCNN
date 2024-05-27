@@ -1,7 +1,7 @@
 from src.toolbox import PQNN_building_brick, QCNN_RBS_based_VQC_bottom_channel
 
 
-def full_connection_gates(n):
+def full_connection_circuit(n):
     """ n=5
     0: ─╭B─╭B─╭B─╭B─╭S──────────╭S──────────╭S──────────╭S──────────┤
     1: ─╰S─│──│──│──╰B─╭B─╭B─╭B─│──╭S───────│──╭S───────│──╭S───────┤
@@ -12,7 +12,7 @@ def full_connection_gates(n):
     return [(i, j) for i in range(n) for j in range(n) if i != j]
 
 
-def full_reverse_connection_gates(n):
+def full_reverse_connection_circuit(n):
     """ n=5
     0: ──────────╭S──────────╭S──────────╭S──────────╭S─╭B─╭B─╭B─╭B─┤
     1: ───────╭S─│────────╭S─│────────╭S─│──╭B─╭B─╭B─╰B─│──│──│──╰S─┤
@@ -23,7 +23,7 @@ def full_reverse_connection_gates(n):
     return [(i, j) for i in range(n-1, -1, -1) for j in range(n-1, -1, -1) if i != j]
 
 
-def slide_gates(n):
+def slide_circuit(n):
     """ n=8
     0: ─╭B───────────────────┤
     1: ─╰S─╭B────────────────┤
@@ -37,7 +37,7 @@ def slide_gates(n):
     return [(i, i + 1) for i in range(n - 1)]
 
 
-def full_pyramid_gates(n):
+def full_pyramid_circuit(n):
     """ n=8
     0: ─╭B────╭B────╭B────╭B────╭B────╭B────╭B─┤
     1: ─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─╭B─╰S─┤
@@ -85,7 +85,7 @@ def get_reduced_layers_structure(n, out):
     return list_gates
 
 
-def butterfly_bi_gates(n):
+def drip_circuit(n):
     """ n=8
     0: ─╭B──────────╭B───────╭B────╭B───────────────────┤
     1: ─│──╭B───────│──╭B────│──╭B─╰S─╭B────────────────┤
@@ -105,7 +105,7 @@ def butterfly_bi_gates(n):
     return list_gates
 
 
-def butterfly_gates(n):
+def butterfly_circuit(n):
     """ n=8
     0: ─╭B───────╭B────╭B────┤
     1: ─│──╭B────│──╭B─╰S────┤
@@ -127,7 +127,7 @@ def butterfly_gates(n):
     return gates
 
 
-def X_gates(n):
+def X_circuit(n):
     """ n=8
     0: ─╭B────────────────╭B─┤
     1: ─╰S─╭B──────────╭B─╰S─┤

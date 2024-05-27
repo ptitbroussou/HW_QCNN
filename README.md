@@ -7,6 +7,7 @@
 * [Tensor dataflow](#tensor-dataflow)
 * [Guide to test with LIP6 Cluster servers](#guide-to-test-with-LIP6-Cluster-servers)
 * [Project directory structure](#project-directory-structure)
+* [Dense circuit layouts](#dense-circuit-layouts)
 * [Record](#record)
 
 ## Hello world
@@ -119,6 +120,46 @@ Little tips: you can use VS Code to ssh connect the server, it's a easy way to e
 * src: backend python methods for QCNN
 * Verification_correction: files to verify the correctness of our methods
 
+## Dense circuit layouts
+
+<table>
+  <tr>
+    <td style="text-align:center">
+      <img src="images/circuit/butterfly_circuit.png" height="200" /><br />
+      <span>butterfly circuit</span>
+    </td>
+    <td style="text-align:center">
+      <img src="images/circuit/drip_circuit.png" height="200" /><br />
+      <span>drip circuit</span>
+    </td>
+    <td style="text-align:center">
+      <img src="images/circuit/X_circuit.png" height="200" /><br />
+      <span>X circuit</span>
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td style="text-align:center">
+      <img src="images/circuit/full_connection_circuit.png" height="200" /><br />
+      <span>full connection circuit</span>
+    </td>
+    <td style="text-align:center">
+      <img src="images/circuit/pyramid_circuit.png" height="200" /><br />
+      <span>pyramid circuit</span>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:center">
+      <img src="images/circuit/full_reverse_connection_circuit.png" height="200" /><br />
+      <span>full reverse connection circuit</span>
+    </td>
+    <td style="text-align:center">
+      <img src="images/circuit/slide_circuit.png" height="200" /><br />
+      <span>slide circuit</span>
+    </td>
+  </tr>
+</table>
 
 ## Record
 10 labels MNIST QCNN: testing accuracy = 79.3% (1000 testing samples)
@@ -139,8 +180,8 @@ train_epochs = 100,
 test_interval = 10,
 criterion = torch.nn.CrossEntropyLoss(),
 
-dense_full_gates = (full_connection_gates(O + J) + butterfly_bi_gates(O + J) + full_pyramid_gates(O + J) + butterfly_gates(O + J) + full_reverse_connection_gates(O + J) + X_gates(O + J) +
-full_connection_gates(O + J) + slide_gates(O + J))
+dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + full_pyramid_circuit(O + J) + butterfly_circuit(O + J) + full_reverse_connection_circuit(O + J) + X_circuit(O + J) +
+full_connection_circuit(O + J) + slide_circuit(O + J))
 
-dense_reduce_gates = (full_connection_gates(5) + butterfly_gates(5) + full_reverse_connection_gates(5) +
-X_gates(5) + full_connection_gates(5) + full_reverse_connection_gates(5) + full_pyramid_gates(5))
+dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) +
+X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5) + full_pyramid_circuit(5))

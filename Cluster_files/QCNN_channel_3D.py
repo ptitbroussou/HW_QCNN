@@ -10,8 +10,8 @@ from src.QCNN_layers.Measurement_layer import measurement
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density_channel
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
-from src.list_gates import butterfly_bi_gates, butterfly_gates, X_gates, full_connection_gates, \
-    full_reverse_connection_gates, slide_gates
+from src.list_gates import drip_circuit, butterfly_circuit, X_circuit, full_connection_circuit, \
+    full_reverse_connection_circuit, slide_circuit
 
 warnings.simplefilter('ignore')
 
@@ -36,11 +36,11 @@ criterion = torch.nn.CrossEntropyLoss()
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want
-dense_full_gates = (full_connection_gates(O + J//4) + butterfly_bi_gates(O + J//4) + butterfly_gates(O + J//4) +
-                    full_connection_gates(O + J//4) + X_gates(O + J//4) + full_reverse_connection_gates(O + J//4)
-                    + slide_gates(O + J//4))
-dense_reduce_gates = (full_connection_gates(5) + butterfly_gates(5) + full_reverse_connection_gates(5) +
-                      X_gates(5) + full_connection_gates(5) + full_reverse_connection_gates(5))
+dense_full_gates = (full_connection_circuit(O + J//4) + drip_circuit(O + J//4) + butterfly_circuit(O + J//4) +
+                    full_connection_circuit(O + J//4) + X_circuit(O + J//4) + full_reverse_connection_circuit(O + J//4)
+                    + slide_circuit(O + J//4))
+dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) +
+                      X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5))
 
 ##################### Hyperparameters end #######################
 
