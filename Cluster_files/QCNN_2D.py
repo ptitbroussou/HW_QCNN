@@ -75,7 +75,7 @@ class QCNN(nn.Module):
         self.conv3 = Conv_RBS_density_I2(O//2, 2, device)
         self.pool3 = Pooling_2D_density(O//2, O//4, device)
         self.basis_map = Basis_Change_I_to_HW_density(O // 4, device)
-        self.dense_full = Dense_RBS_density(O, dense_full_gates, device)
+        self.dense_full = Dense_RBS_density(O//2, dense_full_gates, device)
         self.reduce_dim = Trace_out_dimension(10, device)
         self.dense_reduced = Dense_RBS_density(5, dense_reduce_gates, device)
 
