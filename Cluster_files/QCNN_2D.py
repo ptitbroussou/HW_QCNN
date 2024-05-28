@@ -16,9 +16,11 @@ from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2
 
 warnings.simplefilter('ignore')
 
+print("This is the good file !!")
+
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
-I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
+I = 32  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
@@ -54,7 +56,7 @@ class QCNN(nn.Module):
 
     Then we can use it to calculate the Loss(output, targets)
     """
-    def __init__(self, I, O, K, dense_full_gates, dense_reduce_gates, device):
+    def __init__(self, I, O, dense_full_gates, dense_reduce_gates, device):
         """ Args:
             - I: dimension of image we use, default I is 28
             - O: dimension of image we use after a single pooling
@@ -66,11 +68,13 @@ class QCNN(nn.Module):
             - device: torch device (cpu, cuda, etc...)
         """
         super(QCNN, self).__init__()
-        self.conv1 = Conv_RBS_density_I2(I, K, device)
+        self.conv1 = Conv_RBS_density_I2(I, 8, device)
         self.pool1 = Pooling_2D_density(I, O, device)
-        self.conv2 = Conv_RBS_density_I2(O, K, device)
+        self.conv2 = Conv_RBS_density_I2(O, 4, device)
         self.pool2 = Pooling_2D_density(O, O // 2, device)
-        self.basis_map = Basis_Change_I_to_HW_density(O // 2, device)
+        self.conv3 = Conv_RBS_density_I2(O//2, 2, device)
+        self.pool3 = Pooling_2D_density(O//2, O//4, device)
+        self.basis_map = Basis_Change_I_to_HW_density(O // 4, device)
         self.dense_full = Dense_RBS_density(O, dense_full_gates, device)
         self.reduce_dim = Trace_out_dimension(10, device)
         self.dense_reduced = Dense_RBS_density(5, dense_reduce_gates, device)
@@ -78,12 +82,13 @@ class QCNN(nn.Module):
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
         x = self.pool2(self.conv2(x))  # second convolution and pooling
+        x = self.pool3(self.conv3(x))
         x = self.basis_map(x)  # basis change from 3D Image to HW=2
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
-network = QCNN(I, O, K, dense_full_gates, dense_reduce_gates, device)
+network = QCNN(I, O, dense_full_gates, dense_reduce_gates, device)
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.9)
 
