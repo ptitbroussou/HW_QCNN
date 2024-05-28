@@ -18,7 +18,6 @@ from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2
 
 warnings.simplefilter('ignore')
 
-print("This is the good file !!")
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
@@ -27,13 +26,13 @@ O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 1  # batch number
-training_dataset = 10  # training dataset sample number
-testing_dataset = 10  # testing dataset sample number
+training_dataset = 1  # training dataset sample number
+testing_dataset = 1  # testing dataset sample number
 class_set = [0,1,2] # filter dataset
 reduced_qubit = 3 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = False # shuffle for this dataset
 learning_rate = 1e-1 # step size for each learning steps
-train_epochs = 100  # number of epoch we train
+train_epochs = 10  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss() # loss function
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
@@ -72,7 +71,7 @@ class QCNN(nn.Module):
             - device: torch device (cpu, cuda, etc...)
         """
         super(QCNN, self).__init__()
-        self.conv1 = Conv_RBS_density_I2(I, 8, device)
+        self.conv1 = Conv_RBS_density_I2(I, 4, device)
         self.pool1 = Pooling_2D_density(I, O, device)
         self.conv2 = Conv_RBS_density_I2(O, 4, device)
         self.pool2 = Pooling_2D_density(O, O // 2, device)
