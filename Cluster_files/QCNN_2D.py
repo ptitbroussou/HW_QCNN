@@ -24,7 +24,7 @@ I = 32  # dimension of image we use. If you use 2 times conv and pool layers, pl
 O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
-batch_size = 10  # batch number
+batch_size = 1  # batch number
 training_dataset = 10  # training dataset sample number
 testing_dataset = 10  # testing dataset sample number
 is_shuffle = False # shuffle for this dataset
