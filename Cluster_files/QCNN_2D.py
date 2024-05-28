@@ -40,7 +40,7 @@ device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps"
 # so after the full dense we reduce the dimension from binom(O+J,3) to binom(5,3)=10, i.e., only keep the last 5 qubits.
 # Finally, we do the reduce dense for 5 qubits and measurement.
 # Also, you can check visualization of different gate lists in the file "src/list_gates.py"
-dense_full_gates = drip_circuit(O)
+dense_full_gates = drip_circuit(O//2)
 dense_reduce_gates = full_pyramid_circuit(5)
 ##################### Hyperparameters end #######################
 
