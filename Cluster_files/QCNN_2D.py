@@ -18,6 +18,7 @@ from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2
 
 warnings.simplefilter('ignore')
 
+print("This is the good file !!")
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
@@ -32,7 +33,7 @@ class_set = [0,1,2] # filter dataset
 reduced_qubit = 3 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = False # shuffle for this dataset
 learning_rate = 1e-1 # step size for each learning steps
-train_epochs = 10  # number of epoch we train
+train_epochs = 100  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss() # loss function
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
