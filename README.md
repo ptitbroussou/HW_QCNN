@@ -125,15 +125,15 @@ Little tips: you can use VS Code to ssh connect the server, it's a easy way to e
 <table>
   <tr>
     <td style="text-align:center">
-      <img src="images/circuit/butterfly_circuit.png" height="200" /><br />
+      <img src="images/circuit/butterfly_circuit.png" height="150" /><br />
       <span>butterfly circuit</span>
     </td>
     <td style="text-align:center">
-      <img src="images/circuit/drip_circuit.png" height="200" /><br />
+      <img src="images/circuit/drip_circuit.png" height="150" /><br />
       <span>drip circuit</span>
     </td>
     <td style="text-align:center">
-      <img src="images/circuit/X_circuit.png" height="200" /><br />
+      <img src="images/circuit/X_circuit.png" height="150" /><br />
       <span>X circuit</span>
     </td>
   </tr>
@@ -141,28 +141,28 @@ Little tips: you can use VS Code to ssh connect the server, it's a easy way to e
 <table>
   <tr>
     <td style="text-align:center">
-      <img src="images/circuit/full_connection_circuit.png" height="200" /><br />
+      <img src="images/circuit/full_connection_circuit.png" height="150" /><br />
       <span>full connection circuit</span>
     </td>
     <td style="text-align:center">
-      <img src="images/circuit/pyramid_circuit.png" height="200" /><br />
+      <img src="images/circuit/pyramid_circuit.png" height="150" /><br />
       <span>pyramid circuit</span>
     </td>
   </tr>
   <tr>
     <td style="text-align:center">
-      <img src="images/circuit/full_reverse_connection_circuit.png" height="200" /><br />
+      <img src="images/circuit/full_reverse_connection_circuit.png" height="150" /><br />
       <span>full reverse connection circuit</span>
     </td>
     <td style="text-align:center">
-      <img src="images/circuit/slide_circuit.png" height="200" /><br />
+      <img src="images/circuit/slide_circuit.png" height="150" /><br />
       <span>slide circuit</span>
     </td>
   </tr>
 </table>
 
 ## Record
-10 labels MNIST QCNN: testing accuracy = 79.3% (1000 testing samples)
+10 labels MNIST QCNN: final testing accuracy = 82.22% (10,000 testing samples)
 ![QCNN_plot](images/plot.png)
 ### Hyperparameters:
 I = 16,
@@ -175,7 +175,7 @@ batch_size = 10,
 training_dataset = 1001
 testing_dataset = 1000,
 is_shuffle = True,
-learning_rate = 3e-3 (1e-3 for the last epoch),
+learning_rate = (3e-3 for 0-99 epochs 1e-3 for 100-199 epochs, 5e-4 for 200-209 epochs, 2e-4 for 210-219 epochs),
 train_epochs = 100,
 test_interval = 10,
 criterion = torch.nn.CrossEntropyLoss(),

@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings
 import torch
 import torch.nn as nn
+from torch.optim.lr_scheduler import ExponentialLR
 from src import load_dataset as load
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
@@ -81,11 +82,12 @@ class QCNN(nn.Module):
 
 network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
+scheduler = ExponentialLR(optimizer, gamma=0.9)
 # Loading data
 train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=is_shuffle)
 reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True)
 reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
 
 # training part
-network_state = train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, criterion, train_epochs, test_interval, stride, device)
+network_state = train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
 torch.save(network_state, "model_state")

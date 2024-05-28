@@ -297,15 +297,15 @@ class Dense_RBS_state_vector_3D(nn.Module):
 class Dense_RBS_density(nn.Module):
     """ This module describes the action of one RBS based VQC. """
 
-    def __init__(self, I, list_gates, device):
+    def __init__(self, n, list_gates, device):
         """ Args:
-            - I: size of the square input image
+            - n: 2 time of size of the square input image I
             - list_gates: list of tuples representing the qubits affected by each RBS
             - device: torch device (cpu, cuda, etc...) 
         """
         super().__init__()
         # We only store the RBS unitary corresponding to an edge in the qubit connectivity: 
-        self.RBS_Unitaries_dict = RBS_Unitaries(I * 2, 2, list_gates, device)
+        self.RBS_Unitaries_dict = RBS_Unitaries(n, 2, list_gates, device)
         self.RBS_gates = nn.ModuleList([RBS_Dense_density(list_gates[i], device) for i in range(len(list_gates))])
 
     def forward(self, input_state):

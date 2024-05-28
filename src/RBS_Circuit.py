@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch
 from torch import nn
 from scipy.special import binom
-from toolbox import map_RBS, RBS_generalized, RBS_generalized_I2_2D, RBS_generalized_I2_3D_bottom_channel
+from src.toolbox import map_RBS, RBS_generalized, RBS_generalized_I2_2D, RBS_generalized_I2_3D_bottom_channel
 
 
 #################################################################################
