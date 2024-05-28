@@ -1,4 +1,5 @@
 import os, sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import warnings
@@ -8,6 +9,7 @@ from torch.optim.lr_scheduler import ExponentialLR
 from src import load_dataset as load
 from src.QCNN_layers.Measurement_layer import measurement
 from src.training import train_globally_2D
+from src.load_dataset import filter_dataloader
 from src.QCNN_layers.Dense_layer import Trace_out_dimension
 from src.list_gates import drip_circuit, full_pyramid_circuit
 from src.QCNN_layers.Dense_layer import Dense_RBS_density, Basis_Change_I_to_HW_density
@@ -23,8 +25,10 @@ O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 10  # batch number
-training_dataset = 10  # training dataset sample number
-testing_dataset = 10  # testing dataset sample number
+training_dataset = 50  # training dataset sample number
+testing_dataset = 50  # testing dataset sample number
+class_set = [0,1,2] # filter dataset
+reduced_qubit = 3 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = False # shuffle for this dataset
 learning_rate = 1e-1 # step size for each learning steps
 train_epochs = 10  # number of epoch we train
@@ -39,7 +43,7 @@ device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps"
 # Finally, we do the reduce dense for 5 qubits and measurement.
 # Also, you can check visualization of different gate lists in the file "src/list_gates.py"
 dense_full_gates = drip_circuit(O)
-dense_reduce_gates = full_pyramid_circuit(5)
+dense_reduce_gates = full_pyramid_circuit(reduced_qubit)
 ##################### Hyperparameters end #######################
 
 class QCNN(nn.Module):
@@ -72,8 +76,8 @@ class QCNN(nn.Module):
         self.pool2 = Pooling_2D_density(O, O // 2, device)
         self.basis_map = Basis_Change_I_to_HW_density(O // 2, device)
         self.dense_full = Dense_RBS_density(O, dense_full_gates, device)
-        self.reduce_dim = Trace_out_dimension(10, device)
-        self.dense_reduced = Dense_RBS_density(5, dense_reduce_gates, device)
+        self.reduce_dim = Trace_out_dimension(len(class_set), device)
+        self.dense_reduced = Dense_RBS_density(reduced_qubit, dense_reduce_gates, device)
 
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
@@ -91,6 +95,8 @@ scheduler = ExponentialLR(optimizer, gamma=0.9)
 train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=is_shuffle)
 reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True)
 reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
+reduced_train_loader = filter_dataloader(reduced_train_loader, class_set)
+reduced_test_loader = filter_dataloader(reduced_test_loader,class_set)
 
 # training part
 network_state = train_globally_2D(batch_size, I, network, reduced_train_loader, reduced_test_loader, optimizer, scheduler, criterion, train_epochs, test_interval, device)

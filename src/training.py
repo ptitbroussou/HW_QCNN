@@ -17,7 +17,7 @@ def train_network(batch_size, I, J, network, train_loader, criterion, optimizer,
         new_size = I
         adaptive_avg_pool = AdaptiveAvgPool2d((new_size, new_size))
         data = adaptive_avg_pool(data).to(device)
-        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(batch_size,I**2), p=2, dim=1).to(device), device)
+        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(data.shape[0],I**2), p=2, dim=1).to(device), device)
         channel_data = copy_images_bottom_channel_stride(init_density_matrix, J, stride).to(device)
         output = network(channel_data)  # we run the network on the data
 
@@ -46,7 +46,7 @@ def test_network(batch_size, I, J, network, test_loader, criterion,  stride, dev
         new_size = I
         adaptive_avg_pool = AdaptiveAvgPool2d((new_size, new_size))
         data = adaptive_avg_pool(data).to(device)
-        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(batch_size,I**2), p=2, dim=1).to(device), device)
+        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(data.shape[0],I**2), p=2, dim=1).to(device), device)
         channel_data = copy_images_bottom_channel_stride(init_density_matrix, J, stride).to(device)
         output = network(channel_data)  # we run the network on the data
 
@@ -99,7 +99,7 @@ def train_network_2D(batch_size, I, network, train_loader, criterion, optimizer,
         new_size = I
         adaptive_avg_pool = AdaptiveAvgPool2d((new_size, new_size))
         data = adaptive_avg_pool(data).to(device)
-        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(batch_size,I**2), p=2, dim=1).to(device), device)
+        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(data.shape[0],I**2), p=2, dim=1).to(device), device)
         output = network(init_density_matrix)  # we run the network on the data
 
         # training
@@ -127,7 +127,7 @@ def test_network_2D(batch_size, I, network, test_loader, criterion, device):
         new_size = I
         adaptive_avg_pool = AdaptiveAvgPool2d((new_size, new_size))
         data = adaptive_avg_pool(data).to(device)
-        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(batch_size,I**2), p=2, dim=1).to(device), device)
+        init_density_matrix = to_density_matrix(F.normalize(data.squeeze().resize(data.shape[0],I**2), p=2, dim=1).to(device), device)
         output = network(init_density_matrix)  # we run the network on the data
 
         loss = criterion(output,target.to(device))  # we compare output to the target and compute the loss, using the chosen loss function

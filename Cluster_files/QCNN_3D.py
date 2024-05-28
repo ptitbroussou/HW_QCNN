@@ -8,6 +8,7 @@ from torch.optim.lr_scheduler import ExponentialLR
 from src import load_dataset as load
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
+from src.load_dataset import filter_dataloader
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
@@ -26,8 +27,10 @@ k = 3  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 stride = 2 # the difference in step sizes for different channels
 batch_size = 10  # batch number
-training_dataset = 10  # training dataset sample number
-testing_dataset = 10  # testing dataset sample number
+training_dataset = 50  # training dataset sample number
+testing_dataset = 50  # testing dataset sample number
+class_set = [0,1,2,3] # filter dataset
+reduced_qubit = 4 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = True # shuffle for this dataset
 learning_rate = 2e-3 # step size for each learning steps
 train_epochs = 2  # number of epoch we train
@@ -44,8 +47,8 @@ device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps"
 dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + butterfly_circuit(O + J) +
                     full_connection_circuit(O + J) + X_circuit(O + J) + full_reverse_connection_circuit(O + J)
                     + slide_circuit(O + J))
-dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) +
-                      X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5))
+dense_reduce_gates = (full_connection_circuit(reduced_qubit) + butterfly_circuit(reduced_qubit) + full_reverse_connection_circuit(reduced_qubit) +
+                      X_circuit(reduced_qubit) + full_connection_circuit(reduced_qubit) + full_reverse_connection_circuit(reduced_qubit))
 ##################### Hyperparameters end #######################
 
 
@@ -79,8 +82,8 @@ class QCNN(nn.Module):
         self.pool2 = Pooling_3D_density(O, O // 2, J, device)
         self.basis_map = Basis_Change_I_to_HW_density_3D(O // 2, J, k, device)
         self.dense_full = Dense_RBS_density_3D(O // 2, J, k, dense_full_gates, device)
-        self.reduce_dim = Trace_out_dimension(10, device)
-        self.dense_reduced = Dense_RBS_density_3D(0, 5, k, dense_reduce_gates, device)
+        self.reduce_dim = Trace_out_dimension(len(class_set), device)
+        self.dense_reduced = Dense_RBS_density_3D(0, reduced_qubit, k, dense_reduce_gates, device)
 
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
@@ -99,6 +102,8 @@ scheduler = ExponentialLR(optimizer, gamma=0.9)
 train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=is_shuffle)
 reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True) # reduce dataset samples
 reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
+reduced_train_loader = filter_dataloader(reduced_train_loader, class_set)
+reduced_test_loader = filter_dataloader(reduced_test_loader,class_set)
 
 # training this network
 network_state = train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
