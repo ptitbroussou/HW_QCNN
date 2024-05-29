@@ -5,10 +5,9 @@ import warnings
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
-from src import load_dataset as load
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
-from src.load_dataset import filter_dataloader
+from src.load_dataset import load_fashion_mnist, load_mnist
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
@@ -27,16 +26,16 @@ k = 3  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 stride = 2 # the difference in step sizes for different channels
 batch_size = 10  # batch number
-training_dataset = 50  # training dataset sample number
-testing_dataset = 50  # testing dataset sample number
-class_set = [0,1,2,3] # filter dataset
-reduced_qubit = 4 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
+class_set = [0,1,2,3,4,5,6,7,8,9] # filter dataset
+train_dataset_number = 10  # training dataset sample number
+test_dataset_number = 10  # testing dataset sample number
+reduced_qubit = 5 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = True # shuffle for this dataset
 learning_rate = 2e-3 # step size for each learning steps
-train_epochs = 2  # number of epoch we train
+train_epochs = 10  # number of epoch we train
 test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss() # loss function
-device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -96,15 +95,12 @@ class QCNN(nn.Module):
 network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
 # network.load_state_dict(torch.load("model_state")) # load model parameters if you need
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
-scheduler = ExponentialLR(optimizer, gamma=0.9)
+scheduler = ExponentialLR(optimizer, gamma=0.98)
 
 # Loading data
-train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=is_shuffle)
-reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True) # reduce dataset samples
-reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
-reduced_train_loader = filter_dataloader(reduced_train_loader, class_set)
-reduced_test_loader = filter_dataloader(reduced_test_loader,class_set)
+train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+# train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # training this network
-network_state = train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
+network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
 torch.save(network_state, "model_state") # save network parameters

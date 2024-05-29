@@ -101,6 +101,7 @@ scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 # Loading data
 train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+# train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # training part
 network_state = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
