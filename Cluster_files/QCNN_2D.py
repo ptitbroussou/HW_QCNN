@@ -6,6 +6,7 @@ import warnings
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
+from scipy.special import binom
 from src import load_dataset as load
 from src.QCNN_layers.Measurement_layer import measurement
 from src.training import train_globally_2D
@@ -27,9 +28,9 @@ O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 1  # batch number
-training_dataset = 1  # training dataset sample number
-testing_dataset = 1  # testing dataset sample number
-class_set = [0,1,2] # filter dataset
+training_dataset = 10  # training dataset sample number, please don't let it be too small
+testing_dataset = 10  # testing dataset sample number, please don't let it be too small
+class_set = [0,1] # filter dataset
 reduced_qubit = 3 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = False # shuffle for this dataset
 learning_rate = 1e-1 # step size for each learning steps
@@ -80,7 +81,7 @@ class QCNN(nn.Module):
         self.pool3 = Pooling_2D_density(O//2, O//4, device)
         self.basis_map = Basis_Change_I_to_HW_density(O // 4, device)
         self.dense_full = Dense_RBS_density(O//2, dense_full_gates, device)
-        self.reduce_dim = Trace_out_dimension(len(class_set), device)
+        self.reduce_dim = Trace_out_dimension(int(binom(reduced_qubit,k)), device)
         self.dense_reduced = Dense_RBS_density(reduced_qubit, dense_reduce_gates, device)
 
     def forward(self, x):
