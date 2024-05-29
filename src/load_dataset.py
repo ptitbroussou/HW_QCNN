@@ -1,9 +1,79 @@
 import torch
 from torchvision import datasets, transforms
+from torch.utils.data import DataLoader, Subset
 from torch.utils.data import DataLoader, TensorDataset
 import torch.nn.functional as F
 
 transform_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+
+
+def load_filtered_fashion_mnist(labels_to_include, num_datapoints, train=True):
+    # Define a transform to normalize the data
+    transform = transforms.Compose([transforms.ToTensor()])
+
+    # Load the FashionMNIST dataset
+    fashion_mnist = datasets.FashionMNIST(root='./data', train=train, download=True, transform=transform)
+
+    # Find indices of the datapoints that match the labels_to_include
+    indices = [i for i, (img, label) in enumerate(fashion_mnist) if label in labels_to_include]
+
+    # Shuffle indices to get a random subset
+    random_indices = torch.randperm(len(indices)).tolist()
+
+    # Select the specified number of datapoints
+    selected_indices = indices[:num_datapoints]
+
+    # Create a subset of the dataset
+    filtered_dataset = Subset(fashion_mnist, selected_indices)
+
+    return filtered_dataset
+
+
+# Function to create a DataLoader for the filtered dataset
+def create_dataloader(filtered_dataset, batch_size=32):
+    dataloader = DataLoader(filtered_dataset, batch_size=batch_size, shuffle=True)
+    return dataloader
+
+
+def load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size):
+    filtered_dataset = load_filtered_fashion_mnist(class_set, train_dataset_number, train=True)
+    train_dataloader = create_dataloader(filtered_dataset, batch_size)
+    filtered_test_dataset = load_filtered_fashion_mnist(class_set, test_dataset_number, train=False)
+    test_dataloader = create_dataloader(filtered_test_dataset, batch_size)
+    return train_dataloader, test_dataloader
+
+
+def load_filtered_mnist(labels_to_include, num_datapoints, train=True):
+    # Define a transform to normalize the data
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,))
+    ])
+
+    # Load the MNIST dataset
+    mnist = datasets.MNIST(root='./data', train=train, download=True, transform=transform)
+
+    # Find indices of the datapoints that match the labels_to_include
+    indices = [i for i, (img, label) in enumerate(mnist) if label in labels_to_include]
+
+    # Shuffle indices to get a random subset
+    random_indices = torch.randperm(len(indices)).tolist()
+
+    # Select the specified number of datapoints
+    selected_indices = indices[:num_datapoints]
+
+    # Create a subset of the dataset
+    filtered_dataset = Subset(mnist, selected_indices)
+
+    return filtered_dataset
+
+
+def load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size):
+    filtered_dataset = load_filtered_mnist(class_set, train_dataset_number, train=True)
+    train_dataloader = create_dataloader(filtered_dataset, batch_size)
+    filtered_test_dataset = load_filtered_mnist(class_set, test_dataset_number, train=False)
+    test_dataloader = create_dataloader(filtered_test_dataset, batch_size)
+    return train_dataloader, test_dataloader
 
 
 def load_FashionMNIST(batch_size):

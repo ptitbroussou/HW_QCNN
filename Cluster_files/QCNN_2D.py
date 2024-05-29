@@ -7,11 +7,10 @@ import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
 from scipy.special import binom
-from src import load_dataset as load
 from src.QCNN_layers.Measurement_layer import measurement
+from src.load_dataset import load_fashion_mnist, load_mnist
 from src.training import train_globally_2D
 from src.QCNN_layers.Dense_layer import Trace_out_dimension
-from src.load_dataset import filter_dataloader
 from src.list_gates import drip_circuit, full_pyramid_circuit
 from src.QCNN_layers.Dense_layer import Dense_RBS_density, Basis_Change_I_to_HW_density
 from src.QCNN_layers.Pooling_layer import Pooling_2D_density
@@ -28,15 +27,15 @@ O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 1  # batch number
-training_dataset = 10  # training dataset sample number, please don't let it be too small
-testing_dataset = 10  # testing dataset sample number, please don't let it be too small
-class_set = [0,1] # filter dataset
-reduced_qubit = 3 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
-is_shuffle = False # shuffle for this dataset
-learning_rate = 1e-1 # step size for each learning steps
+class_set = [0, 1]  # filter dataset
+train_dataset_number = 5  # training dataset sample number
+test_dataset_number = 5  # testing dataset sample number
+reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
+is_shuffle = False  # shuffle for this dataset
+learning_rate = 1e-1  # step size for each learning steps
 train_epochs = 100  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
-criterion = torch.nn.CrossEntropyLoss() # loss function
+criterion = torch.nn.CrossEntropyLoss()  # loss function
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
@@ -45,8 +44,10 @@ device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps"
 # so after the full dense we reduce the dimension from binom(O+J,3) to binom(5,3)=10, i.e., only keep the last 5 qubits.
 # Finally, we do the reduce dense for 5 qubits and measurement.
 # Also, you can check visualization of different gate lists in the file "src/list_gates.py"
-dense_full_gates = drip_circuit(O//2)
+dense_full_gates = drip_circuit(O // 2)
 dense_reduce_gates = full_pyramid_circuit(reduced_qubit)
+
+
 ##################### Hyperparameters end #######################
 
 class QCNN(nn.Module):
@@ -61,6 +62,7 @@ class QCNN(nn.Module):
 
     Then we can use it to calculate the Loss(output, targets)
     """
+
     def __init__(self, I, O, dense_full_gates, dense_reduce_gates, device):
         """ Args:
             - I: dimension of image we use, default I is 28
@@ -77,11 +79,11 @@ class QCNN(nn.Module):
         self.pool1 = Pooling_2D_density(I, O, device)
         self.conv2 = Conv_RBS_density_I2(O, 4, device)
         self.pool2 = Pooling_2D_density(O, O // 2, device)
-        self.conv3 = Conv_RBS_density_I2(O//2, 2, device)
-        self.pool3 = Pooling_2D_density(O//2, O//4, device)
+        self.conv3 = Conv_RBS_density_I2(O // 2, 2, device)
+        self.pool3 = Pooling_2D_density(O // 2, O // 4, device)
         self.basis_map = Basis_Change_I_to_HW_density(O // 4, device)
-        self.dense_full = Dense_RBS_density(O//2, dense_full_gates, device)
-        self.reduce_dim = Trace_out_dimension(int(binom(reduced_qubit,k)), device)
+        self.dense_full = Dense_RBS_density(O // 2, dense_full_gates, device)
+        self.reduce_dim = Trace_out_dimension(int(binom(reduced_qubit, k)), device)
         self.dense_reduced = Dense_RBS_density(reduced_qubit, dense_reduce_gates, device)
 
     def forward(self, x):
@@ -98,11 +100,8 @@ optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 # Loading data
-train_loader, test_loader = load.load_MNIST(batch_size=batch_size, shuffle=is_shuffle)
-reduced_train_loader = load.reduce_MNIST_dataset(train_loader, training_dataset, is_train=True)
-reduced_test_loader = load.reduce_MNIST_dataset(test_loader, testing_dataset, is_train=False)
-reduced_train_loader = filter_dataloader(reduced_train_loader, class_set)
-reduced_test_loader = filter_dataloader(reduced_test_loader,class_set)
+train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # training part
-network_state = train_globally_2D(batch_size, I, network, reduced_train_loader, reduced_test_loader, optimizer, scheduler, criterion, train_epochs, test_interval, device)
+network_state = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
+                                  criterion, train_epochs, test_interval, device)
