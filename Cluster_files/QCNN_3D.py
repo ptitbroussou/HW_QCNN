@@ -7,35 +7,35 @@ import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
-from src.load_dataset import load_fashion_mnist, load_mnist
+from src.load_dataset import load_fashion_mnist, load_mnist, load_medmnist, load_cifar10
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
-from src.training import train_globally
+from src.training import train_globally, train_RGB_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
 from src.list_gates import drip_circuit, butterfly_circuit, X_circuit, full_connection_circuit, \
     full_reverse_connection_circuit, slide_circuit
 
 warnings.simplefilter('ignore')
 
-
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
 I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
-J = 2  # number of channel
+J = 3  # number of channel, if you use RGB dataset please let J be multiple of 3
 k = 3  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
-stride = 2 # the difference in step sizes for different channels
+stride = 2  # the difference in step sizes for different channels
 batch_size = 10  # batch number
-class_set = [0,1,2,3,4,5,6,7,8,9] # filter dataset
+class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
+medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
 train_dataset_number = 10  # training dataset sample number
 test_dataset_number = 10  # testing dataset sample number
-reduced_qubit = 5 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
-is_shuffle = True # shuffle for this dataset
-learning_rate = 2e-3 # step size for each learning steps
+reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
+is_shuffle = True  # shuffle for this dataset
+learning_rate = 2e-3  # step size for each learning steps
 train_epochs = 10  # number of epoch we train
 test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
-criterion = torch.nn.CrossEntropyLoss() # loss function
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+criterion = torch.nn.CrossEntropyLoss()  # loss function
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -48,6 +48,8 @@ dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + butte
                     + slide_circuit(O + J))
 dense_reduce_gates = (full_connection_circuit(reduced_qubit) + butterfly_circuit(reduced_qubit) + full_reverse_connection_circuit(reduced_qubit) +
                       X_circuit(reduced_qubit) + full_connection_circuit(reduced_qubit) + full_reverse_connection_circuit(reduced_qubit))
+
+
 ##################### Hyperparameters end #######################
 
 
@@ -63,6 +65,7 @@ class QCNN(nn.Module):
 
     Then we can use it to calculate the Loss(output, targets)
     """
+
     def __init__(self, I, O, J, K, k, dense_full_gates, dense_reduce_gates, device):
         """ Args:
             - I: dimension of image we use, default I is 28
@@ -97,10 +100,15 @@ network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.98)
 
-# Loading data
-train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+# Gray MNIST/Fashion MNIST
+# train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 # train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+# network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
 
-# training this network
-network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
-torch.save(network_state, "model_state") # save network parameters
+# RGB MedMNIST/CIFAR-10
+# train_dataloader, test_dataloader = load_medmnist(medmnist_name, class_set, train_dataset_number, test_dataset_number, batch_size)
+train_dataloader, test_dataloader = load_cifar10(class_set, train_dataset_number, test_dataset_number, batch_size)
+network_state = train_RGB_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval,
+                                   stride, device)
+
+torch.save(network_state, "model_state")  # save network parameters
