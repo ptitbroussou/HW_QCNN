@@ -22,14 +22,14 @@ print("This is the good file !!")
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
-I = 32  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
+I = 6  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
-K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
+K = 3  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 1  # batch number
-training_dataset = 1  # training dataset sample number
-testing_dataset = 1  # testing dataset sample number
-class_set = [0,1,2] # filter dataset
+training_dataset = 100  # training dataset sample number
+testing_dataset = 100  # testing dataset sample number
+class_set = [0,1] # filter dataset
 reduced_qubit = 3 # ATTENTION: binom(reduced_qubit,k)==len(class_set)!
 is_shuffle = False # shuffle for this dataset
 learning_rate = 1e-1 # step size for each learning steps
@@ -72,21 +72,15 @@ class QCNN(nn.Module):
             - device: torch device (cpu, cuda, etc...)
         """
         super(QCNN, self).__init__()
-        self.conv1 = Conv_RBS_density_I2(I, 4, device)
+        self.conv1 = Conv_RBS_density_I2(I, 3, device)
         self.pool1 = Pooling_2D_density(I, O, device)
-        self.conv2 = Conv_RBS_density_I2(O, 4, device)
-        self.pool2 = Pooling_2D_density(O, O // 2, device)
-        self.conv3 = Conv_RBS_density_I2(O//2, 2, device)
-        self.pool3 = Pooling_2D_density(O//2, O//4, device)
-        self.basis_map = Basis_Change_I_to_HW_density(O // 4, device)
-        self.dense_full = Dense_RBS_density(O//2, dense_full_gates, device)
+        self.basis_map = Basis_Change_I_to_HW_density(O // 2, device)
+        self.dense_full = Dense_RBS_density(O, dense_full_gates, device)
         self.reduce_dim = Trace_out_dimension(len(class_set), device)
         self.dense_reduced = Dense_RBS_density(reduced_qubit, dense_reduce_gates, device)
 
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
-        x = self.pool2(self.conv2(x))  # second convolution and pooling
-        x = self.pool3(self.conv3(x))
         x = self.basis_map(x)  # basis change from 3D Image to HW=2
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
         return measurement(x, device)  # measure, only keep the diagonal elements
