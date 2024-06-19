@@ -97,6 +97,8 @@ class QCNN(nn.Module):
 
 network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
 # network.load_state_dict(torch.load("model_state")) # load model parameters if you need
+# network.load_state_dict(torch.load("/home/letao/new/HW_QCNN/Cluster_files/model_state")) # absolute path
+
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.98)
 

@@ -14,8 +14,10 @@ def train_network(batch_size, I, J, network, train_loader, criterion, optimizer,
     # loop on the batches in the train dataset
     for batch_idx, (data, target) in enumerate(train_loader):
         optimizer.zero_grad()  # important step to reset gradients to zero
+        target = target.squeeze()
         adaptive_avg_pool = AdaptiveAvgPool2d((I, I))
         data = adaptive_avg_pool(data).to(device)
+        data = data.sum(dim=1, keepdim=True)
         init_density_matrix = to_density_matrix(
             F.normalize(data.squeeze().resize(data.shape[0], I ** 2), p=2, dim=1).to(device), device)
         channel_data = copy_images_bottom_channel_stride(init_density_matrix, J, stride).to(device)
@@ -44,8 +46,10 @@ def test_network(batch_size, I, J, network, test_loader, criterion, stride, devi
     train_accuracy = 0  # initialize the accuracy
     for batch_idx, (data, target) in enumerate(test_loader):
         # Run the network and compute the loss
+        target = target.squeeze()
         adaptive_avg_pool = AdaptiveAvgPool2d((I, I))
         data = adaptive_avg_pool(data).to(device)
+        data = data.sum(dim=1, keepdim=True)
         init_density_matrix = to_density_matrix(
             F.normalize(data.squeeze().resize(data.shape[0], I ** 2), p=2, dim=1).to(device), device)
         channel_data = copy_images_bottom_channel_stride(init_density_matrix, J, stride).to(device)
@@ -139,7 +143,7 @@ def train_RGB_globally(batch_size, I, J, network, reduced_train_loader, reduced_
             f'Epoch {epoch}: Loss = {train_loss:.6f}, accuracy = {train_accuracy * 100:.4f} %, time={(end - start):.4f}s')
         if epoch % test_interval == 0 and epoch != 0:
             test_loss, test_accuracy = test_RGB_network(batch_size, I, J, network, reduced_test_loader, criterion, stride,
-                                                    device)
+                                                        device)
             print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
         scheduler.step()
     # final testing part
