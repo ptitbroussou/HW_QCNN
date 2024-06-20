@@ -28,7 +28,7 @@ def evaluate_reduced_eff(nbr_qubits,list_gates,k, np):
         U = new_U @ U
 
     U = U.real.float()
-    U = U[-np:,:]
+    U = U[-int(binom(np,k)):,:]
     U_vector = U.view(-1)
     Jacobian = torch.zeros(U_vector.shape[0], len(theta_vector), dtype=torch.float).to(device)
 
@@ -55,13 +55,21 @@ def evaluate_reduced_eff(nbr_qubits,list_gates,k, np):
 
     return torch.linalg.matrix_rank(Jacobian.cpu()).item(), (inner_product_sum / Jacobian.shape[1]).item()
 
-n = 5
+
+n = 6
 k = 2
-np = 2
+np = 5
 device = torch.device("cpu")
-initial_configuration = ([(i,j) for i in range(n) for j in range(0, n) if i!=j])
+initial_configuration = ([(i,j) for i in range(n) for j in range(0, n) if i>j]+
+                         [(i,j) for i in range(n) for j in range(0, n) if i!=j]+
+                         [(i,j) for i in range(n) for j in range(0, n) if i>j]+
+                         [(i,j) for i in range(n) for j in range(0, n) if i!=j]+
+                         [(i,(i+1)%n) for i in range(n-1)])
 start = time.time()
 rank, value = evaluate_reduced_eff(n, initial_configuration, k, np)
 print("Time used: " + str((time.time()-start)) + " s")
 print("Number of paramters: " + str(len(initial_configuration)))
+dk, dkp = int(binom(n,k)), int(binom(np,k))
+up_bound = dk*dkp-(dkp*(dkp+1)/2)
+print("Rank upper bound: " + str(up_bound))
 print("Value:" + str(value) + ", rank: " + str(rank))

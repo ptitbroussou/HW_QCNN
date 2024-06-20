@@ -12,7 +12,7 @@ from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally, train_RGB_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
 from src.list_gates import drip_circuit, butterfly_circuit, X_circuit, full_connection_circuit, \
-    full_reverse_connection_circuit, slide_circuit
+    full_reverse_connection_circuit, slide_circuit, full_pyramid_circuit
 
 warnings.simplefilter('ignore')
 
@@ -20,22 +20,22 @@ warnings.simplefilter('ignore')
 # Below are the hyperparameters of this network, you can change them to test
 I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
-J = 3  # number of channel, if you use RGB dataset please let J be multiple of 3
+J = 2  # number of channel, if you use RGB dataset please let J be multiple of 3
 k = 3  # preserving subspace parameter, usually you don't need to change this
-K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
-stride = 2  # the difference in step sizes for different channels
-batch_size = 10  # batch number
+K = 4  # size of kernel in the convolution layer, please make it divisible by O=I/2
+stride = 1  # the difference in step sizes for different channels
+batch_size = 1  # batch number
 class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
 medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
-train_dataset_number = 10  # training dataset sample number
-test_dataset_number = 10  # testing dataset sample number
+train_dataset_number = 1  # training dataset sample number
+test_dataset_number = 1  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
-is_shuffle = True  # shuffle for this dataset
-learning_rate = 2e-3  # step size for each learning steps
-train_epochs = 10  # number of epoch we train
-test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+is_shuffle = False  # shuffle for this dataset
+learning_rate = 1e-1  # step size for each learning steps
+train_epochs = 40  # number of epoch we train
+test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -43,12 +43,18 @@ device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps"
 # so after the full dense we reduce the dimension from binom(O+J,3) to binom(5,3)=10, i.e., only keep the last 5 qubits.
 # Finally, we do the reduce dense for 5 qubits and measurement.
 # Also, you can check visualization of different gate lists in the file "src/list_gates.py"
-dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + butterfly_circuit(O + J) +
-                    full_connection_circuit(O + J) + X_circuit(O + J) + full_reverse_connection_circuit(O + J)
-                    + slide_circuit(O + J))
-dense_reduce_gates = (full_connection_circuit(reduced_qubit) + butterfly_circuit(reduced_qubit) + full_reverse_connection_circuit(reduced_qubit) +
-                      X_circuit(reduced_qubit) + full_connection_circuit(reduced_qubit) + full_reverse_connection_circuit(reduced_qubit))
+dense_full_gates = ([(i,j) for i in range(O+J) for j in range(0, O+J) if i>j]+
+                    [(i,j) for i in range(O+J) for j in range(0, O+J) if i!=j]+
+                    [(i,j) for i in range(O+J) for j in range(0, O+J) if i>j]+
+                    [(i,j) for i in range(O+J) for j in range(0, O+J) if i!=j]+
+                    [(i,(i+1)%(O+J)) for i in range(O+J-1)])
+dense_reduce_gates = ([(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
+                      [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i!=j]+
+                      [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
+                      [(i,(i+1)%(reduced_qubit)) for i in range(reduced_qubit)])
 
+# dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + full_pyramid_circuit(O + J) + butterfly_circuit(O + J) + full_reverse_connection_circuit(O + J) + X_circuit(O + J) + full_connection_circuit(O + J) + slide_circuit(O + J))
+# dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) + X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5) + full_pyramid_circuit(5))
 
 ##################### Hyperparameters end #######################
 
@@ -83,15 +89,19 @@ class QCNN(nn.Module):
         self.conv2 = Conv_RBS_density_I2_3D(O, K, J, device)
         self.pool2 = Pooling_3D_density(O, O // 2, J, device)
         self.basis_map = Basis_Change_I_to_HW_density_3D(O // 2, J, k, device)
-        self.dense_full = Dense_RBS_density_3D(O // 2, J, k, dense_full_gates, device)
+        self.dense_full1 = Dense_RBS_density_3D(O // 2, J, k, dense_full_gates, device)
+        # self.dense_full2 = Dense_RBS_density_3D(O // 2, J, k, dense_full_gates, device)
         self.reduce_dim = Trace_out_dimension(len(class_set), device)
-        self.dense_reduced = Dense_RBS_density_3D(0, reduced_qubit, k, dense_reduce_gates, device)
+        self.dense_reduced1 = Dense_RBS_density_3D(0, reduced_qubit, k, dense_reduce_gates, device)
+        # self.dense_reduced2 = Dense_RBS_density_3D(0, reduced_qubit, k, dense_reduce_gates, device)
 
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
         x = self.pool2(self.conv2(x))  # second convolution and pooling
+        # x = self.pool2(self.pool1(x))
         x = self.basis_map(x)  # basis change from 3D Image to HW=3
-        x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
+        x = self.dense_reduced1(self.reduce_dim(self.dense_full1(x)))  # dense layer
+        # x = self.dense_reduced2(self.dense_reduced1(x))
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
@@ -100,17 +110,18 @@ network = QCNN(I, O, J, K, k, dense_full_gates, dense_reduce_gates, device)
 # network.load_state_dict(torch.load("/home/letao/new/HW_QCNN/Cluster_files/model_state")) # absolute path
 
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
-scheduler = ExponentialLR(optimizer, gamma=0.98)
+scheduler = ExponentialLR(optimizer, gamma=1)
+# scheduler = ExponentialLR(optimizer, gamma=0.968)
 
 # Gray MNIST/Fashion MNIST
 # train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-# train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-# network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
+train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
 
 # RGB MedMNIST/CIFAR-10
 # train_dataloader, test_dataloader = load_medmnist(medmnist_name, class_set, train_dataset_number, test_dataset_number, batch_size)
-train_dataloader, test_dataloader = load_cifar10(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state = train_RGB_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval,
-                                   stride, device)
+# train_dataloader, test_dataloader = load_cifar10(class_set, train_dataset_number, test_dataset_number, batch_size)
+# network_state = train_RGB_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval,
+#                                    stride, device)
 
 torch.save(network_state, "model_state")  # save network parameters
