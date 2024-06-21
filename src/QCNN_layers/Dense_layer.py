@@ -352,6 +352,13 @@ class Dense_RBS_density_3D(nn.Module):
         return (input_state)
 
 
+def normalize_DM(density_matrix):
+    """"""
+    traces = density_matrix.diagonal(dim1=-2, dim2=-1).sum(-1)
+    traces = traces.view(density_matrix.shape[0], 1, 1)
+    return (density_matrix / traces)
+
+
 class Trace_out_dimension(nn.Module):
     def __init__(self, out, device):
         super().__init__()
@@ -360,6 +367,5 @@ class Trace_out_dimension(nn.Module):
 
     def forward(self, input):
         input = input[:, -self.out:, -self.out:]
-        return F.normalize(input, p=2, dim=1).to(self.device)
-
+        return normalize_DM(input)
 
