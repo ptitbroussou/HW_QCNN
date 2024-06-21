@@ -26,10 +26,10 @@ I = 8  # dimension of image we use. If you use 2 times conv and pool layers, ple
 O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
-batch_size = 10  # batch number
+batch_size = 30  # batch number
 class_set = [i for i in range(5)]  # filter dataset
-train_dataset_number = int(1e5)  # training dataset sample number
-test_dataset_number = int(1e5)  # testing dataset sample numbers
+train_dataset_number = int(1e3)  # training dataset sample number
+test_dataset_number = int(1e3)  # testing dataset sample numbers
 reduced_qubit = 4  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-1  # step size for each learning steps
