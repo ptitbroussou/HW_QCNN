@@ -22,22 +22,21 @@ print("This is the good file !!")
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
-I = 6  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
-O = I  # dimension after pooling, usually you don't need to change this
+I = 32  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
+O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 1  # batch number
-class_set = [0,1]  # filter dataset
-train_dataset_number = 10  # training dataset sample number
-test_dataset_number = 10  # testing dataset sample number
+class_set = [0, 1]  # filter dataset
+train_dataset_number = 5  # training dataset sample number
+test_dataset_number = 5  # testing dataset sample number
 reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
-learning_rate = 1e-2  # step size for each learning steps
-train_epochs = 10  # number of epoch we train
+learning_rate = 1e-1  # step size for each learning steps
+train_epochs = 100  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
-output_scale = 10
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -45,15 +44,8 @@ device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps")
 # so after the full dense we reduce the dimension from binom(O+J,3) to binom(5,3)=10, i.e., only keep the last 5 qubits.
 # Finally, we do the reduce dense for 5 qubits and measurement.
 # Also, you can check visualization of different gate lists in the file "src/list_gates.py"
-dense_full_gates = ([(i,j) for i in range(O) for j in range(0, O) if i>j]+
-                    [(i,j) for i in range(O) for j in range(0, O) if i!=j]+
-                    [(i,j) for i in range(O) for j in range(0, O) if i>j]+
-                    [(i,j) for i in range(O) for j in range(0, O) if i!=j]+
-                    [(i,(i+1)%(O)) for i in range(O-1)])
-dense_reduce_gates = ([(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
-                      [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i!=j]+
-                      [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
-                      [(i,(i+1)%(reduced_qubit)) for i in range(reduced_qubit)])
+dense_full_gates = drip_circuit(O // 2)
+dense_reduce_gates = full_pyramid_circuit(reduced_qubit)
 
 
 ##################### Hyperparameters end #######################
@@ -83,15 +75,21 @@ class QCNN(nn.Module):
             - device: torch device (cpu, cuda, etc...)
         """
         super(QCNN, self).__init__()
-        self.conv1 = Conv_RBS_density_I2(I, K, device)
-        self.pool1 = Pooling_2D_density(I, I//2, device)
-        self.basis_map = Basis_Change_I_to_HW_density(O // 2, device)
-        self.dense_full = Dense_RBS_density(O, dense_full_gates, device)
+        self.conv1 = Conv_RBS_density_I2(I, 4, device)
+        self.pool1 = Pooling_2D_density(I, O, device)
+        self.conv2 = Conv_RBS_density_I2(O, 4, device)
+        self.pool2 = Pooling_2D_density(O, O // 2, device)
+        self.conv3 = Conv_RBS_density_I2(O // 2, 2, device)
+        self.pool3 = Pooling_2D_density(O // 2, O // 4, device)
+        self.basis_map = Basis_Change_I_to_HW_density(O // 4, device)
+        self.dense_full = Dense_RBS_density(O // 2, dense_full_gates, device)
         self.reduce_dim = Trace_out_dimension(int(binom(reduced_qubit, k)), device)
         self.dense_reduced = Dense_RBS_density(reduced_qubit, dense_reduce_gates, device)
 
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
+        x = self.pool2(self.conv2(x))  # second convolution and pooling
+        x = self.pool3(self.conv3(x))
         x = self.basis_map(x)  # basis change from 3D Image to HW=2
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
         return measurement(x, device)  # measure, only keep the diagonal elements
@@ -107,4 +105,4 @@ train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_
 
 # training part
 network_state = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
-                                  criterion, output_scale, train_epochs, test_interval, device)
+                                  criterion, train_epochs, test_interval, device)
