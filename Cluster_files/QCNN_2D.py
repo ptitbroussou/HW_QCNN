@@ -28,13 +28,13 @@ k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 10  # batch number
 class_set = [i for i in range(2)]  # filter dataset
-train_dataset_number = int(1e4)  # training dataset sample number
-test_dataset_number = int(1e3)  # testing dataset sample numbers
+train_dataset_number = int(1e5)  # training dataset sample number
+test_dataset_number = int(1e2)  # testing dataset sample numbers
 reduced_qubit = 4  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-1  # step size for each learning steps
-train_epochs = 50  # number of epoch we train
-test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+train_epochs = 10  # number of epoch we train
+test_interval = 1  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 device = torch.device("cpu")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
