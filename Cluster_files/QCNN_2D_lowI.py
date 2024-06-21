@@ -28,8 +28,8 @@ k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 3  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 10  # batch number
 class_set = [0,1]  # filter dataset
-train_dataset_number = int(1e3)  # training dataset sample number
-test_dataset_number = int(1e2)  # testing dataset sample number
+train_dataset_number = int(1e4)  # training dataset sample number
+test_dataset_number = int(1e3)  # testing dataset sample number
 reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-2  # step size for each learning steps
