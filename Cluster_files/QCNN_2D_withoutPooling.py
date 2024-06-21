@@ -22,20 +22,22 @@ print("This is the good file !!")
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
-I = 6  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
-O = I  # dimension after pooling, usually you don't need to change this
+I = 3  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
+O = I * 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
-batch_size = 1  # batch number
+batch_size = 10  # batch number
 class_set = [0,1]  # filter dataset
-train_dataset_number = 10  # training dataset sample number
-test_dataset_number = 10  # testing dataset sample number
+train_dataset_number = 100  # training dataset sample number
+test_dataset_number = 100  # testing dataset sample number
 reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
-learning_rate = 1e-2  # step size for each learning steps
+learning_rate = 1e-2*(1)  # step size for each learning steps
 train_epochs = 10  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
-output_scale = 10
+# class_weights = torch.tensor([10.0, 10.0, 0])
+# criterion = torch.nn.CrossEntropyLoss(weight=class_weights)  # loss function
+output_scale = 1
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
@@ -52,8 +54,7 @@ dense_full_gates = ([(i,j) for i in range(O) for j in range(0, O) if i>j]+
                     [(i,(i+1)%(O)) for i in range(O-1)])
 dense_reduce_gates = ([(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
                       [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i!=j]+
-                      [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
-                      [(i,(i+1)%(reduced_qubit)) for i in range(reduced_qubit)])
+                      [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j])
 
 
 ##################### Hyperparameters end #######################
@@ -84,20 +85,20 @@ class QCNN(nn.Module):
         """
         super(QCNN, self).__init__()
         self.conv1 = Conv_RBS_density_I2(I, K, device)
-        self.pool1 = Pooling_2D_density(I, I//2, device)
         self.basis_map = Basis_Change_I_to_HW_density(O // 2, device)
         self.dense_full = Dense_RBS_density(O, dense_full_gates, device)
         self.reduce_dim = Trace_out_dimension(int(binom(reduced_qubit, k)), device)
         self.dense_reduced = Dense_RBS_density(reduced_qubit, dense_reduce_gates, device)
 
     def forward(self, x):
-        x = self.pool1(self.conv1(x))  # first convolution and pooling
+        x = self.conv1(x)  # first convolution and pooling
         x = self.basis_map(x)  # basis change from 3D Image to HW=2
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
 network = QCNN(I, O, dense_full_gates, dense_reduce_gates, device)
+# network.load_state_dict(torch.load("model_state")) # load model parameters if you need
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.9)
 
@@ -108,3 +109,4 @@ train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_
 # training part
 network_state = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
                                   criterion, output_scale, train_epochs, test_interval, device)
+torch.save(network_state, "model_state")  # save network parameters
