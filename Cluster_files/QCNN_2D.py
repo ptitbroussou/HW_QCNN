@@ -19,6 +19,7 @@ from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2
 warnings.simplefilter('ignore')
 
 
+
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
 I = 8  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
@@ -26,16 +27,16 @@ O = I // 2  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 10  # batch number
-class_set = [0, 1]  # filter dataset
-train_dataset_number = 1e4  # training dataset sample number
-test_dataset_number = 1e4  # testing dataset sample numbers
-reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
+class_set = [0, 1, 2, 4, 5]  # filter dataset
+train_dataset_number = int(1e5)  # training dataset sample number
+test_dataset_number = int(1e5)  # testing dataset sample numbers
+reduced_qubit = 4  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-1  # step size for each learning steps
-train_epochs = 10  # number of epoch we train
+train_epochs = 100  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cpu")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
