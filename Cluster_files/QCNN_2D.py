@@ -33,7 +33,7 @@ test_dataset_number = int(1e3)  # testing dataset sample numbers
 reduced_qubit = 4  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-1  # step size for each learning steps
-train_epochs = 100  # number of epoch we train
+train_epochs = 50  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 device = torch.device("cpu")  # also torch.device("cpu"), or torch.device("mps") for macbook
