@@ -35,8 +35,9 @@ is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-1  # step size for each learning steps
 train_epochs = 100  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+output_scale = 1
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -105,4 +106,4 @@ train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_
 
 # training part
 network_state = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
-                                  criterion, train_epochs, test_interval, device)
+                                  criterion, output_scale, train_epochs, test_interval, device)
