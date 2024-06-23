@@ -25,21 +25,21 @@ print("This is the good file !!")
 I = 6  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I  # dimension after pooling, usually you don't need to change this
 k = 2  # preserving subspace parameter, usually you don't need to change this
-K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
+K = 3  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 10  # batch number
 class_set = [0,1]  # filter dataset
-train_dataset_number = 10  # training dataset sample number
-test_dataset_number = 10  # testing dataset sample number
+train_dataset_number = int(1e4)  # training dataset sample number
+test_dataset_number = int(1e3)  # testing dataset sample number
 reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-2  # step size for each learning steps
 train_epochs = 10  # number of epoch we train
-test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+test_interval = 1  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 # class_weights = torch.tensor([10.0, 10.0, 0])
 # criterion = torch.nn.CrossEntropyLoss(weight=class_weights)  # loss function
 output_scale = 10
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
