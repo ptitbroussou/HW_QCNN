@@ -1,5 +1,6 @@
 import time
 
+import torch
 from torch.nn import AdaptiveAvgPool2d
 import torch.nn.functional as F
 
@@ -172,14 +173,16 @@ def train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test
         end = time.time()
         print(
             f'Epoch {epoch}: Loss = {train_loss:.6f}, accuracy = {train_accuracy * 100:.4f} %, time={(end - start):.4f}s')
-        if epoch % test_interval == 0 and epoch != 0:
+        if (epoch+1) % test_interval == 0:
             test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, stride,
                                                     device)
             print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
+            # print(os.getcwd())
+            torch.save(network.state_dict(), "Model_states/model" + str(epoch))  # save network parameters
         scheduler.step()
     # final testing part
-    test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, stride, device)
-    print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
+    # test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, stride, device)
+    # print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
     return network.state_dict()
 
 
