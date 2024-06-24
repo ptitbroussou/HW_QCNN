@@ -162,7 +162,7 @@ Little tips: you can use VS Code to ssh connect the server, it's a easy way to e
 </table>
 
 ## Record
-10 labels MNIST QCNN: final testing accuracy = 82.22% (10,000 testing samples)
+10 labels MNIST QCNN: final testing accuracy = 83.8% (1000 testing samples)
 ![QCNN_plot](images/plot.png)
 ### Hyperparameters:
 I = 16,
@@ -172,16 +172,23 @@ k = 3,
 K = 4,
 stride = 2,
 batch_size = 10,
-training_dataset = 1001
+training_dataset = 1000
 testing_dataset = 1000,
 is_shuffle = True,
-learning_rate = (3e-3 for 0-99 epochs 1e-3 for 100-199 epochs, 5e-4 for 200-209 epochs, 2e-4 for 210-219 epochs),
-train_epochs = 100,
+learning_rate = (1e-2 for 0-9 epochs 1e-3 for 10 epochs, 1e-4 for 11-12 epochs),
+train_epochs = 13,
 test_interval = 10,
 criterion = torch.nn.CrossEntropyLoss(),
+output_scale = 20
 
-dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + full_pyramid_circuit(O + J) + butterfly_circuit(O + J) + full_reverse_connection_circuit(O + J) + X_circuit(O + J) +
-full_connection_circuit(O + J) + slide_circuit(O + J))
+dense_full_gates = ([(i,j) for i in range(O+J) for j in range(0, O+J) if i>j]+
+[(i,j) for i in range(O+J) for j in range(0, O+J) if i!=j]+
+[(i,j) for i in range(O+J) for j in range(0, O+J) if i>j]+
+[(i,j) for i in range(O+J) for j in range(0, O+J) if i!=j]+
+drip_circuit(O + J) + butterfly_circuit(O + J)+
+[(i,(i+1)%(O+J)) for i in range(O+J-1)])
 
-dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) +
-X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5) + full_pyramid_circuit(5))
+dense_reduce_gates = ([(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
+[(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i!=j]+
+[(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
+[(i,(i+1)%(reduced_qubit)) for i in range(reduced_qubit)])
