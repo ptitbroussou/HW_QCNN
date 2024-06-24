@@ -194,6 +194,32 @@ class RBS_VQC_state_vector(nn.Module):
         input_state = input_state.squeeze(-1)
         return(input_state)
 
+class RBS_VQC_state_vector_I2(nn.Module):
+    """ This module describes the action of one RBS based VQC. """
+    def __init__(self, I, list_gates, device):
+        """ Args:
+            - I: size of the image
+            - list_gates: list of tuples representing the qubits affected by each RBS
+            - device: torch device (cpu, cuda, etc...) 
+        """
+        super().__init__()
+        # We only store the RBS unitary corresponding to an edge in the qubit connectivity: 
+        self.RBS_Unitaries_dict = RBS_Unitaries_I2(I, list_gates, device)
+        self.RBS_gates = nn.ModuleList([RBS_Gate_state_vector(list_gates[i], device) for i in range(len(list_gates))])
+
+    def forward(self, input_state):
+        """ Feedforward of the RBS based VQC.
+        Arg:
+            - input_state = a state vector on which is applied the RBS from the VQC
+        Output:
+            - final state from the application of the RBS from the VQC on the input 
+            state
+        """
+        input_state = input_state.unsqueeze(-1)
+        for RBS in self.RBS_gates:
+            input_state = RBS(input_state, self.RBS_Unitaries_dict)
+        input_state = input_state.squeeze(-1)
+        return(input_state)
 
 class RBS_VQC_density(nn.Module):
     """ This module describes the action of one RBS based VQC with density matrix
