@@ -1,6 +1,6 @@
 from numpy.linalg import matrix_rank as rank
 
-from toolbox import *
+from Verification_correction.toolbox import *
 
 ################################################################################
 ### Toolbox for Dynamical Lie Algebra Calculus:

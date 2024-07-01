@@ -478,3 +478,10 @@ def Pyramidal_Order_RBS_gates(nbr_qubits, first_RBS=0):
     for i, layer in enumerate(List_layers):
         List_order += layer
     return (List_order, List_layer_index)
+
+
+def normalize_DM(density_matrix):
+    """"""
+    traces = density_matrix.diagonal(dim1=-2, dim2=-1).sum(-1)
+    traces = traces.view(density_matrix.shape[0], 1, 1)
+    return (density_matrix / traces)

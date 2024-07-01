@@ -18,11 +18,11 @@ warnings.simplefilter('ignore')
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
-I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
+I = 8  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
 J = 2  # number of channel, if you use RGB dataset please let J be multiple of 3
 k = 3  # preserving subspace parameter, usually you don't need to change this
-K = 4  # size of kernel in the convolution layer, please make it divisible by O=I/2
+K = 2  # size of kernel in the convolution layer, please make it divisible by O=I/2
 stride = 1  # the difference in step sizes for different channels
 batch_size = 1  # batch number
 class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
@@ -32,10 +32,10 @@ test_dataset_number = 1  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-1  # step size for each learning steps
-train_epochs = 40  # number of epoch we train
-test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+train_epochs = 10  # number of epoch we train
+test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cpu")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -116,7 +116,7 @@ scheduler = ExponentialLR(optimizer, gamma=1)
 # Gray MNIST/Fashion MNIST
 # train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval, stride, device)
+network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, 10, train_epochs, test_interval, stride, device)
 
 # RGB MedMNIST/CIFAR-10
 # train_dataloader, test_dataloader = load_medmnist(medmnist_name, class_set, train_dataset_number, test_dataset_number, batch_size)
@@ -124,4 +124,4 @@ network_state = train_globally(batch_size, I, J, network, train_dataloader, test
 # network_state = train_RGB_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, train_epochs, test_interval,
 #                                    stride, device)
 
-torch.save(network_state, "model_state")  # save network parameters
+# torch.save(network_state, "model_state")  # save network parameters
