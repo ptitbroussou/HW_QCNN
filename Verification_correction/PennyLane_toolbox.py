@@ -34,31 +34,33 @@ def Conv_2D_gates(affected_qubits, K):
      angles is a list of parameters
     of size K*(K-1). """
     list_gates = []
-    _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC(len(affected_qubits) // 2, K)
+    list_gates, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC(len(affected_qubits) // 2, K)
     for key in RBS_dictionary:
         list_gates.append((affected_qubits[RBS_dictionary[key]], affected_qubits[RBS_dictionary[key] + 1]))
     return (Param_dictionary, list_gates)
 
 
 # Convolutional layer using pennylane:
-def Conv_RBS_2D(angles, Param_dictionary, list_gates):
+def Conv_RBS_2D(angles, I, K):
     """ This function creates a Convolutional layer with RBS gates.
     The list affected_qubits contains the qubits on which we apply 
     the RBS gates, and K represents the size of the filter window.
     We suppose that the image is square. angles is a list of parameters
     of size K*(K-1). """
-    for index, RBS in enumerate(list_gates):
-        i, j = RBS
-        angle = angles[Param_dictionary[index]]
-        # decomposing the RBS gate:
-        qml.Hadamard(wires=i)
-        qml.Hadamard(wires=j)
-        qml.CZ(wires=[i, j])
-        qml.RY(-angle, wires=i)
-        qml.RY(angle, wires=j)
-        qml.CZ(wires=[i, j])
-        qml.Hadamard(wires=i)
-        qml.Hadamard(wires=j)
+    QNN_layer, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC(I, K)
+    for layer in QNN_layer:
+        for a in layer:
+            angle = angles[Param_dictionary[a]]
+            i,j = RBS_dictionary[a], RBS_dictionary[a] + 1
+            # decomposing the RBS gate:
+            qml.Hadamard(wires=i)
+            qml.Hadamard(wires=j)
+            qml.CZ(wires=[i, j])
+            qml.RY(-angle, wires=i)
+            qml.RY(angle, wires=j)
+            qml.CZ(wires=[i, j])
+            qml.Hadamard(wires=i)
+            qml.Hadamard(wires=j)
 
     #############################################################################################################
 

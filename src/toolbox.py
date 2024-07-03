@@ -350,12 +350,13 @@ def RBS_generalized_I2_3D_bottom_channel(a, b, I, J):
 ### Convolutional Quantum Neural Network:                                      #
 ################################################################################
 def QCNN_RBS_based_VQC(I, K):
-    """ I represent the size of the input image. K represents the size of the
-    filter we consider. The stride is always equal to K. Each element of
-    QNN_layer is a list of gates applied in parallel. Param_dictionary is a 
-    dictionary that links each gate with the corresponding parameter. 
-    RBS_dictionary is a dictionary that links each RBS with its corresponding
-    first qubit of application. """
+    """ Args:
+        - I: Image size
+        - K: Filter size
+    Outputs:
+        - QNN_layer: a list of gates applied in parallel
+        - Param_dictionary: a dictionary that links each gate with the corresponding parameter
+        - RBS_dictionary: a dictionary that links each RBS with its corresponding first qubit of application """
     # Connectivity_Graph = QCNN_Connectivity_graph(I)
     nbr_parameters = int(K * (K - 1))
     Param_dictionary, RBS_dictionary = {}, {}

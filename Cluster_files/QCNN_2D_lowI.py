@@ -28,8 +28,8 @@ k = 2  # preserving subspace parameter, usually you don't need to change this
 K = 3  # size of kernel in the convolution layer, please make it divisible by O=I/2
 batch_size = 10  # batch number
 class_set = [0,1]  # filter dataset
-train_dataset_number = int(1e4)  # training dataset sample number
-test_dataset_number = int(1e3)  # testing dataset sample number
+train_dataset_number = int(1e2)  # training dataset sample number
+test_dataset_number = int(1e2)  # testing dataset sample number
 reduced_qubit = 3  # ATTENTION: let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = False  # shuffle for this dataset
 learning_rate = 1e-2  # step size for each learning steps
@@ -39,7 +39,7 @@ test_interval = 1  # when the training epoch reaches an integer multiple of the 
 # criterion = torch.nn.CrossEntropyLoss(weight=class_weights)  # loss function
 output_scale = 10
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
