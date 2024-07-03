@@ -1,8 +1,7 @@
 import torch
 from torch import nn
 from scipy.special import binom
-from src.toolbox import map_RBS_I2_2D, map_RBS, map_RBS_I2_3D_bottom_channel, map_RBS_I2_3D_top_channel
-import torch.nn.functional as F
+from src.toolbox import map_RBS_I2_2D, map_RBS, map_RBS_I2_3D_bottom_channel, map_RBS_I2_3D_top_channel, normalize_DM
 from src.RBS_Circuit import RBS_Unitaries
 
 
@@ -350,13 +349,6 @@ class Dense_RBS_density_3D(nn.Module):
         for RBS in self.RBS_gates:
             input_state = RBS(input_state, self.RBS_Unitaries_dict)
         return (input_state)
-
-
-def normalize_DM(density_matrix):
-    """"""
-    traces = density_matrix.diagonal(dim1=-2, dim2=-1).sum(-1)
-    traces = traces.view(density_matrix.shape[0], 1, 1)
-    return (density_matrix / traces)
 
 
 class Trace_out_dimension(nn.Module):
