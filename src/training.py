@@ -75,7 +75,8 @@ def train_RGB_network(batch_size, I, J, network, train_loader, criterion, optimi
 
     # loop on the batches in the train dataset
     for batch_idx, (data, target) in enumerate(train_loader):
-        target = target.squeeze()
+        if target.dim() == 2:
+            target = target.squeeze(1)
         optimizer.zero_grad()  # important step to reset gradients to zero
         adaptive_avg_pool = AdaptiveAvgPool2d((I, I))
         data = adaptive_avg_pool(data).to(device)
@@ -105,13 +106,16 @@ def test_RGB_network(batch_size, I, J, network, test_loader, criterion, stride, 
     train_loss = 0  # initialize the loss
     train_accuracy = 0  # initialize the accuracy
     for batch_idx, (data, target) in enumerate(test_loader):
-        target = target.squeeze()
+        if target.dim() == 2:
+            target = target.squeeze(1)
         # Run the network and compute the loss
         adaptive_avg_pool = AdaptiveAvgPool2d((I, I))
         data = adaptive_avg_pool(data).to(device)
         data = RGB_images_to_density_matrix(I, data, device)
-        data = normalize_DM(copy_images_bottom_channel_stride(data, int(J / 3), stride))
+        data = copy_images_bottom_channel_stride(data, int(J / 3), stride)
+        data = normalize_DM(data)
         output = network(data)  # we run the network on the data
+
         loss = criterion(output, target.to(device))  # we compare output to the target and compute the loss, using the chosen loss function
         train_loss += loss.item()  # we increment the total train loss
         pred = output.argmax(dim=1, keepdim=True)  # the class chosen by the network is the highest output

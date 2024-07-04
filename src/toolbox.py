@@ -417,7 +417,37 @@ def QCNN_RBS_based_VQC_bottom_channel(I, K, J):
     return (QNN_layer, Param_dictionary, RBS_dictionary)
 
 
-def PQNN_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=0):
+def QCNN_RBS_based_VQC_3D(I, K, J, kernel_layout):
+    nbr_parameters = int(K * (K - 1))
+    Param_dictionary, RBS_dictionary = {}, {}
+    QNN_layer = [[] for i in range(2 * K - 3)]
+    # QCNN circuit definition:
+    for index_filter in range(I // K):
+        # For the first half of qubits:
+        # PQNN_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=0)
+        PQNN_param_dictionary1, PQNN_dictionary1, PQNN_layer1 = PQNN_building_brick(K * index_filter, K, index_filter * (nbr_parameters // 2),
+                                                                                    0, kernel_layout)
+        # For the second half of qubits:
+        PQNN_param_dictionary2, PQNN_dictionary2, PQNN_layer2 = PQNN_building_brick(I + K * index_filter, K,(I // K + index_filter) * (nbr_parameters // 2),
+                                                                                    (nbr_parameters // 2), kernel_layout)
+        # Updating the dictionnaries and the QNN_layers:
+        RBS_dictionary.update(PQNN_dictionary1)
+        RBS_dictionary.update(PQNN_dictionary2)
+        Param_dictionary.update(PQNN_param_dictionary1)
+        Param_dictionary.update(PQNN_param_dictionary2)
+
+    for index_filter in range(1):
+        # For the third half of qubits:
+        PQNN_param_dictionary3, PQNN_dictionary3, PQNN_layer3 = PQNN_building_brick(2 * I + J * index_filter, J,
+                                                                                    (2 * I // K + index_filter) * (
+                                                                                            nbr_parameters // 2),
+                                                                                    nbr_parameters, kernel_layout)
+        RBS_dictionary.update(PQNN_dictionary3)
+        Param_dictionary.update(PQNN_param_dictionary3)
+    return (QNN_layer, Param_dictionary, RBS_dictionary)
+
+
+def PQNN_all_connection_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=0):
     """ This function gives back the QNN corresponding to a PQNN with nearest
     neighbours connectivity that start on qubit start_qubit. The size of the
     PQNN is given (nbr of qubits) by the input variable size.
@@ -426,10 +456,39 @@ def PQNN_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=
     PQNN_dictionary is a dictionary that gives the correspondance between the
     RBS and the corresponding edge in the connectivity graph."""
     PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = {}, {}, []
-    List_order, List_layer_index = Pyramidal_Order_RBS_gates(size, start_qubit)
+    List_order, List_layer_index = all_connection_Order_RBS_gates(size, start_qubit)
     for index, RBS in enumerate(List_order):
         PQNN_param_dictionary[index_first_RBS + index] = index_first_param + index
-        PQNN_dictionary[index_first_RBS + index] = start_qubit + RBS
+        PQNN_dictionary[index_first_RBS + index] = (start_qubit+RBS[0], start_qubit+RBS[1])
+    # Definition of the QNN_layers thanks to List_layer_index structure
+    index_RBS = index_first_RBS
+    for layer in List_layer_index:
+        layer_CQNN = []
+        for element in layer:
+            layer_CQNN.append(index_RBS)
+            index_RBS += 1
+        PQNN_layer.append(layer_CQNN)
+    return (PQNN_param_dictionary, PQNN_dictionary, PQNN_layer)
+
+
+def PQNN_building_brick(start_qubit, size, index_first_RBS=0, index_first_param=0, layout="pyramid"):
+    """ This function gives back the QNN corresponding to a PQNN with nearest
+    neighbours connectivity that start on qubit start_qubit. The size of the
+    PQNN is given (nbr of qubits) by the input variable size.
+    The PQNN_param_dictionary gives the corresponding parameters to each RBS. The
+    index_first_RBS is used to named properly the RBS. The
+    PQNN_dictionary is a dictionary that gives the correspondance between the
+    RBS and the corresponding edge in the connectivity graph."""
+    PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = {}, {}, []
+    if layout == "pyramid":
+        List_order, List_layer_index = Pyramidal_Order_RBS_gates(size, start_qubit)
+        for index, RBS in enumerate(List_order):
+            List_order[index] = (List_order[index],List_order[index]+1)
+    else:
+        List_order, List_layer_index = all_connection_Order_RBS_gates(size, start_qubit)
+    for index, RBS in enumerate(List_order):
+        PQNN_param_dictionary[index_first_RBS + index] = index_first_param + index
+        PQNN_dictionary[index_first_RBS + index] = (start_qubit+RBS[0], start_qubit+RBS[1])
     # Definition of the QNN_layers thanks to List_layer_index structure
     index_RBS = index_first_RBS
     for layer in List_layer_index:
@@ -479,6 +538,10 @@ def Pyramidal_Order_RBS_gates(nbr_qubits, first_RBS=0):
     for i, layer in enumerate(List_layers):
         List_order += layer
     return (List_order, List_layer_index)
+
+
+def all_connection_Order_RBS_gates(size, start_qubit):
+    return [(i,j) for i in range(size) for j in range(size) if i<j], [[i+start_qubit] for i in range(size*(size-1)//2)]
 
 
 def normalize_DM(density_matrix):

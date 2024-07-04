@@ -3,7 +3,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
 from torch import nn
-from src.toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_bottom_channel
+from src.toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_bottom_channel, map_RBS_order_to_tuple, \
+    QCNN_RBS_based_VQC_3D
 from src.RBS_Circuit import RBS_Unitaries, RBS_Unitaries_I2, RBS_Unitaries_I2_3D
 
 
@@ -187,11 +188,11 @@ class Conv_RBS_state_vector_I2(nn.Module):
         return (input_state)
 
 
-class Conv_RBS_density_I2_3D(nn.Module):
+class Conv_RBS_density_I2(nn.Module):
     """ This module describes the action of a RBS based convolutional layer in the basis
     of the Image. """
 
-    def __init__(self, I, K, J, device):
+    def __init__(self, I, K, device):
         """ Args:
             - I: dimension of the initial image (for a square image I=n/2 the number of qubits)
             - K: size of the convolutional filter
@@ -199,13 +200,13 @@ class Conv_RBS_density_I2_3D(nn.Module):
         """
         super().__init__()
         list_gates = []
-        _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC_bottom_channel(I, K, J)
+        _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC(I, K)
         for key in RBS_dictionary:
-            list_gates.append((RBS_dictionary[key], RBS_dictionary[key] + 1))
-        # We only store the RBS unitary corresponding to an edge in the qubit connectivity:
-        self.RBS_Unitaries_dict = RBS_Unitaries_I2_3D(I, J, list_gates, device)
+            list_gates.append(RBS_dictionary[key])
+        # We only store the RBS unitary corresponding to an edge in the qubit connectivity: 
+        self.RBS_Unitaries_dict = RBS_Unitaries_I2(I, list_gates, device)
         self.Parameters = nn.ParameterList(
-            [nn.Parameter(torch.rand((), device=device), requires_grad=True) for i in range(int(K * (K - 1)) + J*(J-1)//2)])
+            [nn.Parameter(torch.rand((), device=device), requires_grad=True) for i in range(int(K * (K - 1)))])
         self.RBS_gates = nn.ModuleList(
             [RBS_Conv_density(list_gates[i], self.Parameters[Param_dictionary[i]], device) for i in
              range(len(list_gates))])
@@ -224,11 +225,16 @@ class Conv_RBS_density_I2_3D(nn.Module):
         return (input_state)
 
 
-class Conv_RBS_density_I2(nn.Module):
+########################################################################################
+### Convolutional layer class in the Image basis with customized kernel layout     #
+########################################################################################
+
+
+class Conv_RBS_density_I2_3D(nn.Module):
     """ This module describes the action of a RBS based convolutional layer in the basis
     of the Image. """
 
-    def __init__(self, I, K, device):
+    def __init__(self, I, K, J, kernel_layout, device):
         """ Args:
             - I: dimension of the initial image (for a square image I=n/2 the number of qubits)
             - K: size of the convolutional filter
@@ -236,13 +242,13 @@ class Conv_RBS_density_I2(nn.Module):
         """
         super().__init__()
         list_gates = []
-        _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC(I, K)
+        _, Param_dictionary, RBS_dictionary = QCNN_RBS_based_VQC_3D(I, K, J, kernel_layout)
         for key in RBS_dictionary:
-            list_gates.append((RBS_dictionary[key], RBS_dictionary[key] + 1))
-        # We only store the RBS unitary corresponding to an edge in the qubit connectivity: 
-        self.RBS_Unitaries_dict = RBS_Unitaries_I2(I, list_gates, device)
+            list_gates.append(RBS_dictionary[key])
+        # We only store the RBS unitary corresponding to an edge in the qubit connectivity:
+        self.RBS_Unitaries_dict = RBS_Unitaries_I2_3D(I, J, list_gates, device)
         self.Parameters = nn.ParameterList(
-            [nn.Parameter(torch.rand((), device=device), requires_grad=True) for i in range(int(K * (K - 1)))])
+            [nn.Parameter(torch.rand((), device=device), requires_grad=True) for i in range(int(K * (K - 1)) + J*(J-1)//2)])
         self.RBS_gates = nn.ModuleList(
             [RBS_Conv_density(list_gates[i], self.Parameters[Param_dictionary[i]], device) for i in
              range(len(list_gates))])

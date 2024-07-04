@@ -50,8 +50,8 @@ def full_pyramid_circuit(n):
     """
     list_gates = []
     _, PQNN_dictionary, _ = PQNN_building_brick(0, n, index_first_RBS=0, index_first_param=0)
-    for x, y in PQNN_dictionary.items():
-        list_gates.append((y, y + 1))
+    for key in PQNN_dictionary:
+        list_gates.append(PQNN_dictionary[key])
     return list_gates
 
 
@@ -69,15 +69,15 @@ def get_reduced_layers_structure(n, out):
     list_gates = []
     PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = PQNN_building_brick(0, n, index_first_RBS=0,
                                                                              index_first_param=0)
-    for x, y in PQNN_dictionary.items():
-        list_gates.append((y, y + 1))
+    for key in PQNN_dictionary:
+        list_gates.append(PQNN_dictionary[key])
     list_gates.reverse()
 
     list_gates_delete = []
     PQNN_param_dictionary, PQNN_dictionary, PQNN_layer = PQNN_building_brick(0, n - out, index_first_RBS=0,
                                                                              index_first_param=0)
-    for x, y in PQNN_dictionary.items():
-        list_gates_delete.append((y, y + 1))
+    for key in PQNN_dictionary:
+        list_gates.append(PQNN_dictionary[key])
 
     for e in list_gates_delete:
         list_gates.remove(e)
