@@ -1,3 +1,13 @@
+"""
+===================================================================================
+This file consists of 4 parts:
+    - Change of basis: conversion of different bases, e.g. we need convert Image basis to HW basis before the dense layer.
+    - Dense Layer gates: single RBS gate classes
+    - Dense Layer: dense layers consist of many Dense layer gates.
+    - Reduce dense dimension Layer: reduce dimension to match the number of labels
+===================================================================================
+"""
+
 import torch
 from torch import nn
 from scipy.special import binom
@@ -39,14 +49,14 @@ def Passage_matrix_I_to_HW_3D_top_channel(I, J, k, device):
         - Passage_matrix: tensor matrix of size (int(binom(2*I,2)), I**2) that allows
         to pass from the Image basis to the HW basis.
     """
-    Passage_matrix = torch.zeros((int(binom(I+I+J,k)), I*I*J), dtype=torch.uint8, device=device)
-    mapping_input = map_RBS_I2_3D_top_channel(I,J)
-    mapping_output = map_RBS(I+I+J,k)
+    Passage_matrix = torch.zeros((int(binom(I + I + J, k)), I * I * J), dtype=torch.uint8, device=device)
+    mapping_input = map_RBS_I2_3D_top_channel(I, J)
+    mapping_output = map_RBS(I + I + J, k)
     for line in range(I):
         for column in range(I):
             for channel in range(J):
-                Passage_matrix[mapping_output[(line, I+column, 2*I+channel)], mapping_input[(line, I+column, 2*I+channel)]] = 1
-    return(Passage_matrix)
+                Passage_matrix[mapping_output[(line, I + column, 2 * I + channel)], mapping_input[(line, I + column, 2 * I + channel)]] = 1
+    return (Passage_matrix)
 
 
 def Passage_matrix_I_to_HW_3D(I, J, k, device):
@@ -141,7 +151,7 @@ class Basis_Change_I_to_HW_density_3D(nn.Module):
 
 
 #################################################################################
-### Dense Laye  :                                                               #
+### Dense Layer gates  :                                                         #
 #################################################################################
 class RBS_Dense_state_vector(nn.Module):
     """ This module describe the action of one RBS gate."""
@@ -198,43 +208,15 @@ class RBS_Dense_density(nn.Module):
         return torch.matmul(torch.matmul((RBS_unitaries[self.qubit_tuple][0] * torch.cos(self.angle) +
                                           RBS_unitaries[self.qubit_tuple][1] * torch.sin(self.angle) +
                                           RBS_unitaries[self.qubit_tuple][2]).unsqueeze(0).expand(b, I, I), input), (
-                                        RBS_unitaries[self.qubit_tuple][0] * torch.cos(self.angle) +
-                                        RBS_unitaries[self.qubit_tuple][1] * torch.sin(self.angle) +
-                                        RBS_unitaries[self.qubit_tuple][2]).conj().T.unsqueeze(0).expand(b, I, I))
-        # return((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input).matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).t()))
-
-
-class RBS_Dense_density_para(nn.Module):
-    """ This module describe the action of one RBS gate with a given angle."""
-
-    def __init__(self, qubit_tuple, angle, device):
-        """ Args:
-            - qubit_tuple: tuple of the 2 qubits index affected by the RBS
-            - device: torch device (cpu, cuda, etc...)
-        """
-        super().__init__()
-        self.angle = nn.Parameter(torch.tensor([angle], device=device), requires_grad=True)
-        self.qubit_tuple = qubit_tuple
-
-    def forward(self, input, RBS_unitaries):
-        """ Application of the RBS corresponding unitary on the input state.
-        Args:
-            - input: a torch vector representing the initial density operator.
-            Its dimension is (nbr_batch, binom(I,2), binom(I,2)).
-            - RBS_unitaries: a dictionary that gives the RBS unitary corresponding
-            to the qubit tuple such defined in RBS_Unitaries function. The unitary are
-            of dimension (binom(I,2),binom(I,2))
-        Output:
-            - output state from the application of the RBS on the input state
-        """
-        b, I, I = input.size()
-        return torch.matmul(torch.matmul((RBS_unitaries[self.qubit_tuple][0] * torch.cos(self.angle) +
-                                          RBS_unitaries[self.qubit_tuple][1] * torch.sin(self.angle) +
-                                          RBS_unitaries[self.qubit_tuple][2]).unsqueeze(0).expand(b, I, I), input), (
                                     RBS_unitaries[self.qubit_tuple][0] * torch.cos(self.angle) +
                                     RBS_unitaries[self.qubit_tuple][1] * torch.sin(self.angle) +
                                     RBS_unitaries[self.qubit_tuple][2]).conj().T.unsqueeze(0).expand(b, I, I))
+        # return((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).matmul(input).matmul((RBS_unitaries[self.qubit_tuple][0]*torch.cos(self.angle) + RBS_unitaries[self.qubit_tuple][1]*torch.sin(self.angle) + RBS_unitaries[self.qubit_tuple][2]).t()))
 
+
+#################################################################################
+### Dense Layer  :                                                               #
+#################################################################################
 
 class Dense_RBS_state_vector(nn.Module):
     """ This module describes the action of one RBS based VQC. """
@@ -275,7 +257,7 @@ class Dense_RBS_state_vector_3D(nn.Module):
         """
         super().__init__()
         # We only store the RBS unitary corresponding to an edge in the qubit connectivity:
-        self.RBS_Unitaries_dict = RBS_Unitaries(I+I+J, k, list_gates, device)
+        self.RBS_Unitaries_dict = RBS_Unitaries(I + I + J, k, list_gates, device)
         self.RBS_gates = nn.ModuleList([RBS_Dense_state_vector(list_gates[i], device) for i in range(len(list_gates))])
 
     def forward(self, input_state):
@@ -333,7 +315,7 @@ class Dense_RBS_density_3D(nn.Module):
         """
         super().__init__()
         # We only store the RBS unitary corresponding to an edge in the qubit connectivity:
-        self.RBS_Unitaries_dict = RBS_Unitaries(I+I+J, k, list_gates, device)
+        self.RBS_Unitaries_dict = RBS_Unitaries(I + I + J, k, list_gates, device)
         self.RBS_gates = nn.ModuleList([RBS_Dense_density(list_gates[i], device) for i in range(len(list_gates))])
 
     def forward(self, input_state):
@@ -351,13 +333,33 @@ class Dense_RBS_density_3D(nn.Module):
         return (input_state)
 
 
+#################################################################################
+### Reduce dense dimension Layer  :                                              #
+#################################################################################
+
+
 class Trace_out_dimension(nn.Module):
-    def __init__(self, out, device):
+    """
+    We need a certain number of qubits n to represent a number of labels, usually this n is less than our circuit qubits after
+    2 times conv and pooling layers. So we apply this "Trace_out_dimension" layer to reduce dimension.
+
+    e.g., for 2D, I=12 circuit with 10 labels, the qubits after 2 pooling is 6, binom(6,2)=15>10.
+    So we only keep the last 5 qubits because binom(5,2)=10, which exactly is our number of labels.
+    Actually, these 10 bases look like |11000>, |10100>, |10010>, |10001>, |01100>,..., |00011>
+    """
+
+    def __init__(self, out_dimension, device):
+        """
+        Arg:
+            - out_dimension: int: number of dimension we keep, ideally it is equal to the number of labels.
+            - device: torch device (cpu, cuda, etc...)
+        Output:
+            - new reduced density matrix with dimension "out_dimension"
+        """
         super().__init__()
-        self.out = out
+        self.out_dimension = out_dimension
         self.device = device
 
     def forward(self, input):
-        input = input[:, -self.out:, -self.out:]
-        return normalize_DM(input)
-
+        reduced_matrix = input[:, -self.out_dimension:, -self.out_dimension:]
+        return normalize_DM(reduced_matrix)

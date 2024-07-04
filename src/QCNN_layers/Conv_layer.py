@@ -1,10 +1,19 @@
+"""
+===================================================================================
+This file consists of 4 parts:
+    - RBS gate class for convolution: single Conv RBS gate classes
+    - Convolutional layer class in the basis of fixed HW: Conv layer for HW basis, pyramid kernel layout
+    - 2D Convolutional layer class in the Image basis: Conv layer for 2D Image basis, pyramid kernel layout
+    - 3D Convolutional layer class in the Image basis with customized kernel layout: Conv layer for 3D Image basis with customized kernel layout
+===================================================================================
+"""
+
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
 from torch import nn
-from src.toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_bottom_channel, map_RBS_order_to_tuple, \
-    QCNN_RBS_based_VQC_3D
+from src.toolbox import QCNN_RBS_based_VQC, QCNN_RBS_based_VQC_3D
 from src.RBS_Circuit import RBS_Unitaries, RBS_Unitaries_I2, RBS_Unitaries_I2_3D
 
 
@@ -147,7 +156,7 @@ class Conv_RBS_density(nn.Module):
 
 
 #################################################################################
-### Convolutional layer class in the Image basis :                              #
+### 2D Convolutional layer class in the Image basis :                              #
 #################################################################################
 class Conv_RBS_state_vector_I2(nn.Module):
     """ This module describes the action of a RBS based convolutional layer. """
@@ -189,8 +198,7 @@ class Conv_RBS_state_vector_I2(nn.Module):
 
 
 class Conv_RBS_density_I2(nn.Module):
-    """ This module describes the action of a RBS based convolutional layer in the basis
-    of the Image. """
+    """ This module describes the action of a RBS based convolutional layer in the basis of the Image. """
 
     def __init__(self, I, K, device):
         """ Args:
@@ -226,18 +234,18 @@ class Conv_RBS_density_I2(nn.Module):
 
 
 ########################################################################################
-### Convolutional layer class in the Image basis with customized kernel layout     #
+### 3D Convolutional layer class in the Image basis with customized kernel layout     #
 ########################################################################################
 
 
 class Conv_RBS_density_I2_3D(nn.Module):
-    """ This module describes the action of a RBS based convolutional layer in the basis
-    of the Image. """
+    """ This module describes the action of a RBS based convolutional layer in the basis of the Image. """
 
     def __init__(self, I, K, J, kernel_layout, device):
         """ Args:
             - I: dimension of the initial image (for a square image I=n/2 the number of qubits)
             - K: size of the convolutional filter
+            - kernel_layout: layout of convolution kernel, could be "pyramid", "all_connection", etc. You can also check list_gates.py for details.
             - device: torch device (cpu, cuda, etc...)
         """
         super().__init__()
