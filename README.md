@@ -162,8 +162,9 @@ Little tips: you can use VS Code to ssh connect the server, it's a easy way to e
 </table>
 
 ## Record
-10 labels MNIST QCNN: final testing accuracy = 83.8% (1000 testing samples)
-![QCNN_plot](images/plot.png)
+10 labels MNIST QCNN: final testing accuracy = 86.0% (1000 testing samples)
+
+[//]: # (![QCNN_plot]&#40;images/plot.png&#41;)
 ### Hyperparameters:
 I = 16,
 O = I//2 ,
