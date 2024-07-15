@@ -167,20 +167,24 @@ def train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test
     test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, output_scale, stride, device)
     print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
 
-    loss_list = []
-    accuracy_list = []
+    training_loss_list = []
+    testing_loss_list = []
+    training_accuracy_list = []
+    testing_accuracy_list = []
     for epoch in range(train_epochs):
         start = time.time()
         train_loss, train_accuracy = train_network(batch_size, I, J, network, reduced_train_loader, criterion, output_scale,
                                                    optimizer, stride, device)
-        loss_list.append(train_loss)
-        accuracy_list.append(train_accuracy * 100)
+        training_loss_list.append(train_loss)
+        training_accuracy_list.append(train_accuracy * 100)
         end = time.time()
         print(
             f'Epoch {epoch}: Loss = {train_loss:.6f}, accuracy = {train_accuracy * 100:.4f} %, time={(end - start):.4f}s')
         if (epoch+1) % test_interval == 0:
             test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, output_scale, stride,
                                                     device)
+            testing_loss_list.append(test_loss)
+            testing_accuracy_list.append(test_accuracy)
             print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
             # print(os.getcwd())
             # torch.save(network.state_dict(), "Model_states/model" + str(epoch))  # save network parameters
@@ -188,7 +192,7 @@ def train_globally(batch_size, I, J, network, reduced_train_loader, reduced_test
     # final testing part
     # test_loss, test_accuracy = test_network(batch_size, I, J, network, reduced_test_loader, criterion, stride, device)
     # print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
-    return network.state_dict()
+    return network.state_dict(), training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list
 
 
 def train_network_2D(batch_size, I, network, train_loader, criterion, output_scale, optimizer, device):

@@ -1,4 +1,7 @@
 import os, sys
+
+import numpy as np
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
 pparent_dir_path = os.path.abspath(os.path.join(parent_dir_path, os.pardir))
@@ -34,11 +37,11 @@ test_dataset_number = 10  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
 learning_rate = 1e-4  # step size for each learning steps
-train_epochs = 10  # number of epoch we train
-test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+train_epochs = 4  # number of epoch we train
+test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 output_scale = 20
-device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -101,13 +104,24 @@ class QCNN(nn.Module):
 
 
 network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
+# network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
 
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=1)
 
 # Gray MNIST/Fashion MNIST
 train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
 torch.save(network_state, "new_FashionMNIST_modelState_75.10")  # save network parameters
+
+result_data = {
+    'train_accuracy': training_accuracy_list,
+    'train_loss': training_loss_list,
+    'test_accuracy': testing_accuracy_list,
+    'test_loss': testing_loss_list,
+}
+
+# Save the result data to a numpy file
+file_path = 'fashion_data.npy'
+np.save(file_path, result_data)
