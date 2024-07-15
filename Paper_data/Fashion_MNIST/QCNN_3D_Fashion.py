@@ -37,6 +37,7 @@ learning_rate = 1e-4  # step size for each learning steps
 train_epochs = 10  # number of epoch we train
 test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
+output_scale = 20
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
@@ -107,6 +108,6 @@ scheduler = ExponentialLR(optimizer, gamma=1)
 
 # Gray MNIST/Fashion MNIST
 train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, 20, train_epochs, test_interval, stride, device)
+network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
 torch.save(network_state, "new_FashionMNIST_modelState_75.10")  # save network parameters
