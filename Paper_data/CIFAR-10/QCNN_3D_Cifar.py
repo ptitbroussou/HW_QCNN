@@ -56,9 +56,6 @@ dense_reduce_gates = ([(i,j) for i in range(reduced_qubit) for j in range(reduce
                       [(i,j) for i in range(reduced_qubit) for j in range(reduced_qubit) if i>j]+
                       [(i,(i+1)%(reduced_qubit)) for i in range(reduced_qubit)])
 
-# dense_full_gates = (full_connection_circuit(O + J) + drip_circuit(O + J) + full_pyramid_circuit(O + J) + butterfly_circuit(O + J) + full_reverse_connection_circuit(O + J) + X_circuit(O + J) + full_connection_circuit(O + J) + slide_circuit(O + J))
-# dense_reduce_gates = (full_connection_circuit(5) + butterfly_circuit(5) + full_reverse_connection_circuit(5) + X_circuit(5) + full_connection_circuit(5) + full_reverse_connection_circuit(5) + full_pyramid_circuit(5))
-
 ##################### Hyperparameters end #######################
 
 

@@ -128,7 +128,7 @@ def test_RGB_network(batch_size, I, J, network, test_loader, criterion, output_s
 
 
 def train_RGB_globally(batch_size, I, J, network, reduced_train_loader, reduced_test_loader, optimizer, scheduler,
-                       output_scale, criterion, train_epochs, test_interval, stride, device):
+                        criterion, output_scale, train_epochs, test_interval, stride, device):
     # first testing part
     total_params = sum(p.numel() for p in network.parameters())
     print(f"Start training! Number of network total parameters: {total_params}")
