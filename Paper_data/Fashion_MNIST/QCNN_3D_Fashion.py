@@ -1,6 +1,9 @@
 import os, sys
+dir_path = os.path.dirname(os.path.realpath(__file__))
+parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+pparent_dir_path = os.path.abspath(os.path.join(parent_dir_path, os.pardir))
+sys.path.insert(0, pparent_dir_path)
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings
 import torch
 import torch.nn as nn
@@ -26,8 +29,8 @@ batch_size = 10  # batch number
 class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
 kernel_layout = "all_connection" # you can use "pyramid" or "all_connection"
 medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
-train_dataset_number = 1000  # training dataset sample number
-test_dataset_number = 1000  # testing dataset sample number
+train_dataset_number = 10  # training dataset sample number
+test_dataset_number = 10  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
 learning_rate = 1e-4  # step size for each learning steps
