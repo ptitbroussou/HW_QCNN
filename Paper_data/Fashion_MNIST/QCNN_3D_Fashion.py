@@ -1,7 +1,5 @@
 import os, sys
 
-import numpy as np
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
 pparent_dir_path = os.path.abspath(os.path.join(parent_dir_path, os.pardir))
@@ -11,6 +9,7 @@ import warnings
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
+import numpy as np
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
 from src.load_dataset import load_fashion_mnist

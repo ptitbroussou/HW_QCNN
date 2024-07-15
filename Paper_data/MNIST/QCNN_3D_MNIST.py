@@ -8,6 +8,7 @@ import warnings
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
+import numpy as np
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
 from src.load_dataset import load_mnist
@@ -106,6 +107,16 @@ optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.95)
 
 train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+
+result_data = {
+    'train_accuracy': training_accuracy_list,
+    'train_loss': training_loss_list,
+    'test_accuracy': testing_accuracy_list,
+    'test_loss': testing_loss_list,
+}
+
+file_path = 'mnist_data.npy'
+np.save(file_path, result_data)
 
 torch.save(network_state, "new_mnist_modelState_85.6")  # save network parameters
