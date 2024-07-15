@@ -102,25 +102,27 @@ class QCNN(nn.Module):
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
-network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-# network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
+for test in range(10):
+    print("Test number: ", test)
+    network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
+    # network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
 
-optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
-scheduler = ExponentialLR(optimizer, gamma=1)
+    optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
+    scheduler = ExponentialLR(optimizer, gamma=1)
 
-# Gray MNIST/Fashion MNIST
-train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+    # Gray MNIST/Fashion MNIST
+    train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+    network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
-torch.save(network_state, "new_FashionMNIST_modelState_75.10")  # save network parameters
+    torch.save(network_state, "new_FashionMNIST_{}_modelState_75.10".format(test))  # save network parameters
 
-result_data = {
-    'train_accuracy': training_accuracy_list,
-    'train_loss': training_loss_list,
-    'test_accuracy': testing_accuracy_list,
-    'test_loss': testing_loss_list,
-}
+    result_data = {
+        'train_accuracy': training_accuracy_list,
+        'train_loss': training_loss_list,
+        'test_accuracy': testing_accuracy_list,
+        'test_loss': testing_loss_list,
+    }
 
-# Save the result data to a numpy file
-file_path = 'fashion_data.npy'
-np.save(file_path, result_data)
+    # Save the result data to a numpy file
+    file_path = 'fashion_data_{}.npy'.format(test)
+    np.save(file_path, result_data)
