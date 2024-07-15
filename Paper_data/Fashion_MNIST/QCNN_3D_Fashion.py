@@ -7,10 +7,11 @@ import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
-from src.load_dataset import load_mnist
+from src.load_dataset import load_fashion_mnist
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
+
 warnings.simplefilter('ignore')
 
 ##################### Hyperparameters begin #######################
@@ -33,7 +34,6 @@ learning_rate = 1e-4  # step size for each learning steps
 train_epochs = 10  # number of epoch we train
 test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-output_scale = 20
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
@@ -97,12 +97,13 @@ class QCNN(nn.Module):
 
 
 network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-network.load_state_dict(torch.load("mnist_modelState_85.6"))
+network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
 
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
-scheduler = ExponentialLR(optimizer, gamma=0.95)
+scheduler = ExponentialLR(optimizer, gamma=1)
 
-train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+# Gray MNIST/Fashion MNIST
+train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+network_state = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, 20, train_epochs, test_interval, stride, device)
 
-torch.save(network_state, "new_mnist_modelState_85.6")  # save network parameters
+torch.save(network_state, "new_FashionMNIST_modelState_75.10")  # save network parameters
