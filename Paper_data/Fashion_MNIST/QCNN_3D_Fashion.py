@@ -20,7 +20,7 @@ from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_
 warnings.simplefilter('ignore')
 
 # Load previous part of the training:
-result_data = np.load('fashion_data_0.npy')
+result_data = np.load('fashion_data_0.npy', allow_pickle=True).item()
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
