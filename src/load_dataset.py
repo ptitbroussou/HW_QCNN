@@ -247,7 +247,13 @@ def copy_images_bottom_channel_stride(images, scale_factor, stride):
 
 def RGB_images_to_density_matrix(I, data, device):
     """
-    Input data: shape: batch * channels(by default is 3) * I * I
+    vectorize the image matrix, and then inner product itself to obtain the density matrix,
+    finally convert the 4-dimensional tensor to the 3-dimensional tesnor, i.e. 3 channels to 1 channel
+    Args:
+        - I: size of image
+        - data: input data from dataset, shape: batch * channels(by default is 3) * I * I
+        - device: torch device (cpu, cuda, etc...)
+    Output: encoded density matrix, shape: batch * (I^2*channels) * (I^2*channels)
     """
     channels = data.shape[1]
     data = F.normalize(data.resize(data.shape[0],channels,I**2), p=2, dim=2).to(device)
