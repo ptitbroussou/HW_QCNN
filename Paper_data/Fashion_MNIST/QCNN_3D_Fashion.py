@@ -5,6 +5,10 @@ parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
 pparent_dir_path = os.path.abspath(os.path.join(parent_dir_path, os.pardir))
 sys.path.insert(0, pparent_dir_path)
 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["WORLD_SIZE"] = "1"
+
 import warnings
 import torch
 import torch.nn as nn
@@ -19,6 +23,9 @@ from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_
 
 warnings.simplefilter('ignore')
 
+# Load previous part of the training:
+#result_data = np.load('fashion_data_0.npy', allow_pickle=True).item()
+
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
 I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
@@ -31,16 +38,16 @@ batch_size = 10  # batch number
 class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
 kernel_layout = "all_connection" # you can use "pyramid" or "all_connection"
 medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
-train_dataset_number = 10  # training dataset sample number
-test_dataset_number = 10  # testing dataset sample number
+train_dataset_number = int(1e3)  # training dataset sample number
+test_dataset_number = int(1e2)  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
 learning_rate = 1e-4  # step size for each learning steps
-train_epochs = 4  # number of epoch we train
-test_interval = 2  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+train_epochs = 70  # number of epoch we train
+test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 output_scale = 20
-device = torch.device("mps")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
@@ -102,25 +109,26 @@ class QCNN(nn.Module):
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
-network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-# network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
+for test in range(1,2):
+    print("Test number: ", test)
+    network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
+    #network.load_state_dict(torch.load("new_FashionMNIST_0_modelState_75.10"))
 
-optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
-scheduler = ExponentialLR(optimizer, gamma=1)
+    optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
+    scheduler = ExponentialLR(optimizer, gamma=1)
 
-# Gray MNIST/Fashion MNIST
-train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+    # Gray MNIST/Fashion MNIST
+    train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+    network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
-torch.save(network_state, "new_FashionMNIST_modelState_75.10")  # save network parameters
+    torch.save(network_state, "new_FashionMNIST_{}_modelState_75.10".format(test))  # save network parameters
 
-result_data = {
-    'train_accuracy': training_accuracy_list,
-    'train_loss': training_loss_list,
-    'test_accuracy': testing_accuracy_list,
-    'test_loss': testing_loss_list,
-}
+    result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
+    #result_data['train_accuracy'] += training_accuracy_list
+    #result_data['train_loss'] += training_loss_list
+    #result_data['test_accuracy'] += testing_accuracy_list
+    #result_data['test_loss'] += testing_loss_list
 
-# Save the result data to a numpy file
-file_path = 'fashion_data.npy'
-np.save(file_path, result_data)
+    # Save the result data to a numpy file
+    file_path = 'fashion_data_{}.npy'.format(test)
+    np.save(file_path, result_data)
