@@ -20,7 +20,7 @@ from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_
 warnings.simplefilter('ignore')
 
 # Load previous part of the training:
-result_data = torch.load('fashion_data_0.npy')
+result_data = np.load('fashion_data_0.npy')
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
@@ -39,7 +39,7 @@ test_dataset_number = int(1e2)  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
 learning_rate = 1e-4  # step size for each learning steps
-train_epochs = 30  # number of epoch we train
+train_epochs = 10  # number of epoch we train
 test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 output_scale = 20
