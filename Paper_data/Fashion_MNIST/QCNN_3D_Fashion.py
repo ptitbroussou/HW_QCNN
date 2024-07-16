@@ -107,9 +107,8 @@ class QCNN(nn.Module):
 
 for test in range(1,2):
     print("Test number: ", test)
-    #network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-    network = torch.load('new_FashionMNIST_0_modelState_75.10')
-    # network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
+    network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
+    network.load_state_dict(torch.load("new_FashionMNIST_0_modelState_75.10"))
 
     optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
     scheduler = ExponentialLR(optimizer, gamma=1)
