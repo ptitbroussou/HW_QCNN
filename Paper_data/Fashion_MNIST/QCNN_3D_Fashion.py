@@ -19,6 +19,9 @@ from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_
 
 warnings.simplefilter('ignore')
 
+# Load previous part of the training:
+result_data = torch.load('fashion_data_0.npy')
+
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
 I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
@@ -102,9 +105,10 @@ class QCNN(nn.Module):
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
-for test in range(1):
+for test in range(1,2):
     print("Test number: ", test)
-    network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
+    #network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
+    network = torch.load('new_FashionMNIST_0_modelState_75.10')
     # network.load_state_dict(torch.load("FashionMNIST_modelState_75.10"))
 
     optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
@@ -116,12 +120,11 @@ for test in range(1):
 
     torch.save(network_state, "new_FashionMNIST_{}_modelState_75.10".format(test))  # save network parameters
 
-    result_data = {
-        'train_accuracy': training_accuracy_list,
-        'train_loss': training_loss_list,
-        'test_accuracy': testing_accuracy_list,
-        'test_loss': testing_loss_list,
-    }
+    #result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
+    result_data['train_accuracy'] += training_accuracy_list
+    result_data['train_loss'] += training_loss_list
+    result_data['test_accuracy'] += testing_accuracy_list
+    result_data['test_loss'] += testing_loss_list
 
     # Save the result data to a numpy file
     file_path = 'fashion_data_{}.npy'.format(test)
