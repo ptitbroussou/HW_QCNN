@@ -109,8 +109,7 @@ class QCNN(nn.Module):
         return measurement(x, device)  # measure, only keep the diagonal elements
 
 
-for test in range(2,3):
-    print("Test number: ", test)
+if True:
     network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
     #network.load_state_dict(torch.load("new_FashionMNIST_1_modelState_75.10"))
 
@@ -121,14 +120,14 @@ for test in range(2,3):
     train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
     network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
-    torch.save(network_state, "new_FashionMNIST_{}_modelState_75.10".format(test))  # save network parameters
+    torch.save(network_state, "FashionMNIST_model")  # save network parameters
 
-    result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
+    result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list}
     #result_data['train_accuracy'] += training_accuracy_list
     #result_data['train_loss'] += training_loss_list
     #result_data['test_accuracy'] += testing_accuracy_list
     #result_data['test_loss'] += testing_loss_list
 
     # Save the result data to a numpy file
-    file_path = 'fashion_data_{}.npy'.format(test)
+    file_path = 'fashion_data_100_epochs.npy'
     np.save(file_path, result_data)
