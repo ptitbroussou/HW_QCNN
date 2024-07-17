@@ -32,7 +32,7 @@ print("QCNN 3D Fashion MNIST")
 # Below are the hyperparameters of this network, you can change them to test
 I = 16  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
 O = I // 2  # dimension after pooling, usually you don't need to change this
-J = 7  # number of channel, if you use RGB dataset please let J be multiple of 3
+J = 6  # number of channel, if you use RGB dataset please let J be multiple of 3
 k = 3  # preserving subspace parameter, usually you don't need to change this
 K = 4  # size of kernel in the convolution layer, please make it divisible by O=I/2
 stride = 2  # the difference in step sizes for different channels
