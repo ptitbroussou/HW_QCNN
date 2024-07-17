@@ -24,7 +24,7 @@ from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_
 warnings.simplefilter('ignore')
 
 # Load previous part of the training:
-#result_data = np.load('fashion_data_0.npy', allow_pickle=True).item()
+result_data = np.load('fashion_data_1.npy', allow_pickle=True).item()
 
 ##################### Hyperparameters begin #######################
 # Below are the hyperparameters of this network, you can change them to test
@@ -43,7 +43,7 @@ test_dataset_number = int(1e2)  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
 learning_rate = 1e-4  # step size for each learning steps
-train_epochs = 70  # number of epoch we train
+train_epochs = 30  # number of epoch we train
 test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 output_scale = 20
@@ -112,7 +112,7 @@ class QCNN(nn.Module):
 for test in range(1,2):
     print("Test number: ", test)
     network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-    #network.load_state_dict(torch.load("new_FashionMNIST_0_modelState_75.10"))
+    network.load_state_dict(torch.load("new_FashionMNIST_1_modelState_75.10"))
 
     optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
     scheduler = ExponentialLR(optimizer, gamma=1)
@@ -123,11 +123,11 @@ for test in range(1,2):
 
     torch.save(network_state, "new_FashionMNIST_{}_modelState_75.10".format(test))  # save network parameters
 
-    result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
-    #result_data['train_accuracy'] += training_accuracy_list
-    #result_data['train_loss'] += training_loss_list
-    #result_data['test_accuracy'] += testing_accuracy_list
-    #result_data['test_loss'] += testing_loss_list
+    #result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
+    result_data['train_accuracy'] += training_accuracy_list
+    result_data['train_loss'] += training_loss_list
+    result_data['test_accuracy'] += testing_accuracy_list
+    result_data['test_loss'] += testing_loss_list
 
     # Save the result data to a numpy file
     file_path = 'fashion_data_{}.npy'.format(test)
