@@ -295,22 +295,27 @@ def train_globally_2D(batch_size, I, network, reduced_train_loader, reduced_test
     test_loss, test_accuracy = test_network_2D(batch_size, I, network, reduced_test_loader, criterion, output_scale, device)
     print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
 
-    loss_list = []
-    accuracy_list = []
+    # training step
+    training_loss_list = []
+    testing_loss_list = []
+    training_accuracy_list = []
+    testing_accuracy_list = []
     for epoch in range(train_epochs):
         start = time.time()
         train_loss, train_accuracy = train_network_2D(batch_size, I, network, reduced_train_loader, criterion, output_scale,
                                                       optimizer, device)
-        loss_list.append(train_loss)
-        accuracy_list.append(train_accuracy * 100)
+        training_loss_list.append(train_loss)
+        training_accuracy_list.append(train_accuracy * 100)
         end = time.time()
         print(
             f'Epoch {epoch}: Loss = {train_loss:.6f}, accuracy = {train_accuracy * 100:.4f} %, time={(end - start):.4f}s')
         if epoch % test_interval == 0 and epoch != 0:
             test_loss, test_accuracy = test_network_2D(batch_size, I, network, reduced_test_loader, criterion, output_scale, device)
+            testing_loss_list.append(test_loss)
+            testing_accuracy_list.append(test_accuracy)
             print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
         scheduler.step()
     # final testing part
     test_loss, test_accuracy = test_network_2D(batch_size, I, network, reduced_test_loader, criterion, output_scale, device)
     print(f'Evaluation on test set: Loss = {test_loss:.6f}, accuracy = {test_accuracy * 100:.4f} %')
-    return network.state_dict()
+    return network.state_dict(), training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list
