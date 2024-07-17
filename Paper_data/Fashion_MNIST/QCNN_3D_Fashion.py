@@ -35,7 +35,7 @@ J = 7  # number of channel, if you use RGB dataset please let J be multiple of 3
 k = 3  # preserving subspace parameter, usually you don't need to change this
 K = 4  # size of kernel in the convolution layer, please make it divisible by O=I/2
 stride = 2  # the difference in step sizes for different channels
-batch_size = 10  # batch number
+batch_size = 5  # batch number
 class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
 kernel_layout = "all_connection" # you can use "pyramid" or "all_connection"
 medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
