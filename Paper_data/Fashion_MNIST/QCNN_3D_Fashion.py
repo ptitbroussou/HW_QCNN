@@ -41,7 +41,7 @@ class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
 kernel_layout = "all_connection" # you can use "pyramid" or "all_connection"
 medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
 train_dataset_number = int(1e3)  # training dataset sample number
-test_dataset_number = int(1e2)  # testing dataset sample number
+test_dataset_number = int(1e3)  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
 learning_rate = 1e-3  # step size for each learning steps
@@ -49,7 +49,7 @@ train_epochs = 100  # number of epoch we train
 test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
 output_scale = 20
-device = torch.device("cpu")  # also torch.device("cpu"), or torch.device("mps") for macbook
+device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
 # dense_full_gates is for the case qubit=O+J, dense_reduce_gates is for the case qubit=5.
