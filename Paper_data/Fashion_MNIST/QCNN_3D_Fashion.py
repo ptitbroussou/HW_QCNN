@@ -1,13 +1,5 @@
 import os, sys
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
-pparent_dir_path = os.path.abspath(os.path.join(parent_dir_path, os.pardir))
-sys.path.insert(0, pparent_dir_path)
-
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-os.environ["WORLD_SIZE"] = "1"
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import warnings
 import torch
