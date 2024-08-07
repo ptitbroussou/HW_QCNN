@@ -26,15 +26,15 @@ batch_size = 10  # batch number
 class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset
 kernel_layout = "all_connection" # you can use "pyramid" or "all_connection"
 medmnist_name = 'pathmnist'  # only useful when you use MedMNIST
-train_dataset_number = 1000  # training dataset sample number
+train_dataset_number = 2000  # training dataset sample number
 test_dataset_number = 1000  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
-learning_rate = 1e-4  # step size for each learning steps
-train_epochs = 10  # number of epoch we train
-test_interval = 5  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
+learning_rate = 1e-2*(0.66)  # step size for each learning steps
+train_epochs = 30  # number of epoch we train
+test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-output_scale = 20
+output_scale = 50
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
@@ -98,10 +98,10 @@ class QCNN(nn.Module):
 
 
 network = QCNN(I, O, J, K, k, kernel_layout, dense_full_gates, dense_reduce_gates, device)
-network.load_state_dict(torch.load("mnist_modelState_85.6"))
+# network.load_state_dict(torch.load("mnist_modelState_85.6"))
 
 optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
-scheduler = ExponentialLR(optimizer, gamma=0.95)
+scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
@@ -116,4 +116,4 @@ result_data = {
 file_path = 'mnist_data.npy'
 np.save(file_path, result_data)
 
-torch.save(network_state, "new_mnist_modelState_85.6")  # save network parameters
+torch.save(network_state, "new_mnist_modelState")  # save network parameters
