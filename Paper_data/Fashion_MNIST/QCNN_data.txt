@@ -1,0 +1,479 @@
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 4.031303, accuracy = 3.6000 %
+Epoch 0: Loss = 1.606598, accuracy = 43.5000 %, time=913.3016s
+Epoch 1: Loss = 1.100669, accuracy = 60.9000 %, time=913.3827s
+Epoch 2: Loss = 0.956939, accuracy = 67.0500 %, time=913.4809s
+Epoch 3: Loss = 0.895154, accuracy = 67.9500 %, time=913.4422s
+Epoch 4: Loss = 0.896213, accuracy = 68.8500 %, time=913.2691s
+Epoch 5: Loss = 0.816974, accuracy = 72.2000 %, time=913.3495s
+Epoch 6: Loss = 0.785395, accuracy = 72.6500 %, time=913.2163s
+Epoch 7: Loss = 0.773208, accuracy = 73.1000 %, time=913.3746s
+Epoch 8: Loss = 0.729825, accuracy = 75.2500 %, time=913.2131s
+Epoch 9: Loss = 0.715863, accuracy = 74.7500 %, time=913.4353s
+Evaluation on test set: Loss = 0.709710, accuracy = 74.3000 %
+Epoch 10: Loss = 0.684768, accuracy = 75.5500 %, time=913.6354s
+Epoch 11: Loss = 0.672883, accuracy = 76.5000 %, time=913.7131s
+Epoch 12: Loss = 0.664921, accuracy = 76.0500 %, time=913.6817s
+Epoch 13: Loss = 0.625192, accuracy = 78.0500 %, time=913.9550s
+Epoch 14: Loss = 0.622754, accuracy = 78.0500 %, time=913.6007s
+Epoch 15: Loss = 0.633502, accuracy = 77.3000 %, time=913.5212s
+Epoch 16: Loss = 0.608014, accuracy = 78.5000 %, time=913.7709s
+Epoch 17: Loss = 0.599051, accuracy = 78.3000 %, time=913.4582s
+Epoch 18: Loss = 0.594085, accuracy = 79.1000 %, time=913.3227s
+Epoch 19: Loss = 0.568208, accuracy = 80.1500 %, time=913.3575s
+Evaluation on test set: Loss = 0.674770, accuracy = 75.7000 %
+Epoch 20: Loss = 0.571111, accuracy = 80.0000 %, time=913.8355s
+Epoch 21: Loss = 0.565904, accuracy = 80.1000 %, time=913.5179s
+Epoch 22: Loss = 0.554585, accuracy = 80.6500 %, time=913.5415s
+Epoch 23: Loss = 0.547825, accuracy = 80.0500 %, time=913.7917s
+Epoch 24: Loss = 0.544589, accuracy = 80.3500 %, time=913.5760s
+Epoch 25: Loss = 0.532356, accuracy = 81.0000 %, time=913.3478s
+Epoch 26: Loss = 0.534261, accuracy = 81.6000 %, time=913.3015s
+Epoch 27: Loss = 0.518908, accuracy = 81.2500 %, time=913.6149s
+Epoch 28: Loss = 0.512002, accuracy = 81.6500 %, time=913.4367s
+Epoch 29: Loss = 0.512811, accuracy = 82.5000 %, time=913.5907s
+Evaluation on test set: Loss = 0.617527, accuracy = 77.5000 %
+Epoch 30: Loss = 0.510098, accuracy = 81.4500 %, time=913.3386s
+Epoch 31: Loss = 0.501018, accuracy = 82.4000 %, time=913.3836s
+Epoch 32: Loss = 0.502884, accuracy = 82.3000 %, time=913.4876s
+Epoch 33: Loss = 0.496372, accuracy = 82.8500 %, time=913.4871s
+Epoch 34: Loss = 0.491238, accuracy = 82.1000 %, time=913.4032s
+Epoch 35: Loss = 0.493124, accuracy = 82.5000 %, time=913.5640s
+Epoch 36: Loss = 0.484648, accuracy = 82.5000 %, time=913.8014s
+Epoch 37: Loss = 0.484592, accuracy = 82.9500 %, time=913.3748s
+Epoch 38: Loss = 0.483507, accuracy = 82.4500 %, time=913.5204s
+Epoch 39: Loss = 0.481188, accuracy = 82.8000 %, time=913.2481s
+Evaluation on test set: Loss = 0.608405, accuracy = 78.5000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 4.315382, accuracy = 9.6000 %
+Epoch 0: Loss = 1.525287, accuracy = 49.4000 %, time=916.5121s
+Epoch 1: Loss = 1.067178, accuracy = 63.7000 %, time=916.2426s
+Epoch 2: Loss = 0.928445, accuracy = 67.1000 %, time=916.2618s
+Epoch 3: Loss = 0.937490, accuracy = 67.4000 %, time=916.1014s
+Epoch 4: Loss = 0.829976, accuracy = 71.5500 %, time=916.3709s
+Epoch 5: Loss = 0.824732, accuracy = 70.7500 %, time=916.2810s
+Epoch 6: Loss = 0.772246, accuracy = 73.5000 %, time=916.3934s
+Epoch 7: Loss = 0.775108, accuracy = 72.9500 %, time=916.1676s
+Epoch 8: Loss = 0.709571, accuracy = 74.9000 %, time=916.2790s
+Epoch 9: Loss = 0.701929, accuracy = 75.7000 %, time=916.3531s
+Evaluation on test set: Loss = 0.685231, accuracy = 76.2000 %
+Epoch 10: Loss = 0.680625, accuracy = 76.0500 %, time=916.0268s
+Epoch 11: Loss = 0.669626, accuracy = 76.1500 %, time=916.0289s
+Epoch 12: Loss = 0.648434, accuracy = 76.1000 %, time=915.9303s
+Epoch 13: Loss = 0.652413, accuracy = 76.3000 %, time=916.1610s
+Epoch 14: Loss = 0.606313, accuracy = 78.5000 %, time=916.1869s
+Epoch 15: Loss = 0.601521, accuracy = 78.5000 %, time=916.3179s
+Epoch 16: Loss = 0.597672, accuracy = 78.4000 %, time=916.3160s
+Epoch 17: Loss = 0.583719, accuracy = 78.5500 %, time=916.4797s
+Epoch 18: Loss = 0.561360, accuracy = 79.9000 %, time=916.3094s
+Epoch 19: Loss = 0.555017, accuracy = 79.4500 %, time=916.3230s
+Evaluation on test set: Loss = 0.667054, accuracy = 76.0000 %
+Epoch 20: Loss = 0.552157, accuracy = 79.8000 %, time=916.3322s
+Epoch 21: Loss = 0.540926, accuracy = 80.4000 %, time=916.2192s
+Epoch 22: Loss = 0.529781, accuracy = 81.8500 %, time=916.4150s
+Epoch 23: Loss = 0.530587, accuracy = 81.4500 %, time=916.2597s
+Epoch 24: Loss = 0.515372, accuracy = 81.0000 %, time=916.2700s
+Epoch 25: Loss = 0.514493, accuracy = 82.4000 %, time=916.3821s
+Epoch 26: Loss = 0.513494, accuracy = 82.1500 %, time=916.4300s
+Epoch 27: Loss = 0.503315, accuracy = 81.7000 %, time=916.3392s
+Epoch 28: Loss = 0.497848, accuracy = 81.8000 %, time=916.7142s
+Epoch 29: Loss = 0.494191, accuracy = 82.1500 %, time=916.4052s
+Evaluation on test set: Loss = 0.602007, accuracy = 77.8000 %
+Epoch 30: Loss = 0.488827, accuracy = 82.6500 %, time=916.2703s
+Epoch 31: Loss = 0.485240, accuracy = 82.3500 %, time=916.2797s
+Epoch 32: Loss = 0.484326, accuracy = 82.9000 %, time=916.3028s
+Epoch 33: Loss = 0.484833, accuracy = 82.5000 %, time=916.4622s
+Epoch 34: Loss = 0.475574, accuracy = 83.3000 %, time=916.3199s
+Epoch 35: Loss = 0.477334, accuracy = 83.2500 %, time=916.1635s
+Epoch 36: Loss = 0.472681, accuracy = 82.8500 %, time=916.3654s
+Epoch 37: Loss = 0.472045, accuracy = 83.4000 %, time=916.4634s
+Epoch 38: Loss = 0.466234, accuracy = 83.2500 %, time=916.4132s
+Epoch 39: Loss = 0.466142, accuracy = 83.3500 %, time=916.3301s
+Evaluation on test set: Loss = 0.589429, accuracy = 79.3000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 4.417191, accuracy = 7.5000 %
+Epoch 0: Loss = 1.594669, accuracy = 47.2000 %, time=913.8204s
+Epoch 1: Loss = 1.228339, accuracy = 56.6000 %, time=913.7839s
+Epoch 2: Loss = 1.076401, accuracy = 61.1500 %, time=913.9377s
+Epoch 3: Loss = 0.944662, accuracy = 65.5000 %, time=913.9619s
+Epoch 4: Loss = 0.946214, accuracy = 66.2500 %, time=913.8459s
+Epoch 5: Loss = 0.892559, accuracy = 68.9000 %, time=913.8367s
+Epoch 6: Loss = 0.834511, accuracy = 70.2000 %, time=913.9157s
+Epoch 7: Loss = 0.802995, accuracy = 70.9000 %, time=913.6706s
+Epoch 8: Loss = 0.812701, accuracy = 71.2500 %, time=913.9252s
+Epoch 9: Loss = 0.741409, accuracy = 74.0000 %, time=913.7601s
+Evaluation on test set: Loss = 0.725333, accuracy = 74.8000 %
+Epoch 10: Loss = 0.731372, accuracy = 73.4000 %, time=913.9815s
+Epoch 11: Loss = 0.725919, accuracy = 74.5000 %, time=913.8710s
+Epoch 12: Loss = 0.688234, accuracy = 75.8000 %, time=913.8777s
+Epoch 13: Loss = 0.676567, accuracy = 76.5000 %, time=913.8676s
+Epoch 14: Loss = 0.654368, accuracy = 76.3500 %, time=913.9878s
+Epoch 15: Loss = 0.646872, accuracy = 76.9500 %, time=914.2769s
+Epoch 16: Loss = 0.624669, accuracy = 76.6500 %, time=914.1195s
+Epoch 17: Loss = 0.613803, accuracy = 77.6500 %, time=914.0194s
+Epoch 18: Loss = 0.604533, accuracy = 79.1000 %, time=914.1602s
+Epoch 19: Loss = 0.588276, accuracy = 79.5500 %, time=913.9176s
+Evaluation on test set: Loss = 0.652650, accuracy = 78.4000 %
+Epoch 20: Loss = 0.578477, accuracy = 79.7500 %, time=913.8676s
+Epoch 21: Loss = 0.567776, accuracy = 79.0500 %, time=913.7659s
+Epoch 22: Loss = 0.560443, accuracy = 79.6500 %, time=913.8549s
+Epoch 23: Loss = 0.552263, accuracy = 80.3500 %, time=913.7857s
+Epoch 24: Loss = 0.554182, accuracy = 80.0500 %, time=913.8749s
+Epoch 25: Loss = 0.540515, accuracy = 81.1500 %, time=913.7164s
+Epoch 26: Loss = 0.534022, accuracy = 80.4000 %, time=913.8823s
+Epoch 27: Loss = 0.528616, accuracy = 80.7000 %, time=913.6923s
+Epoch 28: Loss = 0.532400, accuracy = 80.0500 %, time=913.9231s
+Epoch 29: Loss = 0.519240, accuracy = 81.5000 %, time=914.0176s
+Evaluation on test set: Loss = 0.624105, accuracy = 79.0000 %
+Epoch 30: Loss = 0.506874, accuracy = 81.9500 %, time=913.8075s
+Epoch 31: Loss = 0.507393, accuracy = 81.6500 %, time=913.7093s
+Epoch 32: Loss = 0.506963, accuracy = 81.3500 %, time=913.5710s
+Epoch 33: Loss = 0.499252, accuracy = 82.5000 %, time=913.8241s
+Epoch 34: Loss = 0.498051, accuracy = 81.7500 %, time=913.7721s
+Epoch 35: Loss = 0.492650, accuracy = 82.6500 %, time=913.7122s
+Epoch 36: Loss = 0.492437, accuracy = 82.9000 %, time=913.3575s
+Epoch 37: Loss = 0.487926, accuracy = 82.9500 %, time=913.7351s
+Epoch 38: Loss = 0.485621, accuracy = 82.7000 %, time=913.6039s
+Epoch 39: Loss = 0.484326, accuracy = 82.6500 %, time=913.6238s
+Evaluation on test set: Loss = 0.607188, accuracy = 79.7000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 3.682131, accuracy = 7.6000 %
+Epoch 0: Loss = 1.626966, accuracy = 44.5000 %, time=912.7506s
+Epoch 1: Loss = 1.122956, accuracy = 59.9500 %, time=912.5047s
+Epoch 2: Loss = 1.048021, accuracy = 63.7500 %, time=912.3855s
+Epoch 3: Loss = 0.928592, accuracy = 67.2000 %, time=912.6940s
+Epoch 4: Loss = 0.888525, accuracy = 68.0500 %, time=913.0923s
+Epoch 5: Loss = 0.877613, accuracy = 68.5500 %, time=912.7999s
+Epoch 6: Loss = 0.842393, accuracy = 70.0500 %, time=912.8697s
+Epoch 7: Loss = 0.805108, accuracy = 72.4000 %, time=912.4511s
+Epoch 8: Loss = 0.744705, accuracy = 73.7500 %, time=912.4229s
+Epoch 9: Loss = 0.752596, accuracy = 72.6000 %, time=912.3975s
+Evaluation on test set: Loss = 0.720167, accuracy = 73.5000 %
+Epoch 10: Loss = 0.725378, accuracy = 74.2500 %, time=912.6033s
+Epoch 11: Loss = 0.728013, accuracy = 74.6000 %, time=912.4992s
+Epoch 12: Loss = 0.671637, accuracy = 77.1000 %, time=912.3492s
+Epoch 13: Loss = 0.659506, accuracy = 76.4000 %, time=912.5462s
+Epoch 14: Loss = 0.651223, accuracy = 77.4000 %, time=912.4522s
+Epoch 15: Loss = 0.630612, accuracy = 77.6000 %, time=912.4487s
+Epoch 16: Loss = 0.624054, accuracy = 78.1000 %, time=912.5089s
+Epoch 17: Loss = 0.607270, accuracy = 78.9000 %, time=912.6223s
+Epoch 18: Loss = 0.606788, accuracy = 78.2000 %, time=912.8194s
+Epoch 19: Loss = 0.596410, accuracy = 78.5000 %, time=912.5824s
+Evaluation on test set: Loss = 0.656468, accuracy = 76.6000 %
+Epoch 20: Loss = 0.575293, accuracy = 79.4500 %, time=912.3249s
+Epoch 21: Loss = 0.577122, accuracy = 78.9500 %, time=912.2438s
+Epoch 22: Loss = 0.554661, accuracy = 79.4500 %, time=912.4379s
+Epoch 23: Loss = 0.546984, accuracy = 80.8000 %, time=912.2120s
+Epoch 24: Loss = 0.539891, accuracy = 80.3500 %, time=912.3316s
+Epoch 25: Loss = 0.531271, accuracy = 81.2000 %, time=912.2381s
+Epoch 26: Loss = 0.524852, accuracy = 80.9500 %, time=912.4424s
+Epoch 27: Loss = 0.522704, accuracy = 81.2000 %, time=912.1917s
+Epoch 28: Loss = 0.516146, accuracy = 81.2000 %, time=912.3649s
+Epoch 29: Loss = 0.513864, accuracy = 81.2000 %, time=912.3692s
+Evaluation on test set: Loss = 0.626059, accuracy = 77.9000 %
+Epoch 30: Loss = 0.505195, accuracy = 81.9000 %, time=912.4050s
+Epoch 31: Loss = 0.504434, accuracy = 81.7000 %, time=912.4173s
+Epoch 32: Loss = 0.500176, accuracy = 82.4000 %, time=912.4373s
+Epoch 33: Loss = 0.497496, accuracy = 82.1000 %, time=912.2349s
+Epoch 34: Loss = 0.492192, accuracy = 82.4500 %, time=912.2158s
+Epoch 35: Loss = 0.491202, accuracy = 82.8000 %, time=912.4467s
+Epoch 36: Loss = 0.482216, accuracy = 82.8500 %, time=912.4114s
+Epoch 37: Loss = 0.486513, accuracy = 82.6500 %, time=912.4768s
+Epoch 38: Loss = 0.478751, accuracy = 82.3500 %, time=912.3730s
+Epoch 39: Loss = 0.480057, accuracy = 82.6000 %, time=912.3135s
+Evaluation on test set: Loss = 0.612761, accuracy = 77.5000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 3.947945, accuracy = 17.6000 %
+Epoch 0: Loss = 1.607967, accuracy = 46.4500 %, time=914.5460s
+Epoch 1: Loss = 1.147374, accuracy = 59.3500 %, time=913.8738s
+Epoch 2: Loss = 1.073122, accuracy = 61.0500 %, time=913.0887s
+Epoch 3: Loss = 0.985562, accuracy = 64.6500 %, time=913.5138s
+Epoch 4: Loss = 0.990421, accuracy = 64.6500 %, time=913.1517s
+Epoch 5: Loss = 0.919360, accuracy = 66.9500 %, time=912.6486s
+Epoch 6: Loss = 0.838171, accuracy = 70.0500 %, time=912.1766s
+Epoch 7: Loss = 0.822976, accuracy = 69.7500 %, time=911.9536s
+Epoch 8: Loss = 0.792474, accuracy = 72.0500 %, time=912.5725s
+Epoch 9: Loss = 0.754881, accuracy = 72.8500 %, time=912.2546s
+Evaluation on test set: Loss = 0.814997, accuracy = 72.3000 %
+Epoch 10: Loss = 0.745281, accuracy = 73.3500 %, time=912.2682s
+Epoch 11: Loss = 0.727737, accuracy = 73.2500 %, time=912.0324s
+Epoch 12: Loss = 0.692963, accuracy = 75.5500 %, time=912.1265s
+Epoch 13: Loss = 0.688513, accuracy = 74.5000 %, time=911.8832s
+Epoch 14: Loss = 0.676524, accuracy = 75.5500 %, time=912.0330s
+Epoch 15: Loss = 0.655536, accuracy = 76.7500 %, time=912.4158s
+Epoch 16: Loss = 0.632418, accuracy = 77.7000 %, time=912.1199s
+Epoch 17: Loss = 0.629973, accuracy = 77.2500 %, time=912.3575s
+Epoch 18: Loss = 0.611710, accuracy = 77.2000 %, time=912.5084s
+Epoch 19: Loss = 0.608697, accuracy = 77.5500 %, time=911.9241s
+Evaluation on test set: Loss = 0.674856, accuracy = 75.2000 %
+Epoch 20: Loss = 0.600888, accuracy = 77.7500 %, time=912.1787s
+Epoch 21: Loss = 0.588888, accuracy = 78.9500 %, time=912.1783s
+Epoch 22: Loss = 0.571123, accuracy = 78.7000 %, time=912.3354s
+Epoch 23: Loss = 0.565051, accuracy = 80.1500 %, time=912.2707s
+Epoch 24: Loss = 0.556807, accuracy = 80.1500 %, time=912.4511s
+Epoch 25: Loss = 0.544920, accuracy = 80.7500 %, time=912.3514s
+Epoch 26: Loss = 0.548445, accuracy = 80.5500 %, time=912.3403s
+Epoch 27: Loss = 0.534747, accuracy = 80.4000 %, time=912.1425s
+Epoch 28: Loss = 0.528588, accuracy = 81.2000 %, time=912.3637s
+Epoch 29: Loss = 0.522971, accuracy = 81.2000 %, time=912.3762s
+Evaluation on test set: Loss = 0.634916, accuracy = 77.6000 %
+Epoch 30: Loss = 0.515526, accuracy = 81.5000 %, time=912.5650s
+Epoch 31: Loss = 0.519505, accuracy = 81.6500 %, time=912.3161s
+Epoch 32: Loss = 0.510945, accuracy = 81.6500 %, time=912.2288s
+Epoch 33: Loss = 0.509506, accuracy = 81.1500 %, time=912.4148s
+Epoch 34: Loss = 0.506995, accuracy = 82.2500 %, time=912.0645s
+Epoch 35: Loss = 0.502863, accuracy = 81.7500 %, time=912.4140s
+Epoch 36: Loss = 0.500778, accuracy = 81.7000 %, time=912.3884s
+Epoch 37: Loss = 0.497976, accuracy = 82.3000 %, time=912.4628s
+Epoch 38: Loss = 0.494886, accuracy = 82.4500 %, time=912.4082s
+Epoch 39: Loss = 0.491565, accuracy = 82.3500 %, time=912.2777s
+Evaluation on test set: Loss = 0.626627, accuracy = 77.1000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 4.958743, accuracy = 5.9000 %
+Epoch 0: Loss = 1.728195, accuracy = 40.9000 %, time=914.6068s
+Epoch 1: Loss = 1.197590, accuracy = 57.2500 %, time=914.6253s
+Epoch 2: Loss = 1.031414, accuracy = 62.5500 %, time=914.9119s
+Epoch 3: Loss = 0.935867, accuracy = 66.6500 %, time=914.7699s
+Epoch 4: Loss = 0.859444, accuracy = 68.6000 %, time=914.8282s
+Epoch 5: Loss = 0.865135, accuracy = 68.7000 %, time=915.1655s
+Epoch 6: Loss = 0.826668, accuracy = 70.5000 %, time=915.2936s
+Epoch 7: Loss = 0.764044, accuracy = 73.7000 %, time=914.9733s
+Epoch 8: Loss = 0.776829, accuracy = 72.3000 %, time=915.0418s
+Epoch 9: Loss = 0.738813, accuracy = 73.9000 %, time=914.9793s
+Evaluation on test set: Loss = 0.790548, accuracy = 70.0000 %
+Epoch 10: Loss = 0.720516, accuracy = 73.9000 %, time=915.0332s
+Epoch 11: Loss = 0.706627, accuracy = 74.6500 %, time=914.6496s
+Epoch 12: Loss = 0.682345, accuracy = 75.5500 %, time=914.8120s
+Epoch 13: Loss = 0.676634, accuracy = 75.5000 %, time=914.9635s
+Epoch 14: Loss = 0.666788, accuracy = 75.7000 %, time=914.8046s
+Epoch 15: Loss = 0.633321, accuracy = 78.4000 %, time=914.7947s
+Epoch 16: Loss = 0.630690, accuracy = 77.0500 %, time=914.5984s
+Epoch 17: Loss = 0.609245, accuracy = 78.7500 %, time=914.7759s
+Epoch 18: Loss = 0.598242, accuracy = 78.4000 %, time=914.7413s
+Epoch 19: Loss = 0.580796, accuracy = 79.7000 %, time=914.6096s
+Evaluation on test set: Loss = 0.646981, accuracy = 76.0000 %
+Epoch 20: Loss = 0.583258, accuracy = 79.1500 %, time=914.5643s
+Epoch 21: Loss = 0.578118, accuracy = 79.3500 %, time=914.1138s
+Epoch 22: Loss = 0.562708, accuracy = 80.2000 %, time=914.1624s
+Epoch 23: Loss = 0.557065, accuracy = 80.0000 %, time=914.1273s
+Epoch 24: Loss = 0.550465, accuracy = 81.1000 %, time=914.9149s
+Epoch 25: Loss = 0.538601, accuracy = 80.8500 %, time=914.9374s
+Epoch 26: Loss = 0.535245, accuracy = 80.7000 %, time=914.6424s
+Epoch 27: Loss = 0.528591, accuracy = 81.6000 %, time=914.8560s
+Epoch 28: Loss = 0.523291, accuracy = 81.0000 %, time=915.4481s
+Epoch 29: Loss = 0.523559, accuracy = 81.7000 %, time=914.9849s
+Evaluation on test set: Loss = 0.616429, accuracy = 77.8000 %
+Epoch 30: Loss = 0.512986, accuracy = 81.9500 %, time=915.0953s
+Epoch 31: Loss = 0.511946, accuracy = 81.7500 %, time=914.9794s
+Epoch 32: Loss = 0.507837, accuracy = 82.1500 %, time=914.9151s
+Epoch 33: Loss = 0.505449, accuracy = 82.0500 %, time=914.7145s
+Epoch 34: Loss = 0.500868, accuracy = 82.5500 %, time=914.7249s
+Epoch 35: Loss = 0.498456, accuracy = 82.4000 %, time=914.9076s
+Epoch 36: Loss = 0.494887, accuracy = 82.8000 %, time=914.8344s
+Epoch 37: Loss = 0.492630, accuracy = 82.5500 %, time=914.8726s
+Epoch 38: Loss = 0.491235, accuracy = 82.8500 %, time=915.1931s
+Epoch 39: Loss = 0.487816, accuracy = 83.0000 %, time=915.0289s
+Evaluation on test set: Loss = 0.595855, accuracy = 77.9000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 3.923082, accuracy = 9.8000 %
+Epoch 0: Loss = 1.702150, accuracy = 43.4500 %, time=913.5296s
+Epoch 1: Loss = 1.120393, accuracy = 61.5500 %, time=913.2575s
+Epoch 2: Loss = 1.001587, accuracy = 64.9500 %, time=913.3833s
+Epoch 3: Loss = 0.881594, accuracy = 68.3500 %, time=913.3109s
+Epoch 4: Loss = 0.869274, accuracy = 70.2000 %, time=913.3765s
+Epoch 5: Loss = 0.809359, accuracy = 71.6000 %, time=913.1254s
+Epoch 6: Loss = 0.789728, accuracy = 71.9500 %, time=913.5272s
+Epoch 7: Loss = 0.785516, accuracy = 71.9000 %, time=913.3593s
+Epoch 8: Loss = 0.747262, accuracy = 74.2500 %, time=913.4798s
+Epoch 9: Loss = 0.733269, accuracy = 73.7000 %, time=913.2035s
+Evaluation on test set: Loss = 0.756827, accuracy = 72.6000 %
+Epoch 10: Loss = 0.697921, accuracy = 75.8000 %, time=913.3591s
+Epoch 11: Loss = 0.675847, accuracy = 75.2500 %, time=913.5431s
+Epoch 12: Loss = 0.665075, accuracy = 76.9500 %, time=913.3840s
+Epoch 13: Loss = 0.669678, accuracy = 76.4500 %, time=913.4970s
+Epoch 14: Loss = 0.647459, accuracy = 77.2000 %, time=913.5468s
+Epoch 15: Loss = 0.629685, accuracy = 78.0000 %, time=913.4317s
+Epoch 16: Loss = 0.628161, accuracy = 77.8500 %, time=913.3885s
+Epoch 17: Loss = 0.594952, accuracy = 78.6500 %, time=913.4380s
+Epoch 18: Loss = 0.592480, accuracy = 78.4000 %, time=913.5106s
+Epoch 19: Loss = 0.597617, accuracy = 79.0000 %, time=913.5408s
+Evaluation on test set: Loss = 0.694685, accuracy = 74.0000 %
+Epoch 20: Loss = 0.577407, accuracy = 79.1500 %, time=913.5214s
+Epoch 21: Loss = 0.581928, accuracy = 79.7000 %, time=913.4181s
+Epoch 22: Loss = 0.573364, accuracy = 79.9500 %, time=913.5702s
+Epoch 23: Loss = 0.555714, accuracy = 80.5000 %, time=913.2969s
+Epoch 24: Loss = 0.542005, accuracy = 81.2000 %, time=913.4045s
+Epoch 25: Loss = 0.548758, accuracy = 80.4000 %, time=913.4619s
+Epoch 26: Loss = 0.534560, accuracy = 80.8000 %, time=913.4571s
+Epoch 27: Loss = 0.527393, accuracy = 81.5500 %, time=913.5410s
+Epoch 28: Loss = 0.528960, accuracy = 81.1000 %, time=913.2475s
+Epoch 29: Loss = 0.521415, accuracy = 82.0000 %, time=913.2623s
+Evaluation on test set: Loss = 0.632766, accuracy = 77.0000 %
+Epoch 30: Loss = 0.520375, accuracy = 82.0500 %, time=913.0566s
+Epoch 31: Loss = 0.511708, accuracy = 81.7500 %, time=913.3849s
+Epoch 32: Loss = 0.506313, accuracy = 82.6000 %, time=913.2684s
+Epoch 33: Loss = 0.505044, accuracy = 82.0000 %, time=913.3298s
+Epoch 34: Loss = 0.501163, accuracy = 82.5000 %, time=913.3655s
+Epoch 35: Loss = 0.498315, accuracy = 82.1500 %, time=913.2172s
+Epoch 36: Loss = 0.498163, accuracy = 82.1500 %, time=913.3234s
+Epoch 37: Loss = 0.490191, accuracy = 82.9000 %, time=913.1967s
+Epoch 38: Loss = 0.491013, accuracy = 82.4000 %, time=913.3338s
+Epoch 39: Loss = 0.487942, accuracy = 82.9000 %, time=913.1885s
+Evaluation on test set: Loss = 0.597758, accuracy = 77.7000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 5.385741, accuracy = 10.4000 %
+Epoch 0: Loss = 1.812582, accuracy = 38.9500 %, time=911.4091s
+Epoch 1: Loss = 1.175503, accuracy = 58.3000 %, time=911.0036s
+Epoch 2: Loss = 0.998614, accuracy = 64.3000 %, time=911.5197s
+Epoch 3: Loss = 0.953556, accuracy = 67.1500 %, time=911.3076s
+Epoch 4: Loss = 0.909301, accuracy = 67.9500 %, time=911.4295s
+Epoch 5: Loss = 0.835398, accuracy = 70.4500 %, time=911.1768s
+Epoch 6: Loss = 0.784811, accuracy = 71.5500 %, time=911.0208s
+Epoch 7: Loss = 0.748222, accuracy = 73.6000 %, time=910.8036s
+Epoch 8: Loss = 0.757960, accuracy = 73.5000 %, time=910.9985s
+Epoch 9: Loss = 0.741062, accuracy = 73.4500 %, time=910.8443s
+Evaluation on test set: Loss = 0.729269, accuracy = 74.5000 %
+Epoch 10: Loss = 0.704828, accuracy = 74.3500 %, time=910.7695s
+Epoch 11: Loss = 0.698437, accuracy = 73.9000 %, time=910.7054s
+Epoch 12: Loss = 0.665388, accuracy = 76.6000 %, time=910.5872s
+Epoch 13: Loss = 0.657619, accuracy = 76.9500 %, time=910.6438s
+Epoch 14: Loss = 0.620126, accuracy = 79.0000 %, time=910.7351s
+Epoch 15: Loss = 0.613371, accuracy = 78.4000 %, time=910.5484s
+Epoch 16: Loss = 0.630407, accuracy = 78.0000 %, time=910.6850s
+Epoch 17: Loss = 0.594196, accuracy = 79.4000 %, time=910.6388s
+Epoch 18: Loss = 0.591989, accuracy = 78.5500 %, time=910.6290s
+Epoch 19: Loss = 0.575481, accuracy = 80.0000 %, time=910.6309s
+Evaluation on test set: Loss = 0.661822, accuracy = 77.3000 %
+Epoch 20: Loss = 0.568401, accuracy = 79.2500 %, time=910.6599s
+Epoch 21: Loss = 0.557918, accuracy = 80.2000 %, time=910.4133s
+Epoch 22: Loss = 0.551786, accuracy = 79.7500 %, time=910.6708s
+Epoch 23: Loss = 0.542636, accuracy = 81.2000 %, time=910.5475s
+Epoch 24: Loss = 0.539122, accuracy = 81.1500 %, time=910.5139s
+Epoch 25: Loss = 0.527816, accuracy = 81.2500 %, time=910.7287s
+Epoch 26: Loss = 0.524394, accuracy = 81.2500 %, time=910.8169s
+Epoch 27: Loss = 0.520782, accuracy = 81.6000 %, time=910.9189s
+Epoch 28: Loss = 0.514623, accuracy = 81.8000 %, time=911.1304s
+Epoch 29: Loss = 0.509273, accuracy = 82.0500 %, time=910.9564s
+Evaluation on test set: Loss = 0.645472, accuracy = 75.5000 %
+Epoch 30: Loss = 0.501873, accuracy = 82.8000 %, time=910.8849s
+Epoch 31: Loss = 0.497204, accuracy = 81.8500 %, time=910.9142s
+Epoch 32: Loss = 0.498290, accuracy = 82.4000 %, time=910.9973s
+Epoch 33: Loss = 0.495241, accuracy = 82.7500 %, time=910.8381s
+Epoch 34: Loss = 0.490422, accuracy = 81.7000 %, time=911.0072s
+Epoch 35: Loss = 0.488750, accuracy = 82.1000 %, time=910.9344s
+Epoch 36: Loss = 0.482922, accuracy = 82.6000 %, time=911.0361s
+Epoch 37: Loss = 0.483762, accuracy = 82.7000 %, time=910.9485s
+Epoch 38: Loss = 0.478773, accuracy = 83.4000 %, time=911.0746s
+Epoch 39: Loss = 0.477697, accuracy = 83.4000 %, time=910.9161s
+Evaluation on test set: Loss = 0.596541, accuracy = 79.3000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 3.538967, accuracy = 14.3000 %
+Epoch 0: Loss = 1.706995, accuracy = 42.8000 %, time=914.6858s
+Epoch 1: Loss = 1.186658, accuracy = 59.2000 %, time=914.5863s
+Epoch 2: Loss = 0.983745, accuracy = 64.4000 %, time=914.3620s
+Epoch 3: Loss = 0.900791, accuracy = 69.3500 %, time=913.9306s
+Epoch 4: Loss = 0.836052, accuracy = 68.6000 %, time=914.3530s
+Epoch 5: Loss = 0.803694, accuracy = 70.4000 %, time=914.2859s
+Epoch 6: Loss = 0.763315, accuracy = 71.2500 %, time=914.4170s
+Epoch 7: Loss = 0.758067, accuracy = 72.7000 %, time=914.0659s
+Epoch 8: Loss = 0.700256, accuracy = 74.4500 %, time=914.0645s
+Epoch 9: Loss = 0.684973, accuracy = 75.2500 %, time=914.2233s
+Evaluation on test set: Loss = 0.732335, accuracy = 73.6000 %
+Epoch 10: Loss = 0.687289, accuracy = 73.9500 %, time=914.2905s
+Epoch 11: Loss = 0.651144, accuracy = 76.4000 %, time=914.7307s
+Epoch 12: Loss = 0.634699, accuracy = 76.3000 %, time=914.6803s
+Epoch 13: Loss = 0.620125, accuracy = 77.6000 %, time=914.4307s
+Epoch 14: Loss = 0.618364, accuracy = 77.4000 %, time=914.3648s
+Epoch 15: Loss = 0.596021, accuracy = 78.5000 %, time=914.7244s
+Epoch 16: Loss = 0.581134, accuracy = 78.3500 %, time=914.8717s
+Epoch 17: Loss = 0.589822, accuracy = 79.0000 %, time=914.7017s
+Epoch 18: Loss = 0.564069, accuracy = 79.7500 %, time=913.9570s
+Epoch 19: Loss = 0.553986, accuracy = 79.2500 %, time=913.9804s
+Evaluation on test set: Loss = 0.643250, accuracy = 75.8000 %
+Epoch 20: Loss = 0.546221, accuracy = 80.9500 %, time=914.2616s
+Epoch 21: Loss = 0.547623, accuracy = 80.4500 %, time=914.3152s
+Epoch 22: Loss = 0.536092, accuracy = 80.9500 %, time=914.5337s
+Epoch 23: Loss = 0.517584, accuracy = 81.4500 %, time=914.3228s
+Epoch 24: Loss = 0.513216, accuracy = 82.1500 %, time=914.5271s
+Epoch 25: Loss = 0.507650, accuracy = 81.7500 %, time=914.3757s
+Epoch 26: Loss = 0.501644, accuracy = 81.5000 %, time=914.5431s
+Epoch 27: Loss = 0.493450, accuracy = 82.7500 %, time=914.4069s
+Epoch 28: Loss = 0.494995, accuracy = 81.4000 %, time=914.0306s
+Epoch 29: Loss = 0.494254, accuracy = 82.2000 %, time=913.9934s
+Evaluation on test set: Loss = 0.607940, accuracy = 77.5000 %
+Epoch 30: Loss = 0.482840, accuracy = 82.9000 %, time=914.4173s
+Epoch 31: Loss = 0.479229, accuracy = 83.1500 %, time=914.3642s
+Epoch 32: Loss = 0.480717, accuracy = 82.9500 %, time=913.9917s
+Epoch 33: Loss = 0.474709, accuracy = 83.4000 %, time=913.8940s
+Epoch 34: Loss = 0.468623, accuracy = 83.3000 %, time=913.8856s
+Epoch 35: Loss = 0.464688, accuracy = 83.7000 %, time=914.2483s
+Epoch 36: Loss = 0.465765, accuracy = 83.7000 %, time=913.9932s
+Epoch 37: Loss = 0.459673, accuracy = 83.9000 %, time=914.2923s
+Epoch 38: Loss = 0.460736, accuracy = 83.6500 %, time=914.5285s
+Epoch 39: Loss = 0.457418, accuracy = 83.9500 %, time=914.2610s
+Evaluation on test set: Loss = 0.601791, accuracy = 78.1000 %
+
+
+Start training! Number of network total parameters: 755
+Evaluation on test set: Loss = 4.325664, accuracy = 13.0000 %
+Epoch 0: Loss = 1.510855, accuracy = 48.5000 %, time=914.2525s
+Epoch 1: Loss = 1.067895, accuracy = 61.7000 %, time=913.1814s
+Epoch 2: Loss = 0.965132, accuracy = 65.0500 %, time=913.6193s
+Epoch 3: Loss = 0.919403, accuracy = 66.4500 %, time=913.6553s
+Epoch 4: Loss = 0.852595, accuracy = 68.5000 %, time=913.6534s
+Epoch 5: Loss = 0.843872, accuracy = 68.7500 %, time=913.6076s
+Epoch 6: Loss = 0.802618, accuracy = 70.8500 %, time=913.7036s
+Epoch 7: Loss = 0.782450, accuracy = 72.1000 %, time=913.5956s
+Epoch 8: Loss = 0.759306, accuracy = 73.5000 %, time=913.7890s
+Epoch 9: Loss = 0.752639, accuracy = 73.6500 %, time=913.5765s
+Evaluation on test set: Loss = 0.782207, accuracy = 72.4000 %
+Epoch 10: Loss = 0.739284, accuracy = 73.5000 %, time=913.6783s
+Epoch 11: Loss = 0.713291, accuracy = 74.8500 %, time=913.7118s
+Epoch 12: Loss = 0.697800, accuracy = 74.9000 %, time=913.6704s
+Epoch 13: Loss = 0.671626, accuracy = 75.7000 %, time=913.7757s
+Epoch 14: Loss = 0.665640, accuracy = 77.0500 %, time=913.7269s
+Epoch 15: Loss = 0.654314, accuracy = 75.9500 %, time=913.8376s
+Epoch 16: Loss = 0.639944, accuracy = 76.9500 %, time=913.7350s
+Epoch 17: Loss = 0.616913, accuracy = 76.7500 %, time=913.7028s
+Epoch 18: Loss = 0.602173, accuracy = 78.5000 %, time=913.6886s
+Epoch 19: Loss = 0.607119, accuracy = 77.7500 %, time=913.6285s
+Evaluation on test set: Loss = 0.704091, accuracy = 74.9000 %
+Epoch 20: Loss = 0.591045, accuracy = 78.8000 %, time=913.7487s
+Epoch 21: Loss = 0.582286, accuracy = 78.6000 %, time=913.7395s
+Epoch 22: Loss = 0.558836, accuracy = 79.7000 %, time=913.6632s
+Epoch 23: Loss = 0.563044, accuracy = 79.5500 %, time=913.4401s
+Epoch 24: Loss = 0.547811, accuracy = 80.5000 %, time=913.5572s
+Epoch 25: Loss = 0.543749, accuracy = 80.7000 %, time=913.4878s
+Epoch 26: Loss = 0.530273, accuracy = 81.6000 %, time=913.5418s
+Epoch 27: Loss = 0.537748, accuracy = 80.8500 %, time=913.4346s
+Epoch 28: Loss = 0.532019, accuracy = 80.6500 %, time=913.4579s
+Epoch 29: Loss = 0.524646, accuracy = 81.4500 %, time=913.4194s
+Evaluation on test set: Loss = 0.658890, accuracy = 77.1000 %
+Epoch 30: Loss = 0.517811, accuracy = 81.5000 %, time=913.8570s
+Epoch 31: Loss = 0.514283, accuracy = 81.3000 %, time=913.9922s
+Epoch 32: Loss = 0.512441, accuracy = 81.4000 %, time=913.9363s
+Epoch 33: Loss = 0.509171, accuracy = 81.7000 %, time=913.9294s
+Epoch 34: Loss = 0.505833, accuracy = 81.9500 %, time=913.8765s
+Epoch 35: Loss = 0.496101, accuracy = 82.3000 %, time=913.9544s
+Epoch 36: Loss = 0.499306, accuracy = 81.8500 %, time=913.9981s
+Epoch 37: Loss = 0.496455, accuracy = 81.9500 %, time=914.0902s
+Epoch 38: Loss = 0.492244, accuracy = 82.6000 %, time=914.1107s
+Epoch 39: Loss = 0.491030, accuracy = 82.5000 %, time=913.9938s
+Evaluation on test set: Loss = 0.636193, accuracy = 77.8000 %
