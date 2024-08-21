@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
-from src.load_dataset import load_cifar10
+from src.load_dataset import load_cifar10, load_medmnist
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_RGB_globally, train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
@@ -108,16 +108,16 @@ optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 # RGB MedMNIST/CIFAR-10
-train_dataloader, test_dataloader = load_cifar10(class_set, train_dataset_number, test_dataset_number, batch_size)
+train_dataloader, test_dataloader = load_medmnist(medmnist_name, class_set, train_dataset_number, test_dataset_number, batch_size)
 network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
-torch.save(network_state, "CIFAR10_state_model1")  # save network parameters
+torch.save(network_state, "MedMNIST_state_model1")  # save network parameters
 
 result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list}
 
 # Save the result data to a numpy file
-file_path = 'CIFAR10_data1.npy'
+file_path = 'MedMNIST_data1.npy'
 np.save(file_path, result_data)
 # network_state = train_RGB_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval,
-                                   # stride, device)
+# stride, device)
 # torch.save(network_state, "new_Cifar_modelState_25.3")  # save network parameters
