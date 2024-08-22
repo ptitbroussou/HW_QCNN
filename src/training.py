@@ -23,6 +23,7 @@ def train_network(batch_size, I, J, network, train_loader, criterion, output_sca
         # preprocess, pooling operation classically
         data = adaptive_avg_pool(data).to(device)
         data = data.sum(dim=1, keepdim=True)
+        target = target.squeeze() # for MedMNIST target
         # vectorize the image matrix, and then inner product itself to obtain the density matrix
         init_density_matrix = to_density_matrix(
             F.normalize(data.squeeze().resize(data.shape[0], I ** 2), p=2, dim=1).to(device), device)
@@ -59,6 +60,7 @@ def test_network(batch_size, I, J, network, test_loader, criterion, output_scale
         # preprocess, pooling operation classically
         data = adaptive_avg_pool(data).to(device)
         data = data.sum(dim=1, keepdim=True)
+        target = target.squeeze() # for MedMNIST target
         # vectorize the image matrix, and then inner product itself to obtain the density matrix
         init_density_matrix = to_density_matrix(
             F.normalize(data.squeeze().resize(data.shape[0], I ** 2), p=2, dim=1).to(device), device)
@@ -66,8 +68,7 @@ def test_network(batch_size, I, J, network, test_loader, criterion, output_scale
         channel_data = normalize_DM(copy_images_bottom_channel_stride(init_density_matrix, J, stride)).to(device)
         output = network(channel_data)  # we run the network on the data
 
-        loss = criterion(output*output_scale, target.to(
-            device))  # we compare output to the target and compute the loss, using the chosen loss function
+        loss = criterion(output*output_scale, target.to(device))  # we compare output to the target and compute the loss, using the chosen loss function
         train_loss += loss.item()  # we increment the total train loss
         pred = output.argmax(dim=1, keepdim=True)  # the class chosen by the network is the highest output
         acc = pred.eq(target.to(device).view_as(pred)).sum().item()  # the accuracy is the proportion of correct classes
