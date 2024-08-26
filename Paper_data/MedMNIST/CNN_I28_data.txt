@@ -1,0 +1,558 @@
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.376565, accuracy = 17.8000 %
+Epoch 1: Loss = 2.179908, accuracy = 24.6500 %
+Epoch 2: Loss = 2.087581, accuracy = 26.8000 %
+Epoch 3: Loss = 2.014673, accuracy = 27.9500 %
+Epoch 4: Loss = 2.031716, accuracy = 28.1000 %
+Epoch 5: Loss = 2.006649, accuracy = 29.3000 %
+Epoch 6: Loss = 1.963017, accuracy = 31.2000 %
+Epoch 7: Loss = 1.965439, accuracy = 31.7500 %
+Epoch 8: Loss = 1.939363, accuracy = 32.9500 %
+Epoch 9: Loss = 1.919398, accuracy = 33.6500 %
+Epoch 10: Loss = 1.893531, accuracy = 34.4500 %
+Epoch 11: Loss = 1.889487, accuracy = 36.2500 %
+Epoch 12: Loss = 1.891441, accuracy = 35.3000 %
+Epoch 13: Loss = 1.866952, accuracy = 37.2500 %
+Epoch 14: Loss = 1.846619, accuracy = 36.7500 %
+Epoch 15: Loss = 1.851240, accuracy = 37.6500 %
+Epoch 16: Loss = 1.825597, accuracy = 38.4000 %
+Epoch 17: Loss = 1.819731, accuracy = 39.8500 %
+Epoch 18: Loss = 1.807490, accuracy = 39.5500 %
+Epoch 19: Loss = 1.806986, accuracy = 40.2500 %
+Epoch 20: Loss = 1.793012, accuracy = 40.5000 %
+Epoch 21: Loss = 1.783622, accuracy = 40.7500 %
+Epoch 22: Loss = 1.769246, accuracy = 42.3500 %
+Epoch 23: Loss = 1.770516, accuracy = 41.9000 %
+Epoch 24: Loss = 1.760231, accuracy = 41.8500 %
+Epoch 25: Loss = 1.758632, accuracy = 42.4000 %
+Epoch 26: Loss = 1.748089, accuracy = 43.2000 %
+Epoch 27: Loss = 1.748873, accuracy = 43.1000 %
+Epoch 28: Loss = 1.740388, accuracy = 42.8000 %
+Epoch 29: Loss = 1.737605, accuracy = 43.0000 %
+Epoch 30: Loss = 1.736209, accuracy = 43.0500 %
+Epoch 31: Loss = 1.728889, accuracy = 43.4000 %
+Epoch 32: Loss = 1.726355, accuracy = 43.8500 %
+Epoch 33: Loss = 1.727010, accuracy = 44.7000 %
+Epoch 34: Loss = 1.719482, accuracy = 43.8000 %
+Epoch 35: Loss = 1.721521, accuracy = 44.8000 %
+Epoch 36: Loss = 1.721041, accuracy = 44.7000 %
+Epoch 37: Loss = 1.717879, accuracy = 44.9000 %
+Epoch 38: Loss = 1.714782, accuracy = 44.4500 %
+Epoch 39: Loss = 1.713229, accuracy = 44.8500 %
+Epoch 40: Loss = 1.711881, accuracy = 44.8500 %
+Epoch 41: Loss = 1.711943, accuracy = 45.1000 %
+Epoch 42: Loss = 1.710150, accuracy = 44.9500 %
+Epoch 43: Loss = 1.708979, accuracy = 44.8000 %
+Epoch 44: Loss = 1.707659, accuracy = 45.2500 %
+Epoch 45: Loss = 1.706033, accuracy = 44.7500 %
+Epoch 46: Loss = 1.706286, accuracy = 45.1500 %
+Epoch 47: Loss = 1.706073, accuracy = 45.3500 %
+Epoch 48: Loss = 1.704952, accuracy = 45.3000 %
+Epoch 49: Loss = 1.704487, accuracy = 45.3000 %
+Evaluation on test set = 1.804410, testing accuracy = 40.3000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.371428, accuracy = 15.9000 %
+Epoch 1: Loss = 2.139772, accuracy = 23.9000 %
+Epoch 2: Loss = 2.168386, accuracy = 24.7500 %
+Epoch 3: Loss = 2.160792, accuracy = 27.0000 %
+Epoch 4: Loss = 1.991474, accuracy = 29.4000 %
+Epoch 5: Loss = 2.018179, accuracy = 29.1000 %
+Epoch 6: Loss = 1.957778, accuracy = 32.7500 %
+Epoch 7: Loss = 1.959059, accuracy = 33.1500 %
+Epoch 8: Loss = 1.926330, accuracy = 35.9500 %
+Epoch 9: Loss = 1.902460, accuracy = 34.7000 %
+Epoch 10: Loss = 1.923246, accuracy = 34.4000 %
+Epoch 11: Loss = 1.882535, accuracy = 37.3000 %
+Epoch 12: Loss = 1.872327, accuracy = 37.4500 %
+Epoch 13: Loss = 1.847574, accuracy = 37.1500 %
+Epoch 14: Loss = 1.855617, accuracy = 37.1500 %
+Epoch 15: Loss = 1.833297, accuracy = 37.9500 %
+Epoch 16: Loss = 1.817824, accuracy = 39.0500 %
+Epoch 17: Loss = 1.818309, accuracy = 38.9000 %
+Epoch 18: Loss = 1.804734, accuracy = 39.5500 %
+Epoch 19: Loss = 1.800976, accuracy = 39.8500 %
+Epoch 20: Loss = 1.788298, accuracy = 40.1000 %
+Epoch 21: Loss = 1.786184, accuracy = 41.1000 %
+Epoch 22: Loss = 1.778506, accuracy = 41.7500 %
+Epoch 23: Loss = 1.771965, accuracy = 41.6000 %
+Epoch 24: Loss = 1.764852, accuracy = 42.0500 %
+Epoch 25: Loss = 1.759654, accuracy = 42.0500 %
+Epoch 26: Loss = 1.753825, accuracy = 41.5500 %
+Epoch 27: Loss = 1.751388, accuracy = 42.3000 %
+Epoch 28: Loss = 1.749862, accuracy = 41.8000 %
+Epoch 29: Loss = 1.742374, accuracy = 43.4000 %
+Epoch 30: Loss = 1.742602, accuracy = 42.0000 %
+Epoch 31: Loss = 1.740342, accuracy = 42.5500 %
+Epoch 32: Loss = 1.733356, accuracy = 43.4000 %
+Epoch 33: Loss = 1.736181, accuracy = 43.4000 %
+Epoch 34: Loss = 1.732940, accuracy = 43.0500 %
+Epoch 35: Loss = 1.727692, accuracy = 43.3500 %
+Epoch 36: Loss = 1.727633, accuracy = 43.7500 %
+Epoch 37: Loss = 1.724557, accuracy = 42.7500 %
+Epoch 38: Loss = 1.723401, accuracy = 43.5000 %
+Epoch 39: Loss = 1.721687, accuracy = 43.4500 %
+Epoch 40: Loss = 1.719524, accuracy = 43.7500 %
+Epoch 41: Loss = 1.719629, accuracy = 43.7000 %
+Epoch 42: Loss = 1.718135, accuracy = 43.8500 %
+Epoch 43: Loss = 1.716869, accuracy = 43.5000 %
+Epoch 44: Loss = 1.715814, accuracy = 43.9000 %
+Epoch 45: Loss = 1.715200, accuracy = 44.1000 %
+Epoch 46: Loss = 1.715362, accuracy = 43.6500 %
+Epoch 47: Loss = 1.714363, accuracy = 43.9000 %
+Epoch 48: Loss = 1.714153, accuracy = 43.7500 %
+Epoch 49: Loss = 1.713250, accuracy = 43.8000 %
+Evaluation on test set = 1.793390, testing accuracy = 38.8000 %
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.342487, accuracy = 18.8500 %
+Epoch 1: Loss = 2.161240, accuracy = 23.0500 %
+Epoch 2: Loss = 2.104445, accuracy = 26.9000 %
+Epoch 3: Loss = 2.090360, accuracy = 27.3500 %
+Epoch 4: Loss = 2.004895, accuracy = 30.4000 %
+Epoch 5: Loss = 1.996598, accuracy = 32.1500 %
+Epoch 6: Loss = 1.959283, accuracy = 32.2000 %
+Epoch 7: Loss = 1.945399, accuracy = 32.1000 %
+Epoch 8: Loss = 1.937439, accuracy = 32.5500 %
+Epoch 9: Loss = 1.899250, accuracy = 34.0000 %
+Epoch 10: Loss = 1.880295, accuracy = 36.1000 %
+Epoch 11: Loss = 1.883911, accuracy = 35.3000 %
+Epoch 12: Loss = 1.867230, accuracy = 36.8500 %
+Epoch 13: Loss = 1.853912, accuracy = 37.3500 %
+Epoch 14: Loss = 1.836909, accuracy = 38.3000 %
+Epoch 15: Loss = 1.842789, accuracy = 37.6000 %
+Epoch 16: Loss = 1.818266, accuracy = 39.4500 %
+Epoch 17: Loss = 1.822629, accuracy = 39.5000 %
+Epoch 18: Loss = 1.807182, accuracy = 40.7500 %
+Epoch 19: Loss = 1.798282, accuracy = 41.6000 %
+Epoch 20: Loss = 1.801397, accuracy = 39.9500 %
+Epoch 21: Loss = 1.789220, accuracy = 40.4500 %
+Epoch 22: Loss = 1.778639, accuracy = 42.0000 %
+Epoch 23: Loss = 1.774409, accuracy = 41.7500 %
+Epoch 24: Loss = 1.767356, accuracy = 42.8000 %
+Epoch 25: Loss = 1.761895, accuracy = 41.3000 %
+Epoch 26: Loss = 1.756946, accuracy = 43.2000 %
+Epoch 27: Loss = 1.750045, accuracy = 41.8000 %
+Epoch 28: Loss = 1.750492, accuracy = 43.1500 %
+Epoch 29: Loss = 1.749043, accuracy = 43.5500 %
+Epoch 30: Loss = 1.744329, accuracy = 43.6500 %
+Epoch 31: Loss = 1.740929, accuracy = 43.2000 %
+Epoch 32: Loss = 1.736928, accuracy = 43.8000 %
+Epoch 33: Loss = 1.737672, accuracy = 43.7500 %
+Epoch 34: Loss = 1.736385, accuracy = 44.5500 %
+Epoch 35: Loss = 1.732679, accuracy = 44.1000 %
+Epoch 36: Loss = 1.730900, accuracy = 44.4500 %
+Epoch 37: Loss = 1.727516, accuracy = 44.3500 %
+Epoch 38: Loss = 1.725624, accuracy = 44.1000 %
+Epoch 39: Loss = 1.726247, accuracy = 44.4500 %
+Epoch 40: Loss = 1.725564, accuracy = 44.7000 %
+Epoch 41: Loss = 1.723890, accuracy = 44.8500 %
+Epoch 42: Loss = 1.722211, accuracy = 44.3000 %
+Epoch 43: Loss = 1.721715, accuracy = 45.0500 %
+Epoch 44: Loss = 1.721175, accuracy = 44.6000 %
+Epoch 45: Loss = 1.720042, accuracy = 45.1000 %
+Epoch 46: Loss = 1.719621, accuracy = 45.4000 %
+Epoch 47: Loss = 1.718558, accuracy = 45.4000 %
+Epoch 48: Loss = 1.718297, accuracy = 45.3000 %
+Epoch 49: Loss = 1.717843, accuracy = 44.8500 %
+Evaluation on test set = 1.773534, testing accuracy = 41.0000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.379505, accuracy = 17.9000 %
+Epoch 1: Loss = 2.131189, accuracy = 23.5000 %
+Epoch 2: Loss = 2.091812, accuracy = 24.7500 %
+Epoch 3: Loss = 2.083390, accuracy = 27.5000 %
+Epoch 4: Loss = 2.020418, accuracy = 29.6500 %
+Epoch 5: Loss = 2.023391, accuracy = 29.4000 %
+Epoch 6: Loss = 2.001164, accuracy = 29.7500 %
+Epoch 7: Loss = 1.952158, accuracy = 32.2000 %
+Epoch 8: Loss = 1.957565, accuracy = 33.4000 %
+Epoch 9: Loss = 1.919539, accuracy = 33.3000 %
+Epoch 10: Loss = 1.905325, accuracy = 34.5000 %
+Epoch 11: Loss = 1.905922, accuracy = 34.5500 %
+Epoch 12: Loss = 1.882983, accuracy = 35.5500 %
+Epoch 13: Loss = 1.874194, accuracy = 35.7500 %
+Epoch 14: Loss = 1.854409, accuracy = 36.4500 %
+Epoch 15: Loss = 1.855651, accuracy = 37.5500 %
+Epoch 16: Loss = 1.848522, accuracy = 36.9500 %
+Epoch 17: Loss = 1.835166, accuracy = 36.8500 %
+Epoch 18: Loss = 1.818614, accuracy = 37.4500 %
+Epoch 19: Loss = 1.811966, accuracy = 39.1000 %
+Epoch 20: Loss = 1.806422, accuracy = 39.5000 %
+Epoch 21: Loss = 1.800597, accuracy = 39.2500 %
+Epoch 22: Loss = 1.796440, accuracy = 39.5000 %
+Epoch 23: Loss = 1.784791, accuracy = 39.9000 %
+Epoch 24: Loss = 1.781365, accuracy = 40.4000 %
+Epoch 25: Loss = 1.771567, accuracy = 39.7500 %
+Epoch 26: Loss = 1.772597, accuracy = 41.0000 %
+Epoch 27: Loss = 1.764668, accuracy = 40.8500 %
+Epoch 28: Loss = 1.758821, accuracy = 40.7000 %
+Epoch 29: Loss = 1.759415, accuracy = 41.5000 %
+Epoch 30: Loss = 1.756656, accuracy = 42.4000 %
+Epoch 31: Loss = 1.750668, accuracy = 41.9000 %
+Epoch 32: Loss = 1.749771, accuracy = 41.7000 %
+Epoch 33: Loss = 1.748657, accuracy = 41.5000 %
+Epoch 34: Loss = 1.745195, accuracy = 42.5000 %
+Epoch 35: Loss = 1.744733, accuracy = 42.2000 %
+Epoch 36: Loss = 1.739233, accuracy = 42.0000 %
+Epoch 37: Loss = 1.738211, accuracy = 42.2500 %
+Epoch 38: Loss = 1.737111, accuracy = 42.8000 %
+Epoch 39: Loss = 1.736140, accuracy = 42.4500 %
+Epoch 40: Loss = 1.734084, accuracy = 42.5500 %
+Epoch 41: Loss = 1.734366, accuracy = 42.2500 %
+Epoch 42: Loss = 1.732140, accuracy = 42.8000 %
+Epoch 43: Loss = 1.731214, accuracy = 43.0000 %
+Epoch 44: Loss = 1.730217, accuracy = 42.7000 %
+Epoch 45: Loss = 1.730186, accuracy = 42.8000 %
+Epoch 46: Loss = 1.728294, accuracy = 43.2500 %
+Epoch 47: Loss = 1.728048, accuracy = 42.5500 %
+Epoch 48: Loss = 1.727411, accuracy = 42.8500 %
+Epoch 49: Loss = 1.727411, accuracy = 42.6500 %
+Evaluation on test set = 1.798806, testing accuracy = 39.4000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.427212, accuracy = 17.9000 %
+Epoch 1: Loss = 2.260609, accuracy = 20.2000 %
+Epoch 2: Loss = 2.069512, accuracy = 26.8500 %
+Epoch 3: Loss = 2.244654, accuracy = 26.7000 %
+Epoch 4: Loss = 2.084425, accuracy = 29.6500 %
+Epoch 5: Loss = 1.964661, accuracy = 32.2000 %
+Epoch 6: Loss = 1.945499, accuracy = 32.3000 %
+Epoch 7: Loss = 1.952722, accuracy = 33.4000 %
+Epoch 8: Loss = 1.935453, accuracy = 33.7500 %
+Epoch 9: Loss = 1.957139, accuracy = 33.2500 %
+Epoch 10: Loss = 1.911346, accuracy = 35.7500 %
+Epoch 11: Loss = 1.897697, accuracy = 35.1000 %
+Epoch 12: Loss = 1.892948, accuracy = 35.4500 %
+Epoch 13: Loss = 1.888212, accuracy = 36.0000 %
+Epoch 14: Loss = 1.855243, accuracy = 38.0500 %
+Epoch 15: Loss = 1.856857, accuracy = 37.5500 %
+Epoch 16: Loss = 1.846332, accuracy = 37.3500 %
+Epoch 17: Loss = 1.846705, accuracy = 37.2500 %
+Epoch 18: Loss = 1.825521, accuracy = 40.0500 %
+Epoch 19: Loss = 1.815942, accuracy = 38.3000 %
+Epoch 20: Loss = 1.803036, accuracy = 38.2500 %
+Epoch 21: Loss = 1.803800, accuracy = 38.5500 %
+Epoch 22: Loss = 1.796400, accuracy = 39.2000 %
+Epoch 23: Loss = 1.790462, accuracy = 39.8000 %
+Epoch 24: Loss = 1.785917, accuracy = 40.3500 %
+Epoch 25: Loss = 1.777956, accuracy = 40.0000 %
+Epoch 26: Loss = 1.769149, accuracy = 40.6000 %
+Epoch 27: Loss = 1.765646, accuracy = 40.4500 %
+Epoch 28: Loss = 1.763336, accuracy = 41.4500 %
+Epoch 29: Loss = 1.757603, accuracy = 41.3000 %
+Epoch 30: Loss = 1.758690, accuracy = 41.8500 %
+Epoch 31: Loss = 1.752699, accuracy = 41.6000 %
+Epoch 32: Loss = 1.746685, accuracy = 41.6000 %
+Epoch 33: Loss = 1.747916, accuracy = 42.3000 %
+Epoch 34: Loss = 1.744824, accuracy = 42.5500 %
+Epoch 35: Loss = 1.742572, accuracy = 42.7500 %
+Epoch 36: Loss = 1.741922, accuracy = 42.0500 %
+Epoch 37: Loss = 1.737577, accuracy = 42.7000 %
+Epoch 38: Loss = 1.734649, accuracy = 42.2000 %
+Epoch 39: Loss = 1.734041, accuracy = 43.0000 %
+Epoch 40: Loss = 1.736631, accuracy = 42.5000 %
+Epoch 41: Loss = 1.733763, accuracy = 42.4000 %
+Epoch 42: Loss = 1.730246, accuracy = 42.7000 %
+Epoch 43: Loss = 1.730688, accuracy = 42.9000 %
+Epoch 44: Loss = 1.730236, accuracy = 42.8500 %
+Epoch 45: Loss = 1.729274, accuracy = 43.1500 %
+Epoch 46: Loss = 1.729203, accuracy = 43.2500 %
+Epoch 47: Loss = 1.728079, accuracy = 43.0500 %
+Epoch 48: Loss = 1.727658, accuracy = 43.2000 %
+Epoch 49: Loss = 1.726741, accuracy = 42.8000 %
+Evaluation on test set = 1.765481, testing accuracy = 39.8000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.253790, accuracy = 18.3000 %
+Epoch 1: Loss = 2.165708, accuracy = 22.7500 %
+Epoch 2: Loss = 2.148248, accuracy = 26.0500 %
+Epoch 3: Loss = 2.030750, accuracy = 28.8500 %
+Epoch 4: Loss = 2.047167, accuracy = 29.5000 %
+Epoch 5: Loss = 1.957305, accuracy = 32.2500 %
+Epoch 6: Loss = 1.953865, accuracy = 32.1000 %
+Epoch 7: Loss = 1.982264, accuracy = 30.8000 %
+Epoch 8: Loss = 1.930526, accuracy = 33.9500 %
+Epoch 9: Loss = 1.903084, accuracy = 34.6000 %
+Epoch 10: Loss = 1.891263, accuracy = 35.7000 %
+Epoch 11: Loss = 1.886259, accuracy = 36.4000 %
+Epoch 12: Loss = 1.859217, accuracy = 37.0000 %
+Epoch 13: Loss = 1.840837, accuracy = 38.0000 %
+Epoch 14: Loss = 1.832886, accuracy = 38.6500 %
+Epoch 15: Loss = 1.830969, accuracy = 38.0000 %
+Epoch 16: Loss = 1.822472, accuracy = 40.1000 %
+Epoch 17: Loss = 1.810500, accuracy = 38.5500 %
+Epoch 18: Loss = 1.803682, accuracy = 39.9500 %
+Epoch 19: Loss = 1.788517, accuracy = 40.5000 %
+Epoch 20: Loss = 1.786494, accuracy = 40.8000 %
+Epoch 21: Loss = 1.780313, accuracy = 40.5500 %
+Epoch 22: Loss = 1.768140, accuracy = 42.4500 %
+Epoch 23: Loss = 1.767968, accuracy = 41.3500 %
+Epoch 24: Loss = 1.756676, accuracy = 42.1500 %
+Epoch 25: Loss = 1.749934, accuracy = 42.8500 %
+Epoch 26: Loss = 1.751793, accuracy = 42.7500 %
+Epoch 27: Loss = 1.739753, accuracy = 42.9000 %
+Epoch 28: Loss = 1.739760, accuracy = 43.3500 %
+Epoch 29: Loss = 1.735440, accuracy = 43.1500 %
+Epoch 30: Loss = 1.726873, accuracy = 43.1500 %
+Epoch 31: Loss = 1.726223, accuracy = 43.6000 %
+Epoch 32: Loss = 1.723746, accuracy = 43.2000 %
+Epoch 33: Loss = 1.724307, accuracy = 44.4500 %
+Epoch 34: Loss = 1.720546, accuracy = 43.2500 %
+Epoch 35: Loss = 1.720581, accuracy = 43.9000 %
+Epoch 36: Loss = 1.715369, accuracy = 43.5500 %
+Epoch 37: Loss = 1.714424, accuracy = 44.4000 %
+Epoch 38: Loss = 1.712818, accuracy = 44.1000 %
+Epoch 39: Loss = 1.711820, accuracy = 44.6500 %
+Epoch 40: Loss = 1.709895, accuracy = 44.7000 %
+Epoch 41: Loss = 1.708099, accuracy = 44.2000 %
+Epoch 42: Loss = 1.706894, accuracy = 44.6500 %
+Epoch 43: Loss = 1.706295, accuracy = 44.2000 %
+Epoch 44: Loss = 1.704132, accuracy = 44.8500 %
+Epoch 45: Loss = 1.704431, accuracy = 44.4500 %
+Epoch 46: Loss = 1.704150, accuracy = 44.6500 %
+Epoch 47: Loss = 1.702227, accuracy = 44.4500 %
+Epoch 48: Loss = 1.702861, accuracy = 44.5000 %
+Epoch 49: Loss = 1.701971, accuracy = 44.5500 %
+Evaluation on test set = 1.805519, testing accuracy = 41.6000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.319516, accuracy = 19.6000 %
+Epoch 1: Loss = 2.160968, accuracy = 25.5000 %
+Epoch 2: Loss = 2.067224, accuracy = 27.7500 %
+Epoch 3: Loss = 2.072998, accuracy = 25.9500 %
+Epoch 4: Loss = 2.005027, accuracy = 30.3500 %
+Epoch 5: Loss = 1.964518, accuracy = 33.1000 %
+Epoch 6: Loss = 1.970340, accuracy = 32.0500 %
+Epoch 7: Loss = 1.926634, accuracy = 33.9500 %
+Epoch 8: Loss = 1.929669, accuracy = 34.0000 %
+Epoch 9: Loss = 1.941893, accuracy = 33.1000 %
+Epoch 10: Loss = 1.900602, accuracy = 35.5000 %
+Epoch 11: Loss = 1.883417, accuracy = 37.3000 %
+Epoch 12: Loss = 1.858683, accuracy = 37.6500 %
+Epoch 13: Loss = 1.849311, accuracy = 38.5000 %
+Epoch 14: Loss = 1.839919, accuracy = 39.3000 %
+Epoch 15: Loss = 1.825061, accuracy = 40.0000 %
+Epoch 16: Loss = 1.827883, accuracy = 38.4500 %
+Epoch 17: Loss = 1.808550, accuracy = 40.8000 %
+Epoch 18: Loss = 1.801264, accuracy = 40.7500 %
+Epoch 19: Loss = 1.808399, accuracy = 40.8000 %
+Epoch 20: Loss = 1.789529, accuracy = 40.8000 %
+Epoch 21: Loss = 1.775911, accuracy = 41.1500 %
+Epoch 22: Loss = 1.771296, accuracy = 41.3500 %
+Epoch 23: Loss = 1.764008, accuracy = 42.6500 %
+Epoch 24: Loss = 1.761358, accuracy = 42.1000 %
+Epoch 25: Loss = 1.747758, accuracy = 42.4500 %
+Epoch 26: Loss = 1.750474, accuracy = 43.0000 %
+Epoch 27: Loss = 1.741012, accuracy = 43.5500 %
+Epoch 28: Loss = 1.736670, accuracy = 43.8000 %
+Epoch 29: Loss = 1.730913, accuracy = 43.8500 %
+Epoch 30: Loss = 1.728187, accuracy = 44.4500 %
+Epoch 31: Loss = 1.726794, accuracy = 44.1500 %
+Epoch 32: Loss = 1.725254, accuracy = 44.6500 %
+Epoch 33: Loss = 1.718896, accuracy = 44.1500 %
+Epoch 34: Loss = 1.715875, accuracy = 44.4500 %
+Epoch 35: Loss = 1.717202, accuracy = 44.2500 %
+Epoch 36: Loss = 1.713282, accuracy = 44.9000 %
+Epoch 37: Loss = 1.713570, accuracy = 44.5500 %
+Epoch 38: Loss = 1.711149, accuracy = 45.4500 %
+Epoch 39: Loss = 1.708583, accuracy = 44.8500 %
+Epoch 40: Loss = 1.707109, accuracy = 45.5500 %
+Epoch 41: Loss = 1.707875, accuracy = 45.2500 %
+Epoch 42: Loss = 1.705967, accuracy = 44.8500 %
+Epoch 43: Loss = 1.704620, accuracy = 45.6500 %
+Epoch 44: Loss = 1.704467, accuracy = 45.2500 %
+Epoch 45: Loss = 1.704499, accuracy = 45.0000 %
+Epoch 46: Loss = 1.702679, accuracy = 45.5500 %
+Epoch 47: Loss = 1.700572, accuracy = 45.8000 %
+Epoch 48: Loss = 1.700051, accuracy = 45.6500 %
+Epoch 49: Loss = 1.699967, accuracy = 46.1500 %
+Evaluation on test set = 1.831601, testing accuracy = 40.5000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.277978, accuracy = 18.4000 %
+Epoch 1: Loss = 2.164936, accuracy = 23.1000 %
+Epoch 2: Loss = 2.131136, accuracy = 27.0500 %
+Epoch 3: Loss = 2.023272, accuracy = 28.7000 %
+Epoch 4: Loss = 2.015277, accuracy = 28.3000 %
+Epoch 5: Loss = 2.026063, accuracy = 29.7500 %
+Epoch 6: Loss = 1.950246, accuracy = 33.5500 %
+Epoch 7: Loss = 1.970167, accuracy = 33.0000 %
+Epoch 8: Loss = 1.947655, accuracy = 32.3500 %
+Epoch 9: Loss = 1.929809, accuracy = 33.1000 %
+Epoch 10: Loss = 1.884168, accuracy = 35.7500 %
+Epoch 11: Loss = 1.878078, accuracy = 35.9000 %
+Epoch 12: Loss = 1.870121, accuracy = 36.5500 %
+Epoch 13: Loss = 1.862395, accuracy = 36.1000 %
+Epoch 14: Loss = 1.844820, accuracy = 38.6500 %
+Epoch 15: Loss = 1.829532, accuracy = 38.6500 %
+Epoch 16: Loss = 1.812691, accuracy = 39.4000 %
+Epoch 17: Loss = 1.792317, accuracy = 40.9000 %
+Epoch 18: Loss = 1.794083, accuracy = 40.9000 %
+Epoch 19: Loss = 1.797166, accuracy = 40.8000 %
+Epoch 20: Loss = 1.782348, accuracy = 39.7500 %
+Epoch 21: Loss = 1.764358, accuracy = 41.7500 %
+Epoch 22: Loss = 1.761108, accuracy = 42.0000 %
+Epoch 23: Loss = 1.757767, accuracy = 41.8000 %
+Epoch 24: Loss = 1.746594, accuracy = 42.4000 %
+Epoch 25: Loss = 1.742362, accuracy = 42.9500 %
+Epoch 26: Loss = 1.740581, accuracy = 42.3500 %
+Epoch 27: Loss = 1.736846, accuracy = 43.9000 %
+Epoch 28: Loss = 1.729991, accuracy = 42.9500 %
+Epoch 29: Loss = 1.729201, accuracy = 43.6500 %
+Epoch 30: Loss = 1.721776, accuracy = 43.4000 %
+Epoch 31: Loss = 1.718852, accuracy = 44.2000 %
+Epoch 32: Loss = 1.713923, accuracy = 43.2500 %
+Epoch 33: Loss = 1.715684, accuracy = 43.5000 %
+Epoch 34: Loss = 1.709909, accuracy = 44.2000 %
+Epoch 35: Loss = 1.704956, accuracy = 43.8500 %
+Epoch 36: Loss = 1.709220, accuracy = 44.1500 %
+Epoch 37: Loss = 1.702944, accuracy = 44.0500 %
+Epoch 38: Loss = 1.702782, accuracy = 44.5500 %
+Epoch 39: Loss = 1.699597, accuracy = 43.8500 %
+Epoch 40: Loss = 1.700729, accuracy = 44.1500 %
+Epoch 41: Loss = 1.698615, accuracy = 44.7500 %
+Epoch 42: Loss = 1.697966, accuracy = 44.4000 %
+Epoch 43: Loss = 1.696639, accuracy = 44.6000 %
+Epoch 44: Loss = 1.693673, accuracy = 44.3000 %
+Epoch 45: Loss = 1.694927, accuracy = 44.8500 %
+Epoch 46: Loss = 1.693794, accuracy = 45.0500 %
+Epoch 47: Loss = 1.692065, accuracy = 45.0000 %
+Epoch 48: Loss = 1.692150, accuracy = 44.4500 %
+Epoch 49: Loss = 1.691724, accuracy = 44.9500 %
+Evaluation on test set = 1.816460, testing accuracy = 40.4000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.340083, accuracy = 19.7500 %
+Epoch 1: Loss = 2.143429, accuracy = 23.8000 %
+Epoch 2: Loss = 2.340676, accuracy = 24.1500 %
+Epoch 3: Loss = 2.002555, accuracy = 30.0000 %
+Epoch 4: Loss = 1.980966, accuracy = 30.0000 %
+Epoch 5: Loss = 1.967137, accuracy = 31.7500 %
+Epoch 6: Loss = 1.993950, accuracy = 31.1000 %
+Epoch 7: Loss = 1.920839, accuracy = 34.5000 %
+Epoch 8: Loss = 1.921752, accuracy = 34.6500 %
+Epoch 9: Loss = 1.916773, accuracy = 34.5000 %
+Epoch 10: Loss = 1.892295, accuracy = 34.9000 %
+Epoch 11: Loss = 1.891854, accuracy = 34.5000 %
+Epoch 12: Loss = 1.869505, accuracy = 37.1000 %
+Epoch 13: Loss = 1.861885, accuracy = 37.0500 %
+Epoch 14: Loss = 1.847142, accuracy = 37.1000 %
+Epoch 15: Loss = 1.837953, accuracy = 38.2000 %
+Epoch 16: Loss = 1.823619, accuracy = 39.0000 %
+Epoch 17: Loss = 1.817397, accuracy = 38.1500 %
+Epoch 18: Loss = 1.804834, accuracy = 38.5000 %
+Epoch 19: Loss = 1.800606, accuracy = 40.1500 %
+Epoch 20: Loss = 1.784348, accuracy = 39.2500 %
+Epoch 21: Loss = 1.777764, accuracy = 40.5000 %
+Epoch 22: Loss = 1.777005, accuracy = 41.1500 %
+Epoch 23: Loss = 1.764654, accuracy = 41.3500 %
+Epoch 24: Loss = 1.766591, accuracy = 40.9000 %
+Epoch 25: Loss = 1.760747, accuracy = 42.1000 %
+Epoch 26: Loss = 1.753099, accuracy = 40.8500 %
+Epoch 27: Loss = 1.744211, accuracy = 42.6000 %
+Epoch 28: Loss = 1.742010, accuracy = 41.4000 %
+Epoch 29: Loss = 1.738454, accuracy = 41.2500 %
+Epoch 30: Loss = 1.738548, accuracy = 42.3500 %
+Epoch 31: Loss = 1.730858, accuracy = 42.2500 %
+Epoch 32: Loss = 1.730267, accuracy = 42.1500 %
+Epoch 33: Loss = 1.726078, accuracy = 43.6000 %
+Epoch 34: Loss = 1.726657, accuracy = 43.2000 %
+Epoch 35: Loss = 1.723866, accuracy = 42.0000 %
+Epoch 36: Loss = 1.721329, accuracy = 43.2000 %
+Epoch 37: Loss = 1.719877, accuracy = 43.0000 %
+Epoch 38: Loss = 1.717240, accuracy = 43.6500 %
+Epoch 39: Loss = 1.715124, accuracy = 43.1000 %
+Epoch 40: Loss = 1.715204, accuracy = 43.5500 %
+Epoch 41: Loss = 1.713276, accuracy = 43.3500 %
+Epoch 42: Loss = 1.713342, accuracy = 44.7500 %
+Epoch 43: Loss = 1.712409, accuracy = 43.7000 %
+Epoch 44: Loss = 1.711261, accuracy = 43.4500 %
+Epoch 45: Loss = 1.709355, accuracy = 44.0500 %
+Epoch 46: Loss = 1.709000, accuracy = 43.9000 %
+Epoch 47: Loss = 1.708581, accuracy = 43.6500 %
+Epoch 48: Loss = 1.707812, accuracy = 44.0500 %
+Epoch 49: Loss = 1.707764, accuracy = 43.8000 %
+Evaluation on test set = 1.780945, testing accuracy = 40.9000 %
+
+
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Using downloaded and verified file: /Users/letao/.medmnist/pathmnist.npz
+Number of parameters: 808
+Epoch 0: Loss = 2.293721, accuracy = 19.0500 %
+Epoch 1: Loss = 2.156977, accuracy = 22.9500 %
+Epoch 2: Loss = 2.109910, accuracy = 25.0000 %
+Epoch 3: Loss = 2.142231, accuracy = 26.0500 %
+Epoch 4: Loss = 2.050689, accuracy = 28.6500 %
+Epoch 5: Loss = 1.972238, accuracy = 31.3000 %
+Epoch 6: Loss = 1.961298, accuracy = 31.9500 %
+Epoch 7: Loss = 1.951605, accuracy = 32.6000 %
+Epoch 8: Loss = 1.932017, accuracy = 33.0500 %
+Epoch 9: Loss = 1.904026, accuracy = 33.5500 %
+Epoch 10: Loss = 1.896811, accuracy = 35.7000 %
+Epoch 11: Loss = 1.877283, accuracy = 35.3000 %
+Epoch 12: Loss = 1.882583, accuracy = 36.4000 %
+Epoch 13: Loss = 1.853719, accuracy = 38.6500 %
+Epoch 14: Loss = 1.854175, accuracy = 38.1000 %
+Epoch 15: Loss = 1.840882, accuracy = 39.0000 %
+Epoch 16: Loss = 1.831978, accuracy = 39.0000 %
+Epoch 17: Loss = 1.823180, accuracy = 38.6000 %
+Epoch 18: Loss = 1.809567, accuracy = 40.1000 %
+Epoch 19: Loss = 1.802040, accuracy = 40.3500 %
+Epoch 20: Loss = 1.794435, accuracy = 39.7000 %
+Epoch 21: Loss = 1.788122, accuracy = 40.7500 %
+Epoch 22: Loss = 1.778940, accuracy = 41.3000 %
+Epoch 23: Loss = 1.770620, accuracy = 41.6500 %
+Epoch 24: Loss = 1.771211, accuracy = 42.2500 %
+Epoch 25: Loss = 1.758681, accuracy = 42.2000 %
+Epoch 26: Loss = 1.762602, accuracy = 41.7000 %
+Epoch 27: Loss = 1.756791, accuracy = 43.0000 %
+Epoch 28: Loss = 1.749359, accuracy = 42.8000 %
+Epoch 29: Loss = 1.746285, accuracy = 42.9500 %
+Epoch 30: Loss = 1.744129, accuracy = 43.1500 %
+Epoch 31: Loss = 1.741038, accuracy = 43.4000 %
+Epoch 32: Loss = 1.739207, accuracy = 42.7500 %
+Epoch 33: Loss = 1.734260, accuracy = 43.6500 %
+Epoch 34: Loss = 1.731487, accuracy = 44.0000 %
+Epoch 35: Loss = 1.730905, accuracy = 43.7500 %
+Epoch 36: Loss = 1.728487, accuracy = 44.5500 %
+Epoch 37: Loss = 1.726148, accuracy = 44.1500 %
+Epoch 38: Loss = 1.726114, accuracy = 43.8500 %
+Epoch 39: Loss = 1.724311, accuracy = 43.6500 %
+Epoch 40: Loss = 1.722128, accuracy = 44.5500 %
+Epoch 41: Loss = 1.721100, accuracy = 44.2500 %
+Epoch 42: Loss = 1.721098, accuracy = 44.1500 %
+Epoch 43: Loss = 1.719226, accuracy = 44.7500 %
+Epoch 44: Loss = 1.718406, accuracy = 44.2500 %
+Epoch 45: Loss = 1.717173, accuracy = 44.4000 %
+Epoch 46: Loss = 1.715362, accuracy = 44.4500 %
+Epoch 47: Loss = 1.716085, accuracy = 44.9000 %
+Epoch 48: Loss = 1.715452, accuracy = 44.6000 %
+Epoch 49: Loss = 1.715060, accuracy = 44.7000 %
+Evaluation on test set = 1.775922, testing accuracy = 41.4000 %
+
