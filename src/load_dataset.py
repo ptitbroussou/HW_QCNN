@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import medmnist
 from medmnist import INFO
 import torch.nn.functional as F
+from sklearn.decomposition import PCA
 
 transform_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
 
@@ -189,6 +190,59 @@ def filter_dataloader(dataloader, classes=[0, 1]):
     filtered_dataloader = DataLoader(filtered_dataset, batch_size=dataloader.batch_size, shuffle=True)
 
     return filtered_dataloader
+
+
+def apply_pca(dataloader, pca=None, new_image_size=10, fit=True):
+    """
+    Apply PCA to the DataLoader. If fit=True, the PCA model is fitted to the data.
+    If fit=False, the data is only transformed based on the provided PCA model.
+
+    Args:
+        dataloader (DataLoader): The input DataLoader, with data and labels.
+        pca (PCA): Pre-fitted PCA model (used for the test set).
+        n_components (int): Number of principal components to keep (for fitting).
+        fit (bool): If True, fit the PCA model on the dataset. If False, only transform the data.
+
+    Returns:
+        DataLoader: A new DataLoader with PCA applied to the data.
+        PCA: The fitted PCA model (if fit=True).
+    """
+    # Accumulate all data and labels
+    data_list = []
+    label_list = []
+
+    for data, labels in dataloader:
+        # Flatten the data if it's not already flattened
+        if len(data.shape) > 2:
+            # data = data.sum(dim=1, keepdim=True)
+            data = data.view(data.size(0), -1)
+
+        data_list.append(data)
+        label_list.append(labels)
+
+    # Stack all data into a single tensor
+    all_data = torch.cat(data_list, dim=0)
+    all_labels = torch.cat(label_list, dim=0)
+
+    # Convert to numpy array for PCA
+    all_data_np = all_data.numpy()
+
+    # If we are fitting PCA (on the training data)
+    if fit:
+        pca = PCA(n_components=new_image_size**2)
+        all_data_pca = pca.fit_transform(all_data_np)  # Fit PCA on the training data
+    else:
+        all_data_pca = pca.transform(all_data_np)  # Transform based on pre-fitted PCA (test data)
+
+    # Convert back to torch tensor and reshape to new image size
+    all_data_pca_tensor = torch.tensor(all_data_pca, dtype=torch.float32)
+    all_data_pca_tensor = all_data_pca_tensor.view(all_data_pca_tensor.shape[0],1,new_image_size, new_image_size)
+
+    # Create a new dataset and DataLoader
+    pca_dataset = TensorDataset(all_data_pca_tensor, all_labels)
+    pca_dataloader = DataLoader(pca_dataset, batch_size=dataloader.batch_size, shuffle=False)
+
+    return pca_dataloader, pca
 
 
 def reduce_MNIST_dataset(data_loader, dataset, is_train):

@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
-from src.load_dataset import load_cifar10, load_medmnist
+from src.load_dataset import load_cifar10, load_medmnist, apply_pca
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_RGB_globally, train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
@@ -33,11 +33,11 @@ train_dataset_number = 2000  # training dataset sample number
 test_dataset_number = 1000  # testing dataset sample number
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)!
 is_shuffle = True  # shuffle for this dataset
-learning_rate = 1e-2*(0.66)  # step size for each learning steps
+learning_rate = 1e-2  # step size for each learning steps
 train_epochs = 40  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
 criterion = torch.nn.CrossEntropyLoss()  # loss function
-output_scale = 50
+output_scale = 30
 device = torch.device("cuda")  # also torch.device("cpu"), or torch.device("mps") for macbook
 
 # Here you can modify the RBS gate list that you want for the dense layer:
@@ -109,10 +109,13 @@ scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 # RGB MedMNIST/CIFAR-10
 train_dataloader, test_dataloader = load_medmnist(medmnist_name, class_set, train_dataset_number, test_dataset_number, batch_size)
-network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
+# Apply PCA
+pca_train_loader, pca_model = apply_pca(train_dataloader, new_image_size=I, fit=True)
+pca_test_loader, _ = apply_pca(test_dataloader, pca=pca_model, new_image_size=I, fit=False)
+# Training
+network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, pca_train_loader, pca_test_loader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
 torch.save(network_state, "MedMNIST_state_model1")  # save network parameters
-
 result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list}
 
 # Save the result data to a numpy file
