@@ -9,7 +9,7 @@ from torch.optim.lr_scheduler import ExponentialLR
 import numpy as np
 from src.QCNN_layers.Conv_layer import Conv_RBS_density_I2_3D
 from src.QCNN_layers.Measurement_layer import measurement
-from src.load_dataset import load_fashion_mnist
+from src.load_dataset import load_fashion_mnist, apply_pca
 from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
@@ -111,6 +111,9 @@ scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 # Gray MNIST/Fashion MNIST
 train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+# Apply PCA
+pca_train_loader, pca_model = apply_pca(train_dataloader, new_image_size=I, fit=True)
+pca_test_loader, _ = apply_pca(test_dataloader, pca=pca_model, new_image_size=I, fit=False)
 network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale, train_epochs, test_interval, stride, device)
 
 torch.save(network_state, "FashionMNIST_30_epochs_model")  # save network parameters
