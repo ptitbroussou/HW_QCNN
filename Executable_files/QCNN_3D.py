@@ -6,6 +6,9 @@ and you can also do further testing by adjusting the hyperparameter, enjoy :)
 """
 
 import os, sys
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings
 import torch
@@ -107,11 +110,16 @@ optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=gamma) # learning rate decay
 
 # Loading dataset, you can choose the dataset you want to use: MNIST/FashionMNIST/CIFAR-10
+print("Loading dataset...")
 train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 # train_dataloader, test_dataloader = load_cifar10(class_set, train_dataset_number, test_dataset_number, batch_size)
 # train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # Starting training
-network_state, _, _, _, _ = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale,train_epochs, test_interval, stride, device)
+network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale,train_epochs, test_interval, stride, device)
+
 # Saving network parameters
-torch.save(network_state, "Model_states/QCNN_modelState")
+torch.save(network_state, "Model_states/QCNN_3DmodelState")
+result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
+file_path = 'Model_states/plot_data_3D.npy'
+np.save(file_path, result_data)

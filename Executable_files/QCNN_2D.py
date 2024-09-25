@@ -1,6 +1,5 @@
 import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings
 import torch
 import torch.nn as nn
@@ -56,25 +55,14 @@ dense_reduce_gates = half_connection_circuit(reduced_qubit) + full_connection_ci
 
 class QCNN(nn.Module):
     """
-    Hamming weight preserving quantum convolution neural network (k=3)
-
-    Tensor dataflow of this network:
-    input density matrix: (batch,J*I^2,J*I^2)--> conv1: (batch,J*I^2,J*I^2)--> pool1: (batch,J*O^2,J*O^2)
-    --> conv2: (batch,J*O^2,J*O^2)--> pool2: (batch,J*(O/2)^2,J*(O/2)^2)--> basis_map: (batch,binom(O+J,3),binom(O+J,3))
-    --> full_dense: (batch,binom(O+J,3),binom(O+J,3)) --> reduce_dim: (batch,binom(5,3)=10,10)
-    --> reduce_dense: (batch,10,10) --> output measurement: (batch,10)
-
-    Then we can use it to calculate the Loss(output, targets)
+    Hamming weight preserving quantum convolution neural network (k=2)
     """
 
     def __init__(self, I, O, dense_full_gates, dense_reduce_gates, device):
         """ Args:
             - I: dimension of image we use, default I is 28
             - O: dimension of image we use after a single pooling
-            - J: number of convolution channels
-            - K: size of kernel
-            - k: preserving subspace parameter, it should be 3
-            - dense_full_gates: dense gate list, dimension from binom(O+J,3) to binom(5,3)=10
+            - dense_full_gates: dense gate list, dimension from binom(O,2) to binom(4,2)=6
             - dense_reduce_gates: reduced dense gate list, dimension from 10 to 10
             - device: torch device (cpu, cuda, etc...)
         """
@@ -91,7 +79,7 @@ class QCNN(nn.Module):
     def forward(self, x):
         x = self.pool1(self.conv1(x))  # first convolution and pooling
         x = self.pool2(self.conv2(x))  # second convolution and pooling
-        x = self.basis_map(x)  # basis change from 3D Image to HW=2
+        x = self.basis_map(x)  # basis change from 2D Image to HW=2
         x = self.dense_reduced(self.reduce_dim(self.dense_full(x)))  # dense layer
         return measurement(x, device)  # measure, only keep the diagonal elements
 
@@ -101,16 +89,15 @@ optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
 scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 # Loading data
+print("Loading dataset...")
 train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 # train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # training part
 network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
                                   criterion, output_scale, train_epochs, test_interval, device)
-
-torch.save(network_state, "2D_modelState")  # save network parameters
-
+# Saving network parameters
+torch.save(network_state, "Model_states/QCNN_2DmodelState")  # save network parameters
 result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
-   
-file_path = 'plot_data_2D.npy'
+file_path = 'Model_states/plot_data_2D.npy'
 np.save(file_path, result_data)
