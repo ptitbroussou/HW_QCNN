@@ -13,6 +13,13 @@ def full_connection_circuit(n):
 
 
 def half_connection_circuit(n):
+    """ n=5
+    ─╭B─╭B────╭B───────╭B──────────┤
+    ─╰S─│──╭B─│──╭B────│──╭B───────┤
+    ────╰S─╰S─│──│──╭B─│──│──╭B────┤
+    ──────────╰S─╰S─╰S─│──│──│──╭B─┤
+    ───────────────────╰S─╰S─╰S─╰S─┤
+    """
     return [(i, j) for i in range(n) for j in range(n) if i > j]
 
 
@@ -28,6 +35,16 @@ def full_reverse_connection_circuit(n):
 
 
 def slide_circuit(n):
+    """ n=8
+    ─╭B───────────────────╭S─┤
+    ─╰S─╭B────────────────│──┤
+    ────╰S─╭B─────────────│──┤
+    ───────╰S─╭B──────────│──┤
+    ──────────╰S─╭B───────│──┤
+    ─────────────╰S─╭B────│──┤
+    ────────────────╰S─╭B─│──┤
+    ───────────────────╰S─╰B─┤
+    """
     return [(i, (i + 1) % n) for i in range(n)]
 
 

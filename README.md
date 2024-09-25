@@ -62,8 +62,8 @@ This is a project that corresponds to the paper "Subspace Preserving  Quantum Co
   </tr>
   <tr>
     <td style="text-align:center">
-      <img src="images/circuit/full_reverse_connection_circuit.png" height="150" /><br />
-      <span>full reverse connection circuit</span>
+      <img src="images/circuit/half_connection_circuit.png" height="150" /><br />
+      <span>half connection circuit</span>
     </td>
     <td style="text-align:center">
       <img src="images/circuit/slide_circuit.png" height="150" /><br />
