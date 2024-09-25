@@ -1,3 +1,10 @@
+"""
+===================================================================================
+This file can be executed directly, it shows the basic structure of our HW2-QCNN,
+and you can also do further testing by adjusting the hyperparameter, enjoy :)
+===================================================================================
+"""
+
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings

@@ -6,11 +6,9 @@ and you can also do further testing by adjusting the hyperparameter, enjoy :)
 """
 
 import os, sys
-
-import numpy as np
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ExponentialLR
@@ -21,7 +19,6 @@ from src.QCNN_layers.Pooling_layer import Pooling_3D_density
 from src.training import train_globally
 from src.list_gates import slide_circuit, full_connection_circuit, half_connection_circuit
 from src.QCNN_layers.Dense_layer import Dense_RBS_density_3D, Basis_Change_I_to_HW_density_3D, Trace_out_dimension
-
 warnings.simplefilter('ignore')
 
 ########################## Hyperparameters BEGIN ############################
