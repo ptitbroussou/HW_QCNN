@@ -27,6 +27,7 @@ This is a project that corresponds to the paper "Subspace Preserving  Quantum Co
 
 ## Project directory structure
 * Executable_files: QCNN python files
+* IonQ_Simu: files about IonQ Simulation 
 * Paper_data: The data we used in the paper
 * src: backend python methods for QCNN
 * Verification_correction: files to verify the correctness of our methods
