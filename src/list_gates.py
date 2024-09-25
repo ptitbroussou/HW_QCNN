@@ -12,6 +12,10 @@ def full_connection_circuit(n):
     return [(i, j) for i in range(n) for j in range(n) if i != j]
 
 
+def half_connection_circuit(n):
+    return [(i, j) for i in range(n) for j in range(n) if i > j]
+
+
 def full_reverse_connection_circuit(n):
     """ n=5
     0: ──────────╭S──────────╭S──────────╭S──────────╭S─╭B─╭B─╭B─╭B─┤
@@ -20,21 +24,11 @@ def full_reverse_connection_circuit(n):
     3: ─╭S─│──│──│──╭B─╰B─╰B─╰B─│──╰S───────│──╰S───────│──╰S───────┤
     4: ─╰B─╰B─╰B─╰B─╰S──────────╰S──────────╰S──────────╰S──────────┤
     """
-    return [(i, j) for i in range(n-1, -1, -1) for j in range(n-1, -1, -1) if i != j]
+    return [(i, j) for i in range(n - 1, -1, -1) for j in range(n - 1, -1, -1) if i != j]
 
 
 def slide_circuit(n):
-    """ n=8
-    0: ─╭B───────────────────┤
-    1: ─╰S─╭B────────────────┤
-    2: ────╰S─╭B─────────────┤
-    3: ───────╰S─╭B──────────┤
-    4: ──────────╰S─╭B───────┤
-    5: ─────────────╰S─╭B────┤
-    6: ────────────────╰S─╭B─┤
-    7: ───────────────────╰S─┤
-    """
-    return [(i, i + 1) for i in range(n - 1)]
+    return [(i, (i + 1) % n) for i in range(n)]
 
 
 def full_pyramid_circuit(n):
