@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Léo"
+  given-names: "Monbroussou"
+  orcid: "https://orcid.org/0009-0005-4898-8155"
+- family-names: "Wang"
+  given-names: "Letao"
+title: "Hamming Weight Preserving QCNN Simulation Software"
+version: 1.0
+date-released: 2024-09-27
+url: "https://github.com/ptitbroussou/HW_QCNN"
