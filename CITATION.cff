@@ -6,7 +6,9 @@ authors:
   orcid: "https://orcid.org/0009-0005-4898-8155"
 - family-names: "Wang"
   given-names: "Letao"
+  orcid:
 title: "Hamming Weight Preserving QCNN Simulation Software"
 version: 1.0
+doi:
 date-released: 2024-09-27
 url: "https://github.com/ptitbroussou/HW_QCNN"
