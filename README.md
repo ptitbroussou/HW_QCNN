@@ -7,9 +7,9 @@ This is a project that corresponds to the paper "Subspace Preserving  Quantum Co
 
 ## Table of Contents
 * [Hello world](#hello-world)
+* [Hyperparameters](#hyperparameters)
 * [Tensor dataflow](#tensor-dataflow)
 * [Dense circuit layouts](#dense-circuit-layouts)
-* [Hyperparameters](#hyperparameters)
 * [An interesting observation](#an-interesting-observation)
 
 ## Hello world
@@ -24,13 +24,45 @@ you can design and test your own HW-QCNN structure with your PC or servers.
 You can also execute HW2 (or HW3) QCNN as python file in the folder "Executable_files". 
 Here the HW2 means the Hamming weight values is 2, i.e., the input tensor data is 2 dimensional (e.g. single channel images). Please read the paper for more details.
 
+
+## Hyperparameters
+
+This is the hyperparameter used for the training results in our paper:
+
+I = 16,
+J = 7,
+k = 3,
+K = 4,
+stride = 2,
+batch_size = 10,
+kernel_layout = "all_connection",
+training_dataset = 2000,
+testing_dataset = 1000,
+is_shuffle = True,
+learning_rate = 1e-2 * 0.66
+gamma = 0.9
+train_epochs = 30 (or 40),
+test_interval = 10,
+criterion = torch.nn.CrossEntropyLoss(),
+softmax_temperature = 50
+
+dense_full_gates = half_connection_circuit(O + J) + full_connection_circuit(O + J) + half_connection_circuit(
+O + J) + full_connection_circuit(O + J) + slide_circuit(O + J - 1)
+
+dense_reduce_gates = half_connection_circuit(reduced_qubit) + full_connection_circuit(
+reduced_qubit) + half_connection_circuit(reduced_qubit) + slide_circuit(reduced_qubit)
+
+
 ## Tensor dataflow
 ![Dataflow](images/Dataflow.png)
 
 
 
 ## Dense circuit layouts
-
+For dense layers, we have many possible layouts. 
+We have a preliminary result from the Lie algebra analysis, 
+but it is still not clear what kind of layout is the best. 
+Here are some possible component layouts for dense layers.
 <table>
   <tr>
     <td style="text-align:center">
@@ -70,31 +102,6 @@ Here the HW2 means the Hamming weight values is 2, i.e., the input tensor data i
   </tr>
 </table>
 
-## Hyperparameters
-
-This is the hyperparameter used for the training results in our paper:
-
-I = 16,
-J = 7,
-k = 3,
-K = 4,
-stride = 2,
-batch_size = 10,
-kernel_layout = "all_connection",
-training_dataset = 2000, 
-testing_dataset = 1000,
-is_shuffle = True,
-learning_rate = 1e-2 * 0.66
-gamma = 0.9
-train_epochs = 30 (or 40),
-test_interval = 10,
-criterion = torch.nn.CrossEntropyLoss(),
-softmax_temperature = 50
-
-dense_full_gates = half_connection_circuit(O + J) + full_connection_circuit(O + J) + half_connection_circuit(
-O + J) + full_connection_circuit(O + J) + slide_circuit(O + J - 1)
-dense_reduce_gates = half_connection_circuit(reduced_qubit) + full_connection_circuit(
-reduced_qubit) + half_connection_circuit(reduced_qubit) + slide_circuit(reduced_qubit)
 
 ## An interesting observation
 Since we are using CrossEntropy as a Loss Function, it includes the softmax function.
