@@ -169,29 +169,6 @@ def load_MNIST(batch_size, shuffle):
     return train_loader, test_loader
 
 
-def filter_dataloader(dataloader, classes=[0, 1]):
-    filtered_data = []
-    filtered_targets = []
-
-    for data, target in dataloader:
-        mask = target == classes[0]
-        for c in classes[1:]:
-            mask = mask | (target == c)
-
-        filtered_data.append(data[mask])
-        filtered_targets.append(target[mask])
-
-    # Concatenate all collected data and targets
-    filtered_data = torch.cat(filtered_data, dim=0)
-    filtered_targets = torch.cat(filtered_targets, dim=0)
-
-    # Create a new TensorDataset and DataLoader from the filtered data and targets
-    filtered_dataset = TensorDataset(filtered_data, filtered_targets)
-    filtered_dataloader = DataLoader(filtered_dataset, batch_size=dataloader.batch_size, shuffle=True)
-
-    return filtered_dataloader
-
-
 def apply_pca(dataloader, pca=None, new_image_size=10, fit=True):
     """
     Apply PCA to the DataLoader. If fit=True, the PCA model is fitted to the data.
@@ -245,31 +222,19 @@ def apply_pca(dataloader, pca=None, new_image_size=10, fit=True):
     return pca_dataloader, pca
 
 
-def reduce_MNIST_dataset(data_loader, dataset, is_train):
-    # original data: torch.Size([60000, 28, 28])
-    if is_train:
-        scala = 60000//dataset
-    else:
-        scala = 10000//dataset
-    old_data = data_loader.dataset.data
-    data_loader.dataset.data = old_data.resize_(int(data_loader.dataset.data.size(0) / scala), 28, 28)
-    return data_loader
-
-
 def to_density_matrix(batch_vectors, device):
+    """
+    convert vector to density matrix
+    :param batch_vectors: input vector
+    :param device: torch device
+    :return: density matrix
+    """
     out = torch.zeros([batch_vectors.size(0), batch_vectors.size(1), batch_vectors.size(1)]).to(device)
     index = 0
     for vector in batch_vectors:
         out[index] += torch.einsum('i,j->ij', vector, vector)
         index += 1
     return out
-
-
-def copy_images_bottom_channel(images, J):
-    images = images.unsqueeze(1)
-    upscaled_x = F.interpolate(images, size=(images.size()[-1] * J, images.size()[-1] * J), mode='nearest')
-    upscaled_x = upscaled_x.squeeze(1)
-    return upscaled_x
 
 
 def copy_images_bottom_channel_stride(images, scale_factor, stride):

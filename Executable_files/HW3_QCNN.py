@@ -24,14 +24,14 @@ warnings.simplefilter('ignore')
 ########################## Hyperparameters BEGIN ############################
 # Below are the hyperparameters of this network, you may change them to test
 I = 8  # dimension of image we use. If you use 2 times conv and pool layers, please make it a multiple of 4
-J = 4  # number of channel for convolution
+J = 3  # number of channel for convolution
 K = 4  # size of kernel in the convolution layer, please make it divisible by O=I/2
 stride = 2  # the difference in step sizes for different channels
 batch_size = 10  # batch number
 kernel_layout = "all_connection"  # you can use "pyramid" or "all_connection"
-train_dataset_number = 20  # training dataset sample number
-test_dataset_number = 20  # testing dataset sample number
-learning_rate = 1e-2 * 0.66  # step size for each learning steps
+train_dataset_number = 100  # training dataset sample number
+test_dataset_number = 100  # testing dataset sample number
+learning_rate = 1e-2  # step size for each learning steps
 gamma = 0.9  # multiplicative factor of learning rate decay
 train_epochs = 10  # number of epoch we train
 test_interval = 10  # when the training epoch reaches an integer multiple of the test_interval, print the testing result
@@ -41,7 +41,7 @@ device = torch.device("cpu")  # also torch.device("cuda"), or torch.device("mps"
 # Below are the other hyperparameters of this network, usually you don't need to change this
 O = I // 2  # dimension of image data after one pooling
 k = 3  # preserving subspace parameter, k=3 for multichannel images, k=2 for single channel images
-class_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # filter dataset, 10 labels by default
+class_set = [i for i in range(10)]  # filter dataset, 10 labels by default
 reduced_qubit = 5  # ATTENTION: please let binom(reduced_qubit,k) >= len(class_set)! 5 qubits for 10 labels by default
 is_shuffle = True  # shuffle for this dataset
 criterion = torch.nn.CrossEntropyLoss()  # loss function
@@ -108,15 +108,17 @@ scheduler = ExponentialLR(optimizer, gamma=gamma) # learning rate decay
 
 # Loading dataset, you can choose the dataset you want to use: MNIST/FashionMNIST/CIFAR-10
 print("Loading dataset...")
-train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+# train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 # train_dataloader, test_dataloader = load_cifar10(class_set, train_dataset_number, test_dataset_number, batch_size)
-# train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
+train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # Starting training
+print("Number of labels: " + str(len(class_set)))
+print("Training samples number: " + str(train_dataset_number) + ", testing samples number: " + str(test_dataset_number))
 network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally(batch_size, I, J, network, train_dataloader, test_dataloader, optimizer, scheduler, criterion, output_scale,train_epochs, test_interval, stride, device)
 
 # Saving network parameters
-torch.save(network_state, "Model_states/QCNN_3DmodelState")
+torch.save(network_state, "modelState")
 result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
-file_path = 'Model_states/plot_data_3D.npy'
+file_path = 'plot.npy'
 np.save(file_path, result_data)

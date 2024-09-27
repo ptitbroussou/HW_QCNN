@@ -101,10 +101,12 @@ train_dataloader, test_dataloader = load_fashion_mnist(class_set, train_dataset_
 # train_dataloader, test_dataloader = load_mnist(class_set, train_dataset_number, test_dataset_number, batch_size)
 
 # training part
+print("Number of labels: " + str(len(class_set)))
+print("Training samples number: " + str(train_dataset_number) + ", testing samples number: " + str(test_dataset_number))
 network_state, training_loss_list, training_accuracy_list, testing_loss_list, testing_accuracy_list = train_globally_2D(batch_size, I, network, train_dataloader, test_dataloader, optimizer, scheduler,
                                   criterion, output_scale, train_epochs, test_interval, device)
 # Saving network parameters
-torch.save(network_state, "Model_states/QCNN_2DmodelState")  # save network parameters
+torch.save(network_state, "modelState")  # save network parameters
 result_data = {'train_accuracy': training_accuracy_list,'train_loss': training_loss_list,'test_accuracy': testing_accuracy_list,'test_loss': testing_loss_list,}
-file_path = 'Model_states/plot_data_2D.npy'
+file_path = 'plot.npy'
 np.save(file_path, result_data)

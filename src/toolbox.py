@@ -545,7 +545,11 @@ def all_connection_Order_RBS_gates(size, start_qubit):
 
 
 def normalize_DM(density_matrix):
-    """"""
+    """
+    normalise the density matrix
+    :param density_matrix:
+    :return:
+    """
     traces = density_matrix.diagonal(dim1=-2, dim2=-1).sum(-1)
     traces = traces.view(density_matrix.shape[0], 1, 1)
     return (density_matrix / traces)
